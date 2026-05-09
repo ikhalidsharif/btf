@@ -1,0 +1,37 @@
+name: Fetch MailChimp Newsletter RSS
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # كل يوم الساعة 6 صباحاً
+  workflow_dispatch:        # تشغيل يدوي عند الحاجة
+
+jobs:
+  fetch-rss:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install rss-parser gray-matter
+
+      - name: Fetch RSS and generate Markdown
+        run: node .github/scripts/fetch-rss.js
+        env:
+          MAILCHIMP_RSS_URL: ${{ secrets.MAILCHIMP_RSS_URL }}
+
+      - name: Commit new posts if any
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add content/ar/news/ content/en/news/
+          git diff --staged --quiet || git commit -m "📰 Auto: fetch newsletter $(date +'%Y-%m-%d')"
+          git push

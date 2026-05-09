@@ -1,0 +1,156 @@
+{
+  "ar": {
+    "nav": {
+      "home": "الرئيسية",
+      "about": "عن المؤسسة",
+      "projects": "مشاريعنا",
+      "news": "الأخبار",
+      "contact": "تواصل معنا",
+      "donate": "تبرع الآن",
+      "menu": "القائمة"
+    },
+    "footer": {
+      "tagline": "مؤسسة خيرية بحرينية تعمل على تمكين المجتمع وتطوير الإنسان",
+      "quickLinks": "روابط سريعة",
+      "contact": "تواصل معنا",
+      "address": "المنامة، مملكة البحرين",
+      "newsletter": "نشرتنا الإخبارية",
+      "newsletterDesc": "اطلع على آخر أخبار ومشاريع المؤسسة",
+      "readNews": "اقرأ الأخبار",
+      "rights": "جميع الحقوق محفوظة"
+    },
+    "home": {
+      "hero": {
+        "title": "نبني مستقبلاً أفضل",
+        "subtitle": "مؤسسة البحرين للتنمية والتطوير — نعمل من أجل تمكين المجتمع البحريني والأجيال القادمة",
+        "cta": "تبرع الآن",
+        "ctaSecondary": "اكتشف مشاريعنا"
+      },
+      "stats": {
+        "projects": "مشروع منجز",
+        "years": "سنة من العطاء",
+        "beneficiaries": "مستفيد",
+        "volunteers": "متطوع"
+      },
+      "projects": {
+        "title": "مشاريعنا",
+        "subtitle": "نعمل في مجالات التعليم والصحة وخدمة المجتمع",
+        "education": "التعليم",
+        "health": "الصحة",
+        "community": "خدمة المجتمع",
+        "microbusiness": "دعم المشاريع الصغيرة",
+        "viewAll": "عرض جميع المشاريع"
+      },
+      "news": {
+        "title": "آخر الأخبار",
+        "subtitle": "تابع نشراتنا وأخبارنا الأخيرة",
+        "viewAll": "عرض كل الأخبار"
+      },
+      "donate": {
+        "title": "ساهم في صنع الفرق",
+        "subtitle": "تبرعك يساهم في تغيير حياة أسر بحرينية ومجتمعات محتاجة",
+        "cta": "تبرع الآن"
+      }
+    },
+    "news": {
+      "title": "الأخبار والنشرات",
+      "subtitle": "آخر إصدارات نشرتنا الإخبارية",
+      "issue": "العدد",
+      "readMore": "اقرأ المزيد"
+    },
+    "donate": {
+      "title": "ادعم مشاريعنا",
+      "subtitle": "اختر المشروع والمبلغ الذي تريد التبرع به",
+      "selectProject": "اختر مشروعاً",
+      "selectAmount": "اختر المبلغ",
+      "customAmount": "مبلغ آخر",
+      "currency": "دينار بحريني",
+      "proceed": "تبرع الآن",
+      "secure": "الدفع آمن عبر TAP"
+    },
+    "contact": {
+      "title": "تواصل معنا",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "message": "رسالتك",
+      "send": "إرسال"
+    }
+  },
+  "en": {
+    "nav": {
+      "home": "Home",
+      "about": "About Us",
+      "projects": "Projects",
+      "news": "News",
+      "contact": "Contact",
+      "donate": "Donate Now",
+      "menu": "Menu"
+    },
+    "footer": {
+      "tagline": "A Bahraini charitable foundation empowering communities and developing people",
+      "quickLinks": "Quick Links",
+      "contact": "Contact Us",
+      "address": "Manama, Kingdom of Bahrain",
+      "newsletter": "Newsletter",
+      "newsletterDesc": "Stay updated with our latest news and projects",
+      "readNews": "Read News",
+      "rights": "All rights reserved"
+    },
+    "home": {
+      "hero": {
+        "title": "Building a Better Future",
+        "subtitle": "Bahrain Trust Foundation — Empowering communities and shaping the next generation",
+        "cta": "Donate Now",
+        "ctaSecondary": "Explore Our Projects"
+      },
+      "stats": {
+        "projects": "Projects Completed",
+        "years": "Years of Service",
+        "beneficiaries": "Beneficiaries",
+        "volunteers": "Volunteers"
+      },
+      "projects": {
+        "title": "Our Projects",
+        "subtitle": "Working across education, health, and community service",
+        "education": "Education",
+        "health": "Health",
+        "community": "Community Service",
+        "microbusiness": "Micro-Business Support",
+        "viewAll": "View All Projects"
+      },
+      "news": {
+        "title": "Latest News",
+        "subtitle": "Follow our newsletters and latest updates",
+        "viewAll": "View All News"
+      },
+      "donate": {
+        "title": "Make a Difference",
+        "subtitle": "Your donation helps transform lives in Bahrain and beyond",
+        "cta": "Donate Now"
+      }
+    },
+    "news": {
+      "title": "News & Newsletters",
+      "subtitle": "Latest editions of our newsletter",
+      "issue": "Issue",
+      "readMore": "Read More"
+    },
+    "donate": {
+      "title": "Support Our Projects",
+      "subtitle": "Choose a project and the amount you wish to donate",
+      "selectProject": "Select a Project",
+      "selectAmount": "Select Amount",
+      "customAmount": "Other Amount",
+      "currency": "BHD",
+      "proceed": "Donate Now",
+      "secure": "Secure payment via TAP"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "name": "Name",
+      "email": "Email",
+      "message": "Your Message",
+      "send": "Send"
+    }
+  }
+}

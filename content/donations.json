@@ -1,0 +1,111 @@
+{
+  "ar": [
+    {
+      "id": "دعم-مشروع-مدارس-المستشفى-للأطفال-المر",
+      "title": "دعم مشروع مدارس المستشفى للأطفال المرضى",
+      "description": "",
+      "minAmount": 5,
+      "slug": "دعم-مشروع-مدارس-المستشفى-للأطفال-المر"
+    },
+    {
+      "id": "دعم-مشروع-فضاء-للجميع",
+      "title": "دعم مشروع فضاء للجميع",
+      "description": "",
+      "minAmount": 5,
+      "slug": "دعم-مشروع-فضاء-للجميع"
+    },
+    {
+      "id": "دعم-مشروع-مسابقة-تأليف-قصص-الأطفال-وال",
+      "title": "دعم مشروع مسابقة تأليف قصص الأطفال والناشئة",
+      "description": "",
+      "minAmount": 5,
+      "slug": "دعم-مشروع-مسابقة-تأليف-قصص-الأطفال-وال"
+    },
+    {
+      "id": "دعم-الطلبة-البحرينيين-المتعففين-للعو",
+      "title": "دعم الطلبة البحرينيين المتعففين للعودة إلى المدارس",
+      "description": "",
+      "minAmount": 5,
+      "slug": "دعم-الطلبة-البحرينيين-المتعففين-للعو"
+    },
+    {
+      "id": "بناء-مدارس-مصغرة-خارج-مملكة-البحرين",
+      "title": "بناء مدارس مصغرة خارج مملكة البحرين",
+      "description": "",
+      "minAmount": 5,
+      "slug": "بناء-مدارس-مصغرة-خارج-مملكة-البحرين"
+    }
+  ],
+  "en": [
+    {
+      "id": "bahrain-educational-endowment",
+      "title": "CHARITY SUSTAINABILITY FUND",
+      "description": "",
+      "minAmount": 5,
+      "slug": "bahrain-educational-endowment"
+    },
+    {
+      "id": "support-after-school-activities",
+      "title": "SUPPORT AFTER SCHOOL ACTIVITIES",
+      "description": "",
+      "minAmount": 5,
+      "slug": "support-after-school-activities"
+    },
+    {
+      "id": "support-hospital-school-students-art-tal",
+      "title": "SUPPORT HOSPITAL SCHOOL STUDENTS ART TALENTS",
+      "description": "",
+      "minAmount": 5,
+      "slug": "support-hospital-school-students-art-tal"
+    },
+    {
+      "id": "ramadhan-vouchers-boxes",
+      "title": "RAMADHAN VOUCHERS/BOXES",
+      "description": "",
+      "minAmount": 5,
+      "slug": "ramadhan-vouchers-boxes"
+    },
+    {
+      "id": "university-student-scholarship",
+      "title": "SPONSORING A UNIVERSITY STUDENT",
+      "description": "",
+      "minAmount": 5,
+      "slug": "university-student-scholarship"
+    },
+    {
+      "id": "support-hospital-schools-project-for-sic",
+      "title": "SUPPORT HOSPITAL SCHOOLS PROJECT FOR SICK CHILDREN",
+      "description": "",
+      "minAmount": 5,
+      "slug": "support-hospital-schools-project-for-sic"
+    },
+    {
+      "id": "support-space-for-all-project",
+      "title": "SUPPORT SPACE FOR ALL PROJECT",
+      "description": "",
+      "minAmount": 5,
+      "slug": "support-space-for-all-project"
+    },
+    {
+      "id": "support-story-writing-competition",
+      "title": "SUPPORT STORY WRITING COMPETITION",
+      "description": "",
+      "minAmount": 5,
+      "slug": "support-story-writing-competition"
+    },
+    {
+      "id": "support-bahraini-studends-to-return-to-s",
+      "title": "SUPPORT BAHRAINI STUDENTS TO RETURN TO SCHOOL",
+      "description": "",
+      "minAmount": 5,
+      "slug": "support-bahraini-studends-to-return-to-s"
+    },
+    {
+      "id": "build-a-micro-schools-outside-bahrain",
+      "title": "BUILD A MICRO-SCHOOL OUTSIDE BAHRAIN",
+      "description": "",
+      "minAmount": 5,
+      "slug": "build-a-micro-schools-outside-bahrain"
+    }
+  ]
+}
