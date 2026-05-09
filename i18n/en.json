@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "projects": "Projects",
+    "news": "News",
+    "contact": "Contact",
+    "donate": "Donate Now",
+    "menu": "Menu"
+  },
+  "footer": {
+    "tagline": "A Bahraini charitable foundation empowering communities and developing people",
+    "quickLinks": "Quick Links",
+    "contact": "Contact Us",
+    "address": "Manama, Kingdom of Bahrain",
+    "newsletter": "Newsletter",
+    "newsletterDesc": "Stay updated with our latest news and projects",
+    "readNews": "Read News",
+    "rights": "All rights reserved"
+  },
+  "home": {
+    "hero": {
+      "title": "Building a Better Future",
+      "subtitle": "Bahrain Trust Foundation — Empowering communities and shaping the next generation",
+      "cta": "Donate Now",
+      "ctaSecondary": "Explore Our Projects"
+    },
+    "stats": {
+      "projects": "Projects Completed",
+      "years": "Years of Service",
+      "beneficiaries": "Beneficiaries",
+      "volunteers": "Volunteers"
+    },
+    "projects": {
+      "title": "Our Projects",
+      "subtitle": "Working across education, health, and community service",
+      "education": "Education",
+      "health": "Health",
+      "community": "Community Service",
+      "microbusiness": "Micro-Business Support",
+      "viewAll": "View All Projects"
+    },
+    "news": {
+      "title": "Latest News",
+      "subtitle": "Follow our newsletters and latest updates",
+      "viewAll": "View All News"
+    },
+    "donate": {
+      "title": "Make a Difference",
+      "subtitle": "Your donation helps transform lives in Bahrain and beyond",
+      "cta": "Donate Now"
+    }
+  },
+  "news": {
+    "title": "News & Newsletters",
+    "subtitle": "Latest editions of our newsletter",
+    "issue": "Issue",
+    "readMore": "Read More"
+  },
+  "donate": {
+    "title": "Support Our Projects",
+    "subtitle": "Choose a project and the amount you wish to donate",
+    "selectProject": "Select a Project",
+    "selectAmount": "Select Amount",
+    "customAmount": "Other Amount",
+    "currency": "BHD",
+    "proceed": "Donate Now",
+    "secure": "Secure payment via TAP"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "message": "Your Message",
+    "send": "Send"
+  }
+}
