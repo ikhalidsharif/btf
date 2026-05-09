@@ -5,7 +5,7 @@
       <div class="container header-inner">
         <!-- Logo -->
         <NuxtLink :to="localePath('/')" class="logo">
-          <img src="/logo.png" alt="Bahrain Trust Foundation" height="52" />
+          <span class="logo-text">🌿 Bahrain Trust</span>
         </NuxtLink>
 
         <!-- Nav -->
@@ -52,7 +52,7 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <div class="footer-brand">
-          <img src="/logo-white.png" alt="Bahrain Trust Foundation" height="48" />
+          <span class="logo-text-footer">🌿 Bahrain Trust Foundation</span>
           <p>{{ t('footer.tagline') }}</p>
         </div>
 
@@ -132,6 +132,18 @@ onMounted(() => {
   height: 72px;
 }
 
+.logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--green-dark);
+}
+.logo-text-footer {
+  font-size: 18px;
+  font-weight: 800;
+  color: white;
+  display: block;
+  margin-bottom: 16px;
+}
 .logo img { height: 52px; width: auto; }
 
 .nav-links {
