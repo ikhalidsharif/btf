@@ -205,11 +205,11 @@
           >
             <!-- Issue number badge -->
             <div class="news-issue-badge">
-              {{ locale === "ar" ? "العدد" : "Issue" }} {{ formatIssue(post.issue) }}
+              {{ locale === "ar" ? "العدد" : "Issue" }} {{ locale === "ar" ? post.issue : String(post.issue || "").replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d))) }}
             </div>
             <!-- Card content -->
             <div class="news-card-body">
-              <div class="news-date">{{ extractMonthFromTitle(post.title) || formatDate(post.date) }}</div>
+              <div class="news-date">{{ (post.title || "").split(/[-–]/).pop()?.trim() || formatDate(post.date) }}</div>
               <h3>{{ post.title }}</h3>
               <span class="news-read-more">{{ locale === "ar" ? "اقرأ النشرة ←" : "Read Newsletter ←" }}</span>
             </div>
