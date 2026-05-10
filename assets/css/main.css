@@ -1,28 +1,36 @@
 :root {
-  --green: #1a6b3c;
-  --green-light: #2d9158;
-  --green-dark: #0f4425;
-  --gold: #c8972a;
-  --gold-light: #e8b84b;
+  /* الألوان الرسمية لمؤسسة البحرين للتنمية والتطوير */
+  --red: #E31C26;
+  --red-dark: #b5151e;
+  --red-light: #f04550;
+  --teal: #00bcd4;
+  --teal-dark: #0097a7;
+  --dark: #3c3950;
+  --dark-light: #46485c;
   --white: #ffffff;
-  --off-white: #f8f6f1;
-  --gray-light: #f0ede6;
-  --gray: #9a9186;
-  --text: #1c1a17;
-  --text-light: #5a5650;
-  --font-ar: 'Cairo', sans-serif;
-  --font-en: 'Outfit', sans-serif;
-  --radius: 12px;
+  --off-white: #f0f3f2;
+  --gray-light: #dfe5e8;
+  --gray: #99a9b5;
+  --text: #333333;
+  --text-light: #5f727f;
+  --font-ar: 'Tajawal', sans-serif;
+  --font-en: 'IBM Plex Sans Arabic', sans-serif;
+  --radius: 8px;
   --shadow: 0 4px 24px rgba(0,0,0,0.08);
   --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
   --transition: 0.25s ease;
+
+  /* aliases للكود القديم */
+  --green: var(--red);
+  --green-light: var(--red-light);
+  --green-dark: var(--red-dark);
+  --gold: var(--teal);
+  --gold-light: var(--teal);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--off-white);
@@ -47,52 +55,52 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 15px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
   transition: all var(--transition);
   border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn-primary {
-  background: var(--green);
+  background: var(--red);
   color: white;
 }
 .btn-primary:hover {
-  background: var(--green-light);
+  background: var(--red-dark);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(26,107,60,0.3);
+  box-shadow: 0 8px 24px rgba(227,28,38,0.3);
 }
 
 .btn-gold {
-  background: var(--gold);
+  background: var(--red);
   color: white;
 }
 .btn-gold:hover {
-  background: var(--gold-light);
+  background: var(--red-dark);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(200,151,42,0.3);
+  box-shadow: 0 8px 24px rgba(227,28,38,0.3);
 }
 
 .btn-outline {
   background: transparent;
-  color: var(--green);
-  border: 2px solid var(--green);
+  color: var(--red);
+  border: 2px solid var(--red);
 }
 .btn-outline:hover {
-  background: var(--green);
+  background: var(--red);
   color: white;
 }
 
-.section {
-  padding: 80px 0;
-}
+.section { padding: 80px 0; }
 
 .section-title {
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: clamp(28px, 4vw, 38px);
   font-weight: 700;
-  color: var(--green-dark);
+  color: var(--dark);
   margin-bottom: 12px;
 }
 
@@ -115,16 +123,12 @@ img { max-width: 100%; display: block; }
   box-shadow: var(--shadow-lg);
 }
 
-/* Animations */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.fade-up {
-  animation: fadeUp 0.6s ease forwards;
-}
+.fade-up { animation: fadeUp 0.6s ease forwards; }
 
-/* RTL / LTR helpers */
 [dir="rtl"] .ms-auto { margin-right: auto !important; }
 [dir="ltr"] .ms-auto { margin-left: auto !important; }
