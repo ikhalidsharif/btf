@@ -131,7 +131,7 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <div class="footer-brand">
-          <img src="/logo.png" alt="Bahrain Trust Foundation" height="48" style="filter:brightness(10)" />
+          <img src="/logo.png" alt="Bahrain Trust Foundation" height="48" />
           <p>{{ locale === 'ar' ? 'مؤسسة خيرية بحرينية تعمل على تمكين المجتمع وتطوير الإنسان' : 'A Bahraini charitable foundation empowering communities and developing people' }}</p>
           <div class="footer-socials">
             <a href="https://www.facebook.com/BahrainTrustFoundation/" target="_blank">FB</a>

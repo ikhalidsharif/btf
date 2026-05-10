@@ -22,8 +22,13 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;700&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap',
         },
+      ],
+      style: [
+        {
+          children: `* { font-family: 'Tajawal', sans-serif !important; }`,
+        }
       ],
     },
   },
