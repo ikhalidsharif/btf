@@ -50,6 +50,55 @@
       </div>
     </section>
 
+
+    <!-- Mission & Vision -->
+    <section class="mission-section">
+      <div class="container">
+        <div class="mission-vision">
+          <div class="mv-block">
+            <h2>{{ locale === 'ar' ? 'رسالتنا' : 'OUR MISSION' }}</h2>
+            <p>{{ locale === 'ar'
+              ? 'إيجاد حلول ذكية وعملية لحياة أفضل للأفراد في المجتمع'
+              : 'To create smart and practical solutions for a better life for people in the community' }}</p>
+          </div>
+          <div class="mv-divider" />
+          <div class="mv-block">
+            <h2>{{ locale === 'ar' ? 'رؤيتنا' : 'OUR VISION' }}</h2>
+            <p>{{ locale === 'ar'
+              ? 'أن يتمكن أفراد المجتمع من تغيير حياتهم نحو الأفضل من خلال خدمات التنمية المستدامة'
+              : 'People in the community are able to change their lives for the better through sustainable development services (such as Education, Community Service, and Creative Economy)' }}</p>
+          </div>
+        </div>
+
+        <div class="pillars">
+          <div class="pillar">
+            <div class="pillar-icon">🤝</div>
+            <p>{{ locale === 'ar'
+              ? 'تحسين جودة الحياة من خلال تعزيز مبادرات المجتمع والشراكات المستدامة'
+              : 'IMPROVING THE QUALITY OF LIFE BY ENHANCING COMMUNITY INITIATIVES AND SUSTAINABLE PARTNERSHIP' }}</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">💡</div>
+            <p>{{ locale === 'ar'
+              ? 'تمكين الأفراد من الاستفادة من الاقتصاد الإبداعي من خلال الحلول المبتكرة'
+              : 'EMPOWER INDIVIDUALS TO BENEFIT FROM THE CREATIVE ECONOMY THROUGH INNOVATIVE SOLUTIONS AND VOCATIONAL TRAINING' }}</p>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">🎓</div>
+            <p>{{ locale === 'ar'
+              ? 'تعزيز التعليم الشامل والمستدام محلياً وإقليمياً من خلال برامج مبتكرة'
+              : 'ENHANCE INCLUSIVE AND SUSTAINABLE EDUCATION LOCALLY AND REGIONALLY THROUGH INNOVATIVE PROGRAMS' }}</p>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:32px">
+          <NuxtLink :to="localePath('/about')" class="btn-learn-more">
+            {{ locale === 'ar' ? 'اعرف أكثر عن المؤسسة' : 'LEARN MORE ABOUT BTF' }}
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
     <!-- Projects -->
     <section class="section">
       <div class="container">
@@ -61,12 +110,15 @@
             v-for="proj in projects"
             :key="proj.slug"
             :to="localePath(proj.slug)"
-            class="project-card card"
+            class="project-card"
           >
-            <div class="project-icon">{{ proj.icon }}</div>
-            <h3>{{ t(proj.label) }}</h3>
-            <p>{{ proj.desc[locale] }}</p>
-            <span class="arrow">→</span>
+            <div class="project-img">
+              <img :src="proj.image" :alt="proj.desc[locale]" />
+              <div class="project-overlay">
+                <span class="project-label">{{ locale === "ar" ? proj.labelAr : proj.labelEn }}</span>
+                <span class="project-arrow">→</span>
+              </div>
+            </div>
           </NuxtLink>
         </div>
 
@@ -138,40 +190,32 @@ const stats = [
 
 const projects = [
   {
-    icon: '📚',
-    label: 'home.projects.education',
+    labelEn: 'EDUCATION',
+    labelAr: 'التعليم',
     slug: '/projects/education',
-    desc: {
-      ar: 'مدارس مصغرة، كفالة الطلاب، فضاءات تعليمية',
-      en: 'Micro-schools, student sponsorships, learning spaces'
-    }
+    image: '/images/projects/education.jpg',
+    desc: { ar: 'مشاريع التعليم', en: 'Education Projects' }
   },
   {
-    icon: '🏥',
-    label: 'home.projects.health',
-    slug: '/projects/health',
-    desc: {
-      ar: 'دعم مدارس المستشفيات وطلاب الأطفال المرضى',
-      en: 'Hospital schools and support for sick children'
-    }
+    labelEn: 'MICRO-SCHOOLS',
+    labelAr: 'المدارس المصغرة',
+    slug: '/projects/micro-schools',
+    image: '/images/projects/micro-schools.jpg',
+    desc: { ar: 'المدارس المصغرة', en: 'Micro-Schools' }
   },
   {
-    icon: '🤝',
-    label: 'home.projects.community',
+    labelEn: 'COMMUNITY SERVICE',
+    labelAr: 'خدمة المجتمع',
     slug: '/projects/community',
-    desc: {
-      ar: 'مساعدات عينية، أنشطة، رحلات الخير',
-      en: 'In-kind support, activities, goodwill trips'
-    }
+    image: '/images/projects/community.jpg',
+    desc: { ar: 'خدمة المجتمع', en: 'Community Service' }
   },
   {
-    icon: '💡',
-    label: 'home.projects.microbusiness',
-    slug: '/projects/microbusiness',
-    desc: {
-      ar: 'دعم المشاريع الصغيرة وريادة الأعمال',
-      en: 'Supporting small businesses and entrepreneurship'
-    }
+    labelEn: 'STORY WRITING',
+    labelAr: 'مسابقة تأليف القصص',
+    slug: '/projects/story-writing',
+    image: '/images/projects/story.jpg',
+    desc: { ar: 'مسابقة تأليف القصص', en: 'Story Writing Competition' }
   },
 ]
 
@@ -337,39 +381,64 @@ function formatDate(dateStr) {
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 4px;
 }
 
 .project-card {
-  padding: 32px 24px;
-  text-align: center;
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.project-img {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.project-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-img img {
+  transform: scale(1.05);
+}
+
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 40%, rgba(0,0,0,0.75));
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px;
+  transition: background 0.3s;
 }
-.project-icon {
-  font-size: 40px;
-  margin-bottom: 8px;
+
+.project-card:hover .project-overlay {
+  background: linear-gradient(transparent 20%, rgba(227,28,38,0.85));
 }
-.project-card h3 {
-  font-size: 18px;
+
+.project-label {
+  color: white;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--green-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.project-card p {
-  font-size: 14px;
-  color: var(--text-light);
-  line-height: 1.6;
-}
-.arrow {
-  margin-top: auto;
-  font-size: 20px;
-  color: var(--green);
+
+.project-arrow {
+  color: white;
+  font-size: 18px;
   opacity: 0;
   transition: opacity 0.2s;
+  margin-top: 4px;
 }
-.project-card:hover .arrow { opacity: 1; }
+
+.project-card:hover .project-arrow { opacity: 1; }
 
 /* News */
 .news-section { background: var(--gray-light); }
@@ -447,4 +516,107 @@ function formatDate(dateStr) {
 @media (max-width: 480px) {
   .projects-grid { grid-template-columns: 1fr; }
 }
+
+/* Mission & Vision */
+.mission-section {
+  background: white;
+  padding: 64px 0;
+  text-align: center;
+}
+
+.mission-vision {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 48px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.mv-block { max-width: 420px; }
+
+.mv-block h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #3c3950;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.mv-block p {
+  font-size: 15px;
+  color: #5f727f;
+  line-height: 1.8;
+}
+
+.mv-divider {
+  width: 1px;
+  background: #dfe5e8;
+  min-height: 100px;
+  align-self: stretch;
+}
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 32px;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.pillar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.pillar-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  background: #f4f6f7;
+  border: 2px solid #dfe5e8;
+}
+
+.pillar:nth-child(1) .pillar-icon { background: #e8f5e9; border-color: #c8e6c9; }
+.pillar:nth-child(2) .pillar-icon { background: #fff3e0; border-color: #ffe0b2; }
+.pillar:nth-child(3) .pillar-icon { background: #e3f2fd; border-color: #bbdefb; }
+
+.pillar p {
+  font-size: 12px;
+  font-weight: 700;
+  color: #E31C26;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+.btn-learn-more {
+  display: inline-block;
+  background: #E31C26;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-learn-more:hover { background: #b5151e; }
+
+@media (max-width: 768px) {
+  .pillars { grid-template-columns: 1fr; }
+  .mv-divider { display: none; }
+  .mission-vision { flex-direction: column; align-items: center; }
+}
+
 </style>
