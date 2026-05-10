@@ -3,22 +3,38 @@
     <div class="page-hero">
       <div class="container">
         <h1>{{ locale === 'ar' ? 'الأخبار والنشرات' : 'News & Newsletters' }}</h1>
-        <p>{{ locale === 'ar' ? 'آخر إصدارات نشرتنا الإخبارية' : 'Latest editions of our newsletter' }}</p>
+        <p>{{ locale === 'ar' ? 'آخر إصدارات نشرتنا الإخبارية من MailChimp' : 'Latest editions of our newsletter from MailChimp' }}</p>
       </div>
     </div>
 
     <div class="container section">
-      <div class="news-grid">
-        <NuxtLink
-          v-for="post in news"
-          :key="post._path"
-          :to="localePath(post._path)"
+      <!-- Loading -->
+      <div v-if="pending" class="loading">
+        <div class="spinner" />
+        <p>{{ locale === 'ar' ? 'جاري تحميل الأخبار...' : 'Loading newsletters...' }}</p>
+      </div>
+
+      <!-- Error -->
+      <div v-else-if="error" class="error-msg">
+        {{ locale === 'ar' ? 'حدث خطأ في تحميل الأخبار' : 'Error loading news' }}
+      </div>
+
+      <!-- News grid -->
+      <div v-else class="news-grid">
+        <a
+          v-for="(post, index) in newsData?.items"
+          :key="post.link"
+          :href="post.link"
+          target="_blank"
+          rel="noopener"
           class="news-card"
         >
           <!-- Gradient cover -->
-          <div class="news-cover" :style="getCoverStyle(post.issue)">
+          <div class="news-cover" :style="getCoverStyle(index)">
             <img src="/logo.png" alt="BTF" class="cover-logo" />
-            <span class="cover-issue">{{ locale === 'ar' ? 'العدد' : 'Issue' }} {{ post.issue }}</span>
+            <span class="cover-issue" v-if="post.issue">
+              {{ locale === 'ar' ? 'العدد' : 'Issue' }} {{ post.issue }}
+            </span>
           </div>
 
           <div class="news-body">
@@ -27,9 +43,13 @@
               <span class="news-badge">{{ locale === 'ar' ? 'نشرة' : 'Newsletter' }}</span>
             </div>
             <h2>{{ post.title }}</h2>
-            <span class="read-more">{{ locale === 'ar' ? '« المزيد' : 'Read More »' }}</span>
+            <p class="news-excerpt" v-if="post.description">{{ post.description }}</p>
+            <span class="read-more">
+              {{ locale === 'ar' ? '« اقرأ على MailChimp' : 'Read on MailChimp »' }}
+              🔗
+            </span>
           </div>
-        </NuxtLink>
+        </a>
       </div>
     </div>
   </div>
@@ -37,23 +57,22 @@
 
 <script setup>
 const { locale } = useI18n()
-const localePath = useLocalePath()
 
 useHead({
   title: locale.value === 'ar' ? 'الأخبار | مؤسسة البحرين' : 'News | Bahrain Trust Foundation',
 })
 
-const newsPath = locale.value === 'ar' ? '/ar/news' : '/en/news'
-const { data: news } = await useAsyncData('news-list', () =>
-  queryContent(newsPath).sort({ date: -1 }).find()
-)
+// Fetch from server API which gets RSS
+const { data: newsData, pending, error } = await useLazyFetch('/api/news')
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
-  return new Date(dateStr).toLocaleDateString(
-    locale.value === 'ar' ? 'ar-BH' : 'en-BH',
-    { year: 'numeric', month: 'long' }
-  )
+  try {
+    return new Date(dateStr).toLocaleDateString(
+      locale.value === 'ar' ? 'ar-BH' : 'en-BH',
+      { year: 'numeric', month: 'long' }
+    )
+  } catch { return dateStr }
 }
 
 const gradients = [
@@ -62,12 +81,11 @@ const gradients = [
   'linear-gradient(135deg, #00bcd4 0%, #006064 100%)',
   'linear-gradient(135deg, #c8972a 0%, #8B6914 100%)',
   'linear-gradient(135deg, #1a237e 0%, #283593 100%)',
-  'linear-gradient(135deg, #E31C26 0%, #3c3950 100%)',
+  'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
 ]
 
-function getCoverStyle(issue) {
-  const num = parseInt(String(issue || '').replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))) || 0
-  return { background: gradients[num % gradients.length] }
+function getCoverStyle(index) {
+  return { background: gradients[index % gradients.length] }
 }
 </script>
 
@@ -82,7 +100,29 @@ function getCoverStyle(issue) {
   font-weight: 900;
   margin-bottom: 12px;
 }
-.page-hero p { font-size: 18px; opacity: 0.85; }
+.page-hero p { font-size: 17px; opacity: 0.85; }
+
+.loading {
+  text-align: center;
+  padding: 60px 0;
+  color: #5f727f;
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #f0f0f0;
+  border-top-color: #E31C26;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-msg {
+  text-align: center;
+  padding: 40px;
+  color: #E31C26;
+  font-weight: 700;
+}
 
 .news-grid {
   display: grid;
@@ -106,17 +146,16 @@ function getCoverStyle(issue) {
 }
 
 .news-cover {
-  height: 180px;
+  height: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  position: relative;
+  gap: 12px;
 }
 
 .cover-logo {
-  height: 70px;
+  height: 60px;
   width: auto;
   filter: brightness(10);
   opacity: 0.85;
@@ -124,19 +163,18 @@ function getCoverStyle(issue) {
 
 .cover-issue {
   color: white;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   background: rgba(0,0,0,0.25);
-  padding: 4px 16px;
+  padding: 3px 14px;
   border-radius: 20px;
-  letter-spacing: 0.5px;
 }
 
 .news-body {
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
 }
 
@@ -146,10 +184,7 @@ function getCoverStyle(issue) {
   align-items: center;
 }
 
-.news-date {
-  font-size: 12px;
-  color: #99a9b5;
-}
+.news-date { font-size: 12px; color: #99a9b5; }
 
 .news-badge {
   font-size: 11px;
@@ -164,13 +199,23 @@ function getCoverStyle(issue) {
   font-weight: 700;
   color: #E31C26;
   line-height: 1.5;
-  flex: 1;
+}
+
+.news-excerpt {
+  font-size: 13px;
+  color: #5f727f;
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .read-more {
-  font-size: 13px;
-  color: #E31C26;
+  font-size: 12px;
+  color: #00bcd4;
   font-weight: 700;
+  margin-top: auto;
 }
 
 @media (max-width: 900px) {
