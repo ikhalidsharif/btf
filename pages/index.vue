@@ -1,19 +1,31 @@
 <template>
   <div class="home">
-    <!-- Hero -->
+    <!-- Hero with YouTube Video Background -->
     <section class="hero">
-      <div class="hero-bg" />
+      <!-- YouTube iframe background -->
+      <div class="video-bg">
+        <iframe
+          src="https://www.youtube.com/embed/EGrbZpgYoj8?autoplay=1&mute=1&loop=1&playlist=EGrbZpgYoj8&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+          title="Bahrain Trust Foundation"
+        />
+      </div>
+      <!-- Dark overlay -->
+      <div class="video-overlay" />
+
+      <!-- Content -->
       <div class="container hero-content">
         <div class="hero-text fade-up">
-          <span class="hero-badge">🌿 Bahrain Trust Foundation</span>
-          <h1>{{ t('home.hero.title') }}</h1>
-          <p>{{ t('home.hero.subtitle') }}</p>
+          <h1>{{ locale === "ar" ? "حكاية مؤسسة بحرين ترست" : "Bahrain Trust Foundation's Story" }}</h1>
+          <p>{{ locale === "ar" ? "نعمل من أجل تمكين المجتمع البحريني والأجيال القادمة" : "Empowering communities and shaping the next generation" }}</p>
           <div class="hero-ctas">
-            <NuxtLink :to="localePath('/donate')" class="btn btn-gold">
-              ❤️ {{ t('home.hero.cta') }}
+            <NuxtLink :to="localePath('/donate')" class="btn btn-donate-hero">
+              ❤️ {{ locale === "ar" ? "تبرع الآن" : "Donate Now" }}
             </NuxtLink>
-            <NuxtLink :to="localePath('/projects')" class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.5)">
-              {{ t('home.hero.ctaSecondary') }} →
+            <NuxtLink :to="localePath('/about')" class="btn btn-outline-hero">
+              {{ locale === "ar" ? "اعرف أكثر" : "Learn More About BTF" }} →
             </NuxtLink>
           </div>
         </div>
@@ -22,9 +34,17 @@
       <!-- Stats bar -->
       <div class="stats-bar">
         <div class="container stats-inner">
-          <div class="stat" v-for="s in stats" :key="s.label">
-            <strong>{{ s.value }}</strong>
-            <span>{{ t(s.label) }}</span>
+          <div class="stat">
+            <strong>20,508</strong>
+            <span>{{ locale === "ar" ? "طالب مستفيد من مدارسنا" : "Beneficiary students from our micro schools" }}</span>
+          </div>
+          <div class="stat">
+            <strong>2,353</strong>
+            <span>{{ locale === "ar" ? "حقيبة مدرسية وزعت" : "School bags distributed to students" }}</span>
+          </div>
+          <div class="stat">
+            <strong>1,996</strong>
+            <span>{{ locale === "ar" ? "صندوق رمضان وزع" : "Ramadan boxes distributed inside & outside Bahrain" }}</span>
           </div>
         </div>
       </div>
@@ -177,18 +197,38 @@ function formatDate(dateStr) {
 /* Hero */
 .hero {
   position: relative;
-  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 60%, #2d9158 100%);
   min-height: 600px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  background: #000;
 }
 
-.hero-bg {
+/* YouTube video background */
+.video-bg {
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(circle at 80% 20%, rgba(200,151,42,0.15) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 40%);
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.video-bg iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 177.78vh;
+  height: 56.25vw;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Dark overlay */
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1;
 }
 
 .hero-content {
@@ -198,7 +238,7 @@ function formatDate(dateStr) {
   padding-top: 80px;
   padding-bottom: 60px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .hero-text { max-width: 680px; }
@@ -231,12 +271,50 @@ function formatDate(dateStr) {
 
 .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
 
+.btn-donate-hero {
+  background: #E31C26;
+  color: white;
+  padding: 14px 32px;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-donate-hero:hover { background: #b5151e; transform: translateY(-2px); }
+
+.btn-outline-hero {
+  background: transparent;
+  color: white;
+  padding: 14px 32px;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid rgba(255,255,255,0.6);
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline-hero:hover { background: rgba(255,255,255,0.15); border-color: white; }
+
 /* Stats bar */
 .stats-bar {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.5);
   backdrop-filter: blur(8px);
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 .stats-inner {
   display: flex;
