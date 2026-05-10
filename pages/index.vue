@@ -181,30 +181,39 @@
       </div>
     </section>
 
-    <!-- News -->
-    <section class="section news-section">
+    <!-- Latest News -->
+    <section class="news-section">
       <div class="container">
-        <div class="section-header">
+        <div class="news-header">
           <div>
-            <h2 class="section-title">{{ t('home.news.title') }}</h2>
-            <p class="section-subtitle">{{ t('home.news.subtitle') }}</p>
+            <h2 class="section-title">{{ locale === "ar" ? "آخر الأخبار" : "LATEST NEWS" }}</h2>
+            <p class="section-subtitle">{{ locale === "ar" ? "تابع نشراتنا الإخبارية الأخيرة" : "Follow our latest newsletters" }}</p>
           </div>
-          <NuxtLink :to="localePath('/news')" class="btn btn-outline">
-            {{ t('home.news.viewAll') }}
+          <NuxtLink :to="localePath('/news')" class="btn-view-all">
+            {{ locale === "ar" ? "عرض الكل" : "VIEW ALL" }} →
           </NuxtLink>
         </div>
 
         <div class="news-grid">
-          <NuxtLink
+          <a
             v-for="post in latestNews"
             :key="post._path"
-            :to="localePath(post._path)"
-            class="news-card card"
+            :href="post.link || localePath(post._path)"
+            :target="post.link ? '_blank' : '_self'"
+            rel="noopener"
+            class="news-card"
           >
-            <div class="news-date">{{ formatDate(post.date) }}</div>
-            <h3>{{ post.title }}</h3>
-            <span class="news-issue">{{ t('news.issue') }} {{ post.issue }}</span>
-          </NuxtLink>
+            <!-- Issue number badge -->
+            <div class="news-issue-badge">
+              {{ locale === "ar" ? "العدد" : "Issue" }} {{ post.issue }}
+            </div>
+            <!-- Card content -->
+            <div class="news-card-body">
+              <div class="news-date">{{ formatDate(post.date) }}</div>
+              <h3>{{ post.title }}</h3>
+              <span class="news-read-more">{{ locale === "ar" ? "اقرأ النشرة ←" : "Read Newsletter ←" }}</span>
+            </div>
+          </a>
         </div>
       </div>
     </section>
@@ -521,15 +530,32 @@ function formatDate(dateStr) {
 
 .project-card:hover .project-arrow { opacity: 1; }
 
-/* News */
-.news-section { background: var(--gray-light); }
-.section-header {
+/* ── News Section ── */
+.news-section {
+  background: #f4f6f7;
+  padding: 64px 0;
+}
+
+.news-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 40px;
 }
-.section-header .section-subtitle { margin-bottom: 0; }
+
+.news-header .section-subtitle { margin-bottom: 0; }
+
+.btn-view-all {
+  color: #E31C26;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.btn-view-all:hover { opacity: 0.7; }
 
 .news-grid {
   display: grid;
@@ -538,26 +564,68 @@ function formatDate(dateStr) {
 }
 
 .news-card {
-  padding: 28px;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  position: relative;
 }
-.news-date {
-  font-size: 13px;
-  color: var(--gold);
-  font-weight: 600;
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
-.news-card h3 {
-  font-size: 17px;
+
+.news-issue-badge {
+  background: #E31C26;
+  color: white;
+  padding: 6px 16px;
+  font-size: 12px;
   font-weight: 700;
-  color: var(--green-dark);
-  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.news-issue {
-  font-size: 13px;
-  color: var(--text-light);
+
+.news-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.news-date {
+  font-size: 12px;
+  color: #00bcd4;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.news-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3c3950;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.news-read-more {
+  font-size: 12px;
+  color: #E31C26;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .news-grid { grid-template-columns: 1fr; }
+  .news-header { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
 
 /* Donate CTA */
