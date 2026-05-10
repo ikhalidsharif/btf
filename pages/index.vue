@@ -99,34 +99,85 @@
       </div>
     </section>
 
-    <!-- Projects -->
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">{{ t('home.projects.title') }}</h2>
-        <p class="section-subtitle">{{ t('home.projects.subtitle') }}</p>
+    <!-- Projects 3-Column Slider -->
+    <section class="projects-section">
+      <div class="projects-columns">
 
-        <div class="projects-grid">
-          <NuxtLink
-            v-for="proj in projects"
-            :key="proj.slug"
-            :to="localePath(proj.slug)"
-            class="project-card"
-          >
-            <div class="project-img">
-              <img :src="proj.image" :alt="proj.desc[locale]" />
-              <div class="project-overlay">
-                <span class="project-label">{{ locale === "ar" ? proj.labelAr : proj.labelEn }}</span>
-                <span class="project-arrow">→</span>
+        <!-- EDUCATION -->
+        <div class="proj-column">
+          <div class="slide-track" :style="{ transform: `translateX(${-eduIndex * 100}%)` }">
+            <div v-for="slide in education" :key="slide.slug" class="slide">
+              <img :src="slide.image" :alt="slide.title" />
+              <div class="slide-overlay">
+                <div class="slide-content">
+                  <h3>{{ locale === "ar" ? "التعليم" : "EDUCATION" }}</h3>
+                  <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
+                  <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                    {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
+                  </NuxtLink>
+                </div>
+              </div>
+              <div class="slide-dots">
+                <span v-for="(s, i) in education" :key="i"
+                  :class="{ active: i === eduIndex }"
+                  @click="eduIndex = i" />
               </div>
             </div>
-          </NuxtLink>
+          </div>
+          <button class="slide-prev" @click="eduIndex = (eduIndex - 1 + education.length) % education.length">&#8249;</button>
+          <button class="slide-next" @click="eduIndex = (eduIndex + 1) % education.length">&#8250;</button>
         </div>
 
-        <div style="text-align:center;margin-top:40px">
-          <NuxtLink :to="localePath('/projects')" class="btn btn-primary">
-            {{ t('home.projects.viewAll') }}
-          </NuxtLink>
+        <!-- COMMUNITY SERVICE -->
+        <div class="proj-column">
+          <div class="slide-track" :style="{ transform: `translateX(${-comIndex * 100}%)` }">
+            <div v-for="slide in community" :key="slide.slug" class="slide">
+              <img :src="slide.image" :alt="slide.title" />
+              <div class="slide-overlay">
+                <div class="slide-content">
+                  <h3>{{ locale === "ar" ? "خدمة المجتمع" : "COMMUNITY SERVICE" }}</h3>
+                  <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
+                  <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                    {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
+                  </NuxtLink>
+                </div>
+              </div>
+              <div class="slide-dots">
+                <span v-for="(s, i) in community" :key="i"
+                  :class="{ active: i === comIndex }"
+                  @click="comIndex = i" />
+              </div>
+            </div>
+          </div>
+          <button class="slide-prev" @click="comIndex = (comIndex - 1 + community.length) % community.length">&#8249;</button>
+          <button class="slide-next" @click="comIndex = (comIndex + 1) % community.length">&#8250;</button>
         </div>
+
+        <!-- CREATIVE ECONOMY -->
+        <div class="proj-column">
+          <div class="slide-track" :style="{ transform: `translateX(${-creIndex * 100}%)` }">
+            <div v-for="slide in creative" :key="slide.slug" class="slide">
+              <img :src="slide.image" :alt="slide.title" />
+              <div class="slide-overlay">
+                <div class="slide-content">
+                  <h3>{{ locale === "ar" ? "الاقتصاد الإبداعي" : "CREATIVE ECONOMY" }}</h3>
+                  <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
+                  <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                    {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
+                  </NuxtLink>
+                </div>
+              </div>
+              <div class="slide-dots">
+                <span v-for="(s, i) in creative" :key="i"
+                  :class="{ active: i === creIndex }"
+                  @click="creIndex = i" />
+              </div>
+            </div>
+          </div>
+          <button class="slide-prev" @click="creIndex = (creIndex - 1 + creative.length) % creative.length">&#8249;</button>
+          <button class="slide-next" @click="creIndex = (creIndex + 1) % creative.length">&#8250;</button>
+        </div>
+
       </div>
     </section>
 
@@ -218,6 +269,36 @@ const projects = [
     desc: { ar: 'مسابقة تأليف القصص', en: 'Story Writing Competition' }
   },
 ]
+
+const eduIndex = ref(0)
+const comIndex = ref(0)
+const creIndex = ref(0)
+
+const education = [
+  { title: 'SPACE FOR ALL', titleAr: 'فضاء للجميع', slug: '/projects/space-for-all', image: '/images/projects/education-space.jpg' },
+  { title: 'DA VINCI TRAINING PROGRAM', titleAr: 'برنامج دافنشي التدريبي', slug: '/projects/da-vinci', image: '/images/projects/education-davinci.jpg' },
+  { title: 'STORY WRITING COMPETITION', titleAr: 'مسابقة تأليف القصص', slug: '/projects/story-writing', image: '/images/projects/education-story.jpg' },
+  { title: 'MICRO-SCHOOLS', titleAr: 'المدارس المصغرة', slug: '/projects/micro-schools', image: '/images/projects/education-micro.jpg' },
+  { title: 'HOSPITAL MICRO SCHOOLS', titleAr: 'مدارس المستشفيات', slug: '/projects/hospital-micro-schools', image: '/images/projects/education-hospital.jpg' },
+]
+
+const community = [
+  { title: 'GOOD WILL TRIPS', titleAr: 'رحلات الخير', slug: '/projects/good-will-trips', image: '/images/projects/community-goodwill.jpg' },
+  { title: 'VOLUNTEER TEAMS', titleAr: 'فرق التطوع', slug: '/projects/volunteer-teams', image: '/images/projects/community-volunteer.jpg' },
+  { title: 'IN-KIND SUPPORT', titleAr: 'الدعم العيني', slug: '/projects/in-kind-support', image: '/images/projects/community-inkind.jpg' },
+]
+
+const creative = [
+  { title: 'SAFEYA ALI KANOO HUB', titleAr: 'مركز صفية علي كانو', slug: '/projects/safeya-kanoo-hub', image: '/images/projects/community.jpg' },
+  { title: 'GIFT SHOP', titleAr: 'المتجر', slug: '/gift-shop', image: '/images/projects/creative-giftshop.jpg' },
+]
+
+// Auto-advance sliders
+onMounted(() => {
+  setInterval(() => { eduIndex.value = (eduIndex.value + 1) % education.length }, 5000)
+  setInterval(() => { comIndex.value = (comIndex.value + 1) % community.length }, 5500)
+  setInterval(() => { creIndex.value = (creIndex.value + 1) % creative.length }, 6000)
+})
 
 // Fetch latest 3 news posts
 const newsPath = locale.value === 'ar' ? '/ar/news' : '/en/news'
@@ -617,6 +698,139 @@ function formatDate(dateStr) {
   .pillars { grid-template-columns: 1fr; }
   .mv-divider { display: none; }
   .mission-vision { flex-direction: column; align-items: center; }
+}
+
+
+/* ── Projects 3-Column Slider ── */
+.projects-section {
+  background: #f0f3f2;
+  padding: 0;
+}
+
+.projects-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.proj-column {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+}
+
+.slide-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 30%, rgba(0,0,0,0.7));
+  display: flex;
+  align-items: flex-end;
+}
+
+.slide-content {
+  padding: 24px;
+  color: white;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-content h3 {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.slide-content p {
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+.slide-btn {
+  display: inline-block;
+  border: 1.5px solid white;
+  color: white;
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.slide-btn:hover {
+  background: white;
+  color: #3c3950;
+}
+
+.slide-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+.slide-dots span {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.slide-dots span.active { background: white; }
+
+.slide-prev, .slide-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.3);
+  border: none;
+  color: white;
+  font-size: 28px;
+  width: 36px;
+  height: 48px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.slide-prev:hover, .slide-next:hover { background: rgba(0,0,0,0.6); }
+.slide-prev { left: 0; }
+.slide-next { right: 0; }
+
+@media (max-width: 768px) {
+  .projects-columns { grid-template-columns: 1fr; }
+  .proj-column { aspect-ratio: 4/3; }
 }
 
 </style>
