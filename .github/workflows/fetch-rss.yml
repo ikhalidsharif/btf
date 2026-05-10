@@ -2,8 +2,8 @@ name: Fetch MailChimp Newsletter RSS
 
 on:
   schedule:
-    - cron: '0 6 * * *'   # كل يوم الساعة 6 صباحاً
-  workflow_dispatch:        # تشغيل يدوي عند الحاجة
+    - cron: '0 6 * * *'
+  workflow_dispatch:
 
 jobs:
   fetch-rss:
@@ -21,12 +21,12 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install rss-parser gray-matter
+        run: npm install rss-parser
 
       - name: Fetch RSS and generate Markdown
         run: node .github/scripts/fetch-rss.js
         env:
-          MAILCHIMP_RSS_URL: ${{ secrets.MAILCHIMP_RSS_URL }}
+          MAILCHIMP_RSS_URL: "https://us16.campaign-archive.com/feed?u=dd98d3712532e7894f3bafc86&id=f3d779a516"
 
       - name: Commit new posts if any
         run: |
