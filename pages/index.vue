@@ -703,20 +703,23 @@ function formatDate(dateStr) {
 
 /* ── Projects 3-Column Slider ── */
 .projects-section {
-  background: #f0f3f2;
+  background: #000;
   padding: 0;
+  margin: 0;
+  line-height: 0;
 }
 
 .projects-columns {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
+  gap: 2px;
+  height: 400px;
 }
 
 .proj-column {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 3/4;
+  height: 400px;
 }
 
 .slide-track {
@@ -741,15 +744,16 @@ function formatDate(dateStr) {
 .slide-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(transparent 30%, rgba(0,0,0,0.7));
+  background: linear-gradient(transparent 25%, rgba(0,0,0,0.75));
   display: flex;
   align-items: flex-end;
 }
 
 .slide-content {
-  padding: 24px;
+  padding: 20px;
   color: white;
   animation: slideUp 0.5s ease;
+  min-height: 130px;
 }
 
 @keyframes slideUp {
@@ -758,19 +762,20 @@ function formatDate(dateStr) {
 }
 
 .slide-content h3 {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 900;
   letter-spacing: 1px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .slide-content p {
-  font-size: 13px;
+  font-size: 11px;
   letter-spacing: 0.5px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   opacity: 0.9;
   text-transform: uppercase;
+  line-height: 1.4;
 }
 
 .slide-btn {
@@ -829,8 +834,8 @@ function formatDate(dateStr) {
 .slide-next { right: 0; }
 
 @media (max-width: 768px) {
-  .projects-columns { grid-template-columns: 1fr; }
-  .proj-column { aspect-ratio: 4/3; }
+  .projects-columns { grid-template-columns: 1fr; height: auto; }
+  .proj-column { height: 300px; }
 }
 
 </style>
