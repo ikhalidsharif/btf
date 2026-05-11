@@ -34,8 +34,6 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
-    tapSecretKey: process.env.TAP_SECRET_KEY,
-    supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     public: {
       tapPublicKey: process.env.TAP_PUBLIC_KEY || '',
       supabaseUrl: 'https://atfcckxxcomreukjzuxa.supabase.co',
