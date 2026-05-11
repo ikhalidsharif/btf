@@ -55,22 +55,21 @@
         <div class="modal-body">
           <!-- Controls -->
           <div class="page-controls">
-            <button @click="nextPage" :disabled="currentPage >= totalPages" class="flip-btn">
-              {{ locale === 'ar' ? '›' : '‹' }}
-            </button>
-            <span class="page-num">
-              {{ locale === 'ar'
-                ? `${currentPage} / ${totalPages}`
-                : `${currentPage} / ${totalPages}`
-              }}
-            </span>
-            <button @click="prevPage" :disabled="currentPage <= 1" class="flip-btn">
-              {{ locale === 'ar' ? '‹' : '›' }}
-            </button>
+            <!-- LTR: ‹ prev | page | next › -->
+            <!-- RTL: › next | page | prev ‹ (visual arrows reversed) -->
+            <button @click="locale === 'ar' ? nextPage() : prevPage()"
+              :disabled="locale === 'ar' ? currentPage >= totalPages : currentPage <= 1"
+              class="flip-btn">‹</button>
+            <span class="page-num">{{ currentPage }} / {{ totalPages }}</span>
+            <button @click="locale === 'ar' ? prevPage() : nextPage()"
+              :disabled="locale === 'ar' ? currentPage <= 1 : currentPage >= totalPages"
+              class="flip-btn">›</button>
           </div>
 
           <!-- PDF Pages - double page spread -->
-          <div class="spread" :class="{ rtl: locale === 'ar' }">
+          <!-- RTL books open right-to-left: right=current, left=current+1 -->
+          <!-- LTR books open left-to-right: left=current-1, right=current -->
+          <div class="spread">
             <div class="page-wrap" v-show="!isMobile && showLeftPage">
               <canvas ref="canvasLeft" class="pdf-page"></canvas>
             </div>
@@ -169,9 +168,13 @@ const canvasRight = ref(null)
 let pdfDoc = null
 
 const showLeftPage = computed(() => {
-  return locale.value === 'ar'
-    ? currentPage.value < totalPages.value
-    : currentPage.value > 1
+  if (locale.value === 'ar') {
+    // RTL: show left page if there's a next page to show
+    return currentPage.value + 1 <= totalPages.value
+  } else {
+    // LTR: show left page if there's a previous page
+    return currentPage.value > 1
+  }
 })
 
 onMounted(() => {
@@ -229,17 +232,31 @@ async function renderSpread() {
   if (!pdfDoc) return
   loading.value = true
 
-  // In RTL: right canvas shows current page, left shows next page
-  // In LTR: left canvas shows previous page, right shows current page
-  const rightPageNum = currentPage.value
-  const leftPageNum = locale.value === 'ar' ? currentPage.value + 1 : currentPage.value - 1
+  if (locale.value === 'ar') {
+    // RTL: reading right-to-left
+    // Right canvas = current page (first in reading order)
+    // Left canvas = current page + 1 (second in reading order)
+    const rightPageNum = currentPage.value
+    const leftPageNum = currentPage.value + 1
 
-  if (canvasRight.value && rightPageNum <= totalPages.value) {
-    await renderPage(rightPageNum, canvasRight.value)
-  }
+    if (canvasRight.value && rightPageNum <= totalPages.value) {
+      await renderPage(rightPageNum, canvasRight.value)
+    }
+    if (!isMobile.value && canvasLeft.value && leftPageNum <= totalPages.value) {
+      await renderPage(leftPageNum, canvasLeft.value)
+    }
+  } else {
+    // LTR: reading left-to-right
+    // Left canvas = previous page, right canvas = current page
+    const rightPageNum = currentPage.value
+    const leftPageNum = currentPage.value - 1
 
-  if (!isMobile.value && canvasLeft.value && leftPageNum >= 1 && leftPageNum <= totalPages.value) {
-    await renderPage(leftPageNum, canvasLeft.value)
+    if (canvasRight.value && rightPageNum <= totalPages.value) {
+      await renderPage(rightPageNum, canvasRight.value)
+    }
+    if (!isMobile.value && canvasLeft.value && leftPageNum >= 1) {
+      await renderPage(leftPageNum, canvasLeft.value)
+    }
   }
 
   loading.value = false
@@ -259,12 +276,14 @@ async function renderPage(num, canvas) {
 }
 
 async function prevPage() {
+  // prevPage = go to earlier pages (lower page numbers)
   if (currentPage.value <= 1) return
   currentPage.value = Math.max(1, currentPage.value - 2)
   await renderSpread()
 }
 
 async function nextPage() {
+  // nextPage = go to later pages (higher page numbers)
   if (currentPage.value >= totalPages.value) return
   currentPage.value = Math.min(totalPages.value, currentPage.value + 2)
   await renderSpread()
