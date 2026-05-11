@@ -136,7 +136,7 @@ const { data: rawProjects } = await useAsyncData('donation-projects', () =>
   query('donation_projects', '?active=eq.true&order=sort_order.asc')
 )
 
-const projects = computed(() => (rawProjects.value || []).map((p: any) => ({
+const projects = computed(() => (rawProjects.value || []).map((p) => ({
   id: p.id,
   image: p.image_url,
   nameAr: p.name_ar,
