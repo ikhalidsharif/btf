@@ -146,7 +146,7 @@ function login() {
 
 async function loadProjects() {
   loading.value = true
-  const data = await query('donation_projects', '?order=sort_order.asc&active=neq.null')
+  const data = await query('donation_projects', '?order=sort_order.asc')
   projects.value = data
   loading.value = false
 }

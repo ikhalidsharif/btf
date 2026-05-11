@@ -34,7 +34,7 @@
                 <p>{{ locale === 'ar' ? proj.descAr : proj.descEn }}</p>
                 <span class="project-amount">{{ locale === 'ar' ? `${proj.amount} د.ب` : `${proj.amount} BHD` }}</span>
               </div>
-              <div class="project-check" v-if="selectedProject?.id === proj.id">✓</div>
+              <div class="project-check" v-if="selectedProject.value?.id === proj.id">✓</div>
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@
 
             <!-- Selected project -->
             <div v-if="selectedProject" class="selected-project-badge">
-              {{ selectedProject.icon }} {{ locale === 'ar' ? selectedProject.nameAr : selectedProject.nameEn }}
+              {{ selectedProject?.icon }} {{ locale === 'ar' ? selectedProject?.nameAr : selectedProject?.nameEn }}
             </div>
 
             <!-- Amount -->
@@ -133,7 +133,7 @@ useHead({
 
 // Load projects from Supabase
 const { data: rawProjects } = await useAsyncData('donation-projects', () =>
-  query('donation_projects', '?active=eq.true&order=sort_order.asc')
+  query('donation_projects', '?active=eq.true&order=sort_order.asc,id.asc')
 )
 
 const projects = computed(() => (rawProjects.value || []).map((p) => ({
