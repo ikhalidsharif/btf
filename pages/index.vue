@@ -918,6 +918,7 @@ function formatDate(dateStr) {
 /* ── Stories Banner ── */
 .stories-banner {
   line-height: 0;
+  margin: 0;
 }
 
 .stories-banner-link {
@@ -929,19 +930,11 @@ function formatDate(dateStr) {
   width: 100%;
   height: auto;
   display: block;
-  object-fit: cover;
-  /* Crop to show only the left half (the image + red CTA section) */
-  object-position: left center;
-  max-height: 500px;
   transition: transform 0.3s;
 }
 
 .stories-banner-link:hover .stories-banner-full-img {
-  transform: scale(1.02);
-}
-
-@media (max-width: 768px) {
-  .stories-banner-full-img { max-height: 300px; }
+  transform: scale(1.01);
 }
 
 </style>
