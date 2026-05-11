@@ -95,21 +95,6 @@
                 placeholder="+973 XXXX XXXX" />
             </div>
 
-            <!-- Donation type -->
-            <div class="form-group">
-              <label>{{ locale === 'ar' ? 'نوع التبرع' : 'Donation Type' }}</label>
-              <div class="radio-group">
-                <label class="radio-label">
-                  <input type="radio" v-model="donationType" value="once" />
-                  {{ locale === 'ar' ? 'مرة واحدة' : 'One Time' }}
-                </label>
-                <label class="radio-label">
-                  <input type="radio" v-model="donationType" value="monthly" />
-                  {{ locale === 'ar' ? 'شهري' : 'Monthly' }}
-                </label>
-              </div>
-            </div>
-
             <!-- Error -->
             <div v-if="error" class="error-msg">{{ error }}</div>
 
@@ -182,7 +167,6 @@ const presets = [5, 10, 20, 50, 100]
 const amount = ref(10)
 const customAmount = ref(false)
 const customAmountValue = ref('')
-const donationType = ref('once')
 const loading = ref(false)
 const error = ref('')
 
@@ -233,7 +217,6 @@ async function submitDonation() {
         amount: finalAmount.value,
         currency: 'BHD',
         project: locale.value === 'ar' ? selectedProject.value.nameAr : selectedProject.value.nameEn,
-        donationType: donationType.value,
         customer: {
           name: form.name,
           email: form.email,
@@ -359,8 +342,7 @@ async function submitDonation() {
 .preset-btn:hover { border-color: #E31C26; color: #E31C26; }
 .preset-btn.active { background: #E31C26; color: white; border-color: #E31C26; }
 
-.radio-group { display: flex; gap: 20px; }
-.radio-label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+
 
 .error-msg {
   background: #fff5f5;
