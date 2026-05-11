@@ -1,10 +1,9 @@
 <template>
-  <div class="stories-page" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
+  <div class="stories-page">
 
-    <!-- Hero Banner -->
+    <!-- Hero -->
     <div class="stories-hero">
       <div class="container">
-        <div class="hero-badge">📚</div>
         <h1>{{ locale === 'ar' ? 'اقرأ قصصنا' : 'Read Our Stories' }}</h1>
         <p>{{ locale === 'ar'
           ? 'قصص إبداعية من مسابقة تأليف القصص للأطفال والناشئة في البحرين'
@@ -13,7 +12,7 @@
       </div>
     </div>
 
-    <!-- Books shelf -->
+    <!-- Books Grid -->
     <div class="container section">
       <div class="books-grid">
         <div
@@ -22,17 +21,15 @@
           class="book-card"
           @click="openBook(book)"
         >
-          <div class="book-cover" :style="{ background: book.color }">
-            <div class="book-spine" :style="{ background: book.spineColor }"></div>
-            <div class="book-cover-content">
-              <div class="book-icon">📖</div>
-              <div class="book-title-cover">{{ book.title }}</div>
-              <div class="book-author-cover">{{ book.author }}</div>
+          <!-- Book Cover with real thumbnail -->
+          <div class="book-cover">
+            <img :src="book.cover" :alt="book.title" class="cover-img" />
+            <div class="cover-overlay">
+              <span class="read-icon">📖</span>
             </div>
           </div>
           <div class="book-info">
             <h3>{{ book.title }}</h3>
-            <p>{{ book.author }}</p>
             <button class="btn-read">
               {{ locale === 'ar' ? 'اقرأ الكتاب' : 'Read Book' }} →
             </button>
@@ -41,50 +38,51 @@
       </div>
     </div>
 
-    <!-- Flipbook Modal -->
-    <div v-if="activeBook" class="flipbook-modal" @click.self="closeBook">
-      <div class="flipbook-container">
-        <div class="flipbook-header">
+    <!-- PDF Viewer Modal -->
+    <div v-if="activeBook" class="modal-overlay" @click.self="closeBook">
+      <div class="modal-box">
+
+        <div class="modal-header">
           <h2>{{ activeBook.title }}</h2>
-          <div class="flipbook-actions">
-            <a :href="activeBook.url" target="_blank" class="btn-download">
+          <div class="modal-actions">
+            <a :href="activeBook.url" target="_blank" download class="btn-download">
               ⬇️ {{ locale === 'ar' ? 'تحميل' : 'Download' }}
             </a>
-            <button class="btn-close" @click="closeBook">✕</button>
+            <button @click="closeBook" class="btn-close">✕</button>
           </div>
         </div>
 
-        <!-- PDF Flipbook using PDF.js + StPageFlip -->
-        <div class="flipbook-viewer">
-          <div class="flipbook-controls">
-            <button class="flip-btn" @click="prevPage" :disabled="currentPage <= 1">
+        <div class="modal-body">
+          <!-- Controls -->
+          <div class="page-controls">
+            <button @click="nextPage" :disabled="currentPage >= totalPages" class="flip-btn">
               {{ locale === 'ar' ? '›' : '‹' }}
             </button>
-            <span class="page-info">
+            <span class="page-num">
               {{ locale === 'ar'
-                ? `صفحة ${currentPage} من ${totalPages}`
-                : `Page ${currentPage} of ${totalPages}`
+                ? `${currentPage} / ${totalPages}`
+                : `${currentPage} / ${totalPages}`
               }}
             </span>
-            <button class="flip-btn" @click="nextPage" :disabled="currentPage >= totalPages">
+            <button @click="prevPage" :disabled="currentPage <= 1" class="flip-btn">
               {{ locale === 'ar' ? '‹' : '›' }}
             </button>
           </div>
 
-          <div class="pages-wrapper" :class="{ rtl: locale === 'ar' }">
-            <!-- Left page (or right in RTL) -->
-            <div class="page-left" v-show="!isMobile">
-              <canvas :id="`canvas-left`" class="pdf-canvas"></canvas>
+          <!-- PDF Pages - double page spread -->
+          <div class="spread" :class="{ rtl: locale === 'ar' }">
+            <div class="page-wrap" v-show="!isMobile && showLeftPage">
+              <canvas ref="canvasLeft" class="pdf-page"></canvas>
             </div>
-            <!-- Right page (or left in RTL) -->
-            <div class="page-right">
-              <canvas :id="`canvas-right`" class="pdf-canvas"></canvas>
-              <div v-if="loading" class="page-loading">
+            <div class="page-wrap">
+              <canvas ref="canvasRight" class="pdf-page"></canvas>
+              <div v-if="loading" class="loading-overlay">
                 <div class="spinner"></div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -95,90 +93,105 @@
 const { locale } = useI18n()
 
 useHead({
-  title: locale.value === 'ar' ? 'قصصنا | مؤسسة البحرين' : 'Our Stories | Bahrain Trust Foundation',
+  title: computed(() => locale.value === 'ar' ? 'قصصنا | مؤسسة البحرين' : 'Our Stories | Bahrain Trust Foundation'),
   script: [
-    { src: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js', defer: true }
+    {
+      src: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+      defer: true,
+    }
   ]
 })
 
-const SUPABASE_URL = 'https://atfcckxxcomreukjzuxa.supabase.co/storage/v1/object/public/stories'
+const SUPABASE = 'https://atfcckxxcomreukjzuxa.supabase.co/storage/v1/object/public/stories'
+const WP = 'https://bahraintrust.org/wp-content/uploads/real3d-flipbook'
 
 const books = [
   {
-    file: 'Rana.pdf',
-    title: locale.value === 'ar' ? 'قصة رنا' : 'Rana\'s Story',
-    author: 'Rana',
-    color: 'linear-gradient(135deg, #E31C26, #8B0000)',
-    spineColor: '#8B0000',
-    url: `${SUPABASE_URL}/Rana.pdf`,
+    title: locale.value === 'ar' ? 'برواز الأعواد' : 'Brawaz Al-Awad',
+    cover: `${WP}/flipbook_2/thumb.jpg`,
+    url: `${SUPABASE}/Brawaz-Al-Awad.pdf`,
   },
   {
-    file: 'imand.pdf',
-    title: locale.value === 'ar' ? 'قصة إيمان' : 'Imand\'s Story',
-    author: 'Imand',
-    color: 'linear-gradient(135deg, #00bcd4, #006064)',
-    spineColor: '#006064',
-    url: `${SUPABASE_URL}/imand.pdf`,
+    title: locale.value === 'ar' ? 'رأيت في حلمي' : 'I Saw in My Dream',
+    cover: `${WP}/flipbook_4/thumb.jpg`,
+    url: `${SUPABASE}/Rayt-Fi-Holmi.pdf`,
   },
   {
-    file: 'mustafa_compressed.pdf',
-    title: locale.value === 'ar' ? 'قصة مصطفى' : 'Mustafa\'s Story',
-    author: 'Mustafa',
-    color: 'linear-gradient(135deg, #3c3950, #212331)',
-    spineColor: '#212331',
-    url: `${SUPABASE_URL}/mustafa_compressed.pdf`,
+    title: locale.value === 'ar' ? 'أنا طباخ ماهر' : 'I Am a Great Chef',
+    cover: `${WP}/flipbook_5/thumb.jpg`,
+    url: `${SUPABASE}/Tabbakh-Maher.pdf`,
   },
   {
-    file: 'Batool-dummy-3-r1.pdf',
-    title: locale.value === 'ar' ? 'قصة بتول' : 'Batool\'s Story',
-    author: 'Batool',
-    color: 'linear-gradient(135deg, #c8972a, #8B6914)',
-    spineColor: '#8B6914',
-    url: `${SUPABASE_URL}/Batool-dummy-3-r1.pdf`,
+    title: locale.value === 'ar' ? 'طائرتي الصفراء' : 'My Yellow Airplane',
+    cover: `${WP}/flipbook_6/thumb.jpg`,
+    url: `${SUPABASE}/Tayarti-Al-Safra.pdf`,
   },
   {
-    file: 'siddiqa-FINAL-2-r1.pdf',
-    title: locale.value === 'ar' ? 'قصة صديقة' : 'Siddiqa\'s Story',
-    author: 'Siddiqa',
-    color: 'linear-gradient(135deg, #1a237e, #283593)',
-    spineColor: '#1a237e',
-    url: `${SUPABASE_URL}/siddiqa-FINAL-2-r1.pdf`,
+    title: locale.value === 'ar' ? 'أح مد' : 'Ahmad',
+    cover: `${WP}/flipbook_7/thumb.jpg`,
+    url: `${SUPABASE}/Ahmad.pdf`,
   },
   {
-    file: '2-Booklet-A4s.pdf',
-    title: locale.value === 'ar' ? 'مجموعة القصص ٢' : 'Stories Collection 2',
-    author: locale.value === 'ar' ? 'مؤسسة بحرين ترست' : 'Bahrain Trust Foundation',
-    color: 'linear-gradient(135deg, #2e7d32, #1b5e20)',
-    spineColor: '#1b5e20',
-    url: `${SUPABASE_URL}/2-Booklet-A4s.pdf`,
+    title: locale.value === 'ar' ? 'مقدام يعيد الأيام' : 'Moqdam Relives the Days',
+    cover: `${WP}/flipbook_8/thumb.jpg`,
+    url: `${SUPABASE}/Moqdam.pdf`,
   },
   {
-    file: '3-Booklets.pdf',
-    title: locale.value === 'ar' ? 'مجموعة القصص ٣' : 'Stories Collection 3',
-    author: locale.value === 'ar' ? 'مؤسسة بحرين ترست' : 'Bahrain Trust Foundation',
-    color: 'linear-gradient(135deg, #6a1b9a, #4a148c)',
-    spineColor: '#4a148c',
-    url: `${SUPABASE_URL}/3-Booklets.pdf`,
+    title: locale.value === 'ar' ? 'العالم الذي أيقظني' : 'The World That Woke Me',
+    cover: `${WP}/flipbook_10/thumb.jpg`,
+    url: `${SUPABASE}/Al-Alam-Alathi-Ayqathni.pdf`,
+  },
+  {
+    title: locale.value === 'ar' ? 'جدي القلاف' : 'My Grandfather the Boat Builder',
+    cover: `${WP}/flipbook_11/thumb.jpg`,
+    url: `${SUPABASE}/Jiddi-Al-Qallaf.pdf`,
+  },
+  {
+    title: locale.value === 'ar' ? 'معالم بلادنا' : 'Landmarks of Our Country',
+    cover: `${WP}/flipbook_12/thumb.jpg`,
+    url: `${SUPABASE}/Malem-Bladna.pdf`,
+  },
+  {
+    title: locale.value === 'ar' ? 'ما هو إعادة التدوير؟' : 'What is Recycling?',
+    cover: `${WP}/flipbook_14/thumb.jpg`,
+    url: `${SUPABASE}/Eadat-Tadweer.pdf`,
   },
 ]
 
+// State
 const activeBook = ref(null)
 const currentPage = ref(1)
 const totalPages = ref(0)
 const loading = ref(false)
 const isMobile = ref(false)
+const canvasLeft = ref(null)
+const canvasRight = ref(null)
 let pdfDoc = null
+
+const showLeftPage = computed(() => {
+  return locale.value === 'ar'
+    ? currentPage.value < totalPages.value
+    : currentPage.value > 1
+})
 
 onMounted(() => {
   isMobile.value = window.innerWidth < 768
   window.addEventListener('resize', () => {
     isMobile.value = window.innerWidth < 768
   })
+  // Keyboard navigation
+  window.addEventListener('keydown', (e) => {
+    if (!activeBook.value) return
+    if (e.key === 'ArrowRight') locale.value === 'ar' ? nextPage() : prevPage()
+    if (e.key === 'ArrowLeft') locale.value === 'ar' ? prevPage() : nextPage()
+    if (e.key === 'Escape') closeBook()
+  })
 })
 
 async function openBook(book) {
   activeBook.value = book
   currentPage.value = 1
+  loading.value = true
   await nextTick()
   await loadPDF(book.url)
 }
@@ -191,232 +204,195 @@ function closeBook() {
 }
 
 async function loadPDF(url) {
-  loading.value = true
   try {
-    const pdfjsLib = window['pdfjs-dist/build/pdf']
-    if (!pdfjsLib) {
-      // Load PDF.js if not loaded
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Wait for pdf.js to load
+    let attempts = 0
+    while (!window.pdfjsLib && attempts < 20) {
+      await new Promise(r => setTimeout(r, 200))
+      attempts++
     }
 
-    const pdfjsLib2 = window.pdfjsLib || window['pdfjs-dist/build/pdf']
-    pdfjsLib2.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+    const lib = window.pdfjsLib
+    if (!lib) throw new Error('PDF.js not loaded')
 
-    pdfDoc = await pdfjsLib2.getDocument(url).promise
+    lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+    pdfDoc = await lib.getDocument(url).promise
     totalPages.value = pdfDoc.numPages
-    await renderPages()
+    await renderSpread()
   } catch (e) {
-    console.error('PDF load error:', e)
+    console.error('PDF error:', e)
   }
   loading.value = false
 }
 
-async function renderPages() {
+async function renderSpread() {
   if (!pdfDoc) return
   loading.value = true
 
-  // Render main page
-  const canvasRight = document.getElementById('canvas-right')
-  if (canvasRight && currentPage.value <= totalPages.value) {
-    await renderPage(pdfDoc, currentPage.value, canvasRight)
+  // In RTL: right canvas shows current page, left shows next page
+  // In LTR: left canvas shows previous page, right shows current page
+  const rightPageNum = currentPage.value
+  const leftPageNum = locale.value === 'ar' ? currentPage.value + 1 : currentPage.value - 1
+
+  if (canvasRight.value && rightPageNum <= totalPages.value) {
+    await renderPage(rightPageNum, canvasRight.value)
   }
 
-  // Render facing page (RTL: previous page, LTR: next page)
-  if (!isMobile.value) {
-    const canvasLeft = document.getElementById('canvas-left')
-    const facingPage = locale.value === 'ar' ? currentPage.value + 1 : currentPage.value - 1
-    if (canvasLeft && facingPage >= 1 && facingPage <= totalPages.value) {
-      await renderPage(pdfDoc, facingPage, canvasLeft)
-    }
+  if (!isMobile.value && canvasLeft.value && leftPageNum >= 1 && leftPageNum <= totalPages.value) {
+    await renderPage(leftPageNum, canvasLeft.value)
   }
 
   loading.value = false
 }
 
-async function renderPage(pdf, pageNum, canvas) {
-  const page = await pdf.getPage(pageNum)
-  const viewport = page.getViewport({ scale: 1.2 })
-  canvas.height = viewport.height
+async function renderPage(num, canvas) {
+  const page = await pdfDoc.getPage(num)
+  const scale = Math.min(
+    (window.innerWidth * 0.4) / page.getViewport({ scale: 1 }).width,
+    (window.innerHeight * 0.75) / page.getViewport({ scale: 1 }).height,
+    2
+  )
+  const viewport = page.getViewport({ scale })
   canvas.width = viewport.width
-  const ctx = canvas.getContext('2d')
-  await page.render({ canvasContext: ctx, viewport }).promise
+  canvas.height = viewport.height
+  await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise
 }
 
 async function prevPage() {
-  if (currentPage.value > 1) {
-    currentPage.value = locale.value === 'ar'
-      ? Math.min(currentPage.value + 2, totalPages.value)
-      : Math.max(currentPage.value - 2, 1)
-    await renderPages()
-  }
+  if (currentPage.value <= 1) return
+  currentPage.value = Math.max(1, currentPage.value - 2)
+  await renderSpread()
 }
 
 async function nextPage() {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value = locale.value === 'ar'
-      ? Math.max(currentPage.value - 2, 1)
-      : Math.min(currentPage.value + 2, totalPages.value)
-    await renderPages()
-  }
+  if (currentPage.value >= totalPages.value) return
+  currentPage.value = Math.min(totalPages.value, currentPage.value + 2)
+  await renderSpread()
 }
 </script>
 
 <style scoped>
-/* Hero */
 .stories-hero {
-  background: linear-gradient(135deg, #3c3950 0%, #212331 100%);
+  background: linear-gradient(135deg, #3c3950, #212331);
   padding: 80px 0 60px;
   color: white;
   text-align: center;
 }
-
-.hero-badge {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
-
 .stories-hero h1 {
-  font-size: clamp(32px, 4vw, 52px);
+  font-size: clamp(28px, 4vw, 48px);
   font-weight: 900;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
+.stories-hero p { font-size: 16px; opacity: 0.8; max-width: 600px; margin: 0 auto; }
 
-.stories-hero p {
-  font-size: 17px;
-  opacity: 0.8;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Books grid */
+/* Books Grid */
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 28px;
 }
 
 .book-card {
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.25s;
 }
 .book-card:hover { transform: translateY(-6px); }
 
 .book-cover {
-  border-radius: 4px 8px 8px 4px;
-  height: 220px;
   position: relative;
+  border-radius: 4px 8px 8px 4px;
+  overflow: hidden;
+  box-shadow: -4px 4px 16px rgba(0,0,0,0.25), 2px 0 6px rgba(0,0,0,0.1);
+  aspect-ratio: 3/4;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: -4px 4px 16px rgba(0,0,0,0.3), 4px 0 8px rgba(0,0,0,0.1);
-  overflow: hidden;
+  transition: background 0.2s;
 }
+.book-card:hover .cover-overlay { background: rgba(227,28,38,0.5); }
 
-.book-spine {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 14px;
-  border-radius: 4px 0 0 4px;
+.read-icon {
+  font-size: 32px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s;
 }
-
-.book-cover-content {
-  text-align: center;
-  color: white;
-  padding: 16px;
-  z-index: 1;
-}
-
-.book-icon { font-size: 32px; margin-bottom: 8px; }
-
-.book-title-cover {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 6px;
-}
-
-.book-author-cover {
-  font-size: 12px;
-  opacity: 0.8;
-}
+.book-card:hover .read-icon { opacity: 1; transform: scale(1); }
 
 .book-info {
-  padding: 12px 0;
+  padding: 10px 0;
   text-align: center;
 }
-
 .book-info h3 {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: #3c3950;
-  margin-bottom: 4px;
-}
-
-.book-info p {
-  font-size: 13px;
-  color: #99a9b5;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
 .btn-read {
   background: #E31C26;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: 3px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
   font-family: inherit;
+  transition: background 0.2s;
 }
 .btn-read:hover { background: #b5151e; }
 
 /* Modal */
-.flipbook-modal {
+.modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.9);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
 }
 
-.flipbook-container {
+.modal-box {
   background: #1a1a2e;
   border-radius: 8px;
   width: 100%;
-  max-width: 1000px;
-  max-height: 90vh;
-  overflow: hidden;
+  max-width: 1100px;
+  max-height: 95vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-.flipbook-header {
+.modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
+  padding: 14px 20px;
   background: #212331;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
 }
+.modal-header h2 { color: white; font-size: 16px; font-weight: 700; }
 
-.flipbook-header h2 {
-  color: white;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.flipbook-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
+.modal-actions { display: flex; gap: 10px; align-items: center; }
 
 .btn-download {
   background: #00bcd4;
@@ -426,95 +402,84 @@ async function nextPage() {
   font-size: 12px;
   font-weight: 700;
   text-decoration: none;
-  transition: background 0.2s;
 }
-.btn-download:hover { background: #0097a7; }
 
 .btn-close {
   background: rgba(255,255,255,0.1);
   border: none;
   color: white;
-  width: 32px;
-  height: 32px;
+  width: 30px; height: 30px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
+  font-size: 14px;
 }
 .btn-close:hover { background: #E31C26; }
 
-.flipbook-viewer {
+.modal-body {
   flex: 1;
   overflow: auto;
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   align-items: center;
+  gap: 16px;
 }
 
-.flipbook-controls {
+.page-controls {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
 .flip-btn {
   background: #E31C26;
   color: white;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 38px; height: 38px;
   border-radius: 50%;
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
   font-family: inherit;
+  transition: background 0.2s;
 }
 .flip-btn:hover:not(:disabled) { background: #b5151e; }
-.flip-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.flip-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-.page-info { color: rgba(255,255,255,0.7); font-size: 14px; }
+.page-num { color: rgba(255,255,255,0.7); font-size: 14px; min-width: 80px; text-align: center; }
 
-.pages-wrapper {
+.spread {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   direction: ltr;
 }
+.spread.rtl { direction: rtl; }
 
-.pages-wrapper.rtl {
-  direction: rtl;
-}
-
-.page-left, .page-right {
+.page-wrap {
   position: relative;
   background: white;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-.pdf-canvas {
+.pdf-page {
   display: block;
-  max-height: 60vh;
+  max-height: 70vh;
   width: auto;
 }
 
-.page-loading {
+.loading-overlay {
   position: absolute;
   inset: 0;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
 }
 
 .spinner {
-  width: 40px; height: 40px;
+  width: 36px; height: 36px;
   border: 3px solid #f0f0f0;
   border-top-color: #E31C26;
   border-radius: 50%;
@@ -522,12 +487,7 @@ async function nextPage() {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media (max-width: 900px) {
-  .books-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-  .books-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .book-cover { height: 160px; }
-  .pages-wrapper { flex-direction: column; }
-}
+@media (max-width: 1100px) { .books-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 800px) { .books-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 500px) { .books-grid { grid-template-columns: repeat(2, 1fr); } }
 </style>
