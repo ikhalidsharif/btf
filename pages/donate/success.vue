@@ -2,8 +2,14 @@
   <div class="result-page">
     <div class="container">
 
+      <!-- Loading -->
+      <div v-if="checking" class="result-box">
+        <div class="spinner"></div>
+        <p>{{ locale === "ar" ? "جاري التحقق من الدفع..." : "Verifying payment..." }}</p>
+      </div>
+
       <!-- Success -->
-      <div v-if="isSuccess" class="result-box success">
+      <div v-else-if="isSuccess" class="result-box success">
         <div class="result-icon">🎉</div>
         <h1>{{ locale === 'ar' ? 'شكراً لتبرعك!' : 'Thank You for Your Donation!' }}</h1>
         <p>{{ locale === 'ar'
@@ -24,7 +30,7 @@
       </div>
 
       <!-- Failed -->
-      <div v-else class="result-box failed">
+      <div v-else-if="!checking" class="result-box failed">
         <div class="result-icon">❌</div>
         <h1>{{ locale === 'ar' ? 'لم تكتمل عملية الدفع' : 'Payment Not Completed' }}</h1>
         <p>{{ locale === 'ar'
@@ -70,6 +76,16 @@ useHead({
 </script>
 
 <style scoped>
+.spinner {
+  width: 48px; height: 48px;
+  border: 4px solid #f0f0f0;
+  border-top-color: #E31C26;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
 .result-page {
   min-height: 70vh;
   display: flex;
