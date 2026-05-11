@@ -26,9 +26,7 @@ export default defineNuxtConfig({
         },
       ],
       style: [
-        {
-          children: `* { font-family: 'Tajawal', sans-serif !important; }`,
-        }
+        { children: `* { font-family: 'Tajawal', sans-serif !important; }` }
       ],
     },
   },
@@ -36,15 +34,17 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
+    tapSecretKey: process.env.TAP_SECRET_KEY,
+    supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
     public: {
-      tapPublicKey: process.env.TAP_PUBLIC_KEY || 'pk_test_xxxxxxx',
+      tapPublicKey: process.env.TAP_PUBLIC_KEY || '',
+      supabaseUrl: 'https://atfcckxxcomreukjzuxa.supabase.co',
+      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0ZmNja3h4Y29tcmV1a2p6dXhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0NTkwMDcsImV4cCI6MjA5NDAzNTAwN30.NTKDuqdG33Aa2fLpfUi0ExHmTEJ7AwUApYMrn9d0tHQ',
     },
   },
 
   nitro: {
-    prerender: {
-      failOnError: false,
-    },
+    prerender: { failOnError: false },
   },
 
   compatibilityDate: '2024-11-01',

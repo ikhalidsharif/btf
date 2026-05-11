@@ -125,44 +125,29 @@
 <script setup>
 const { locale } = useI18n()
 const localePath = useLocalePath()
-const config = useRuntimeConfig()
+const { query } = useSupabase()
 
 useHead({
   title: computed(() => locale.value === 'ar' ? 'تبرع | مؤسسة البحرين' : 'Donate | Bahrain Trust Foundation'),
-  script: [{ src: 'https://cdnjs.cloudflare.com/ajax/libs/tap-payments/1.0.0/goSell.js', defer: true }]
 })
 
-const projects = [
-  {
-    id: 1,
-    image: '/images/donate/donate-1.jpg',
-    nameAr: 'دعم مشروع مدارس المستشفى للأطفال المرضى',
-    nameEn: 'Support Hospital Schools Project for Sick Children',
-    descAr: 'تقديم برامج تعليمية تلائم الحالة الصحية وتوفير دروس تقوية للأطفال المرضى',
-    descEn: 'Providing educational programs tailored to health conditions and offering tutoring lessons for sick children',
-    amount: 10,
-  },
-  {
-    id: 2,
-    image: '/images/donate/donate-3.jpg',
-    nameAr: 'دعم المواهب الفنية لطلبة مدارس المستشفى',
-    nameEn: 'Support the Artistic Talents of Hospital School Students',
-    descAr: 'ورش تدريبية في الفنون وتوفير مواد وأدوات للأعمال الفنية وتنظيم معارض',
-    descEn: 'Workshops in various arts, provision of materials and tools, organizing exhibitions',
-    amount: 20,
-  },
-  {
-    id: 3,
-    image: '/images/donate/donate-5.jpg',
-    nameAr: 'دعم مشروع فضاء للجميع',
-    nameEn: 'Support Space for All Project',
-    descAr: 'تقديم برامج تعليمية وترفيهية وتمكين الأطفال من تطوير مهاراتهم في بيئة دامجة',
-    descEn: 'Offering educational and recreational programs and enabling children to develop their skills in an inclusive environment',
-    amount: 20,
-  },
-]
+// Load projects from Supabase
+const { data: rawProjects } = await useAsyncData('donation-projects', () =>
+  query('donation_projects', '?active=eq.true&order=sort_order.asc')
+)
 
-const selectedProject = ref(projects[0])
+const projects = computed(() => (rawProjects.value || []).map((p: any) => ({
+  id: p.id,
+  image: p.image_url,
+  nameAr: p.name_ar,
+  nameEn: p.name_en,
+  descAr: p.desc_ar,
+  descEn: p.desc_en,
+  amount: p.amount,
+})))
+
+const selectedProject = ref(null)
+watch(projects, (val) => { if (val.length && !selectedProject.value) selectedProject.value = val[0] }, { immediate: true })
 const presets = [5, 10, 20, 50, 100]
 const amount = ref(10)
 const customAmount = ref(false)
