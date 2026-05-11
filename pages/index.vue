@@ -184,20 +184,9 @@
 
     <!-- Stories Banner -->
     <section class="stories-banner">
-      <div class="stories-banner-img">
-        <img src="https://bahraintrust.org/wp-content/uploads/2022/04/readOurStories.png"
-          alt="Read Our Stories" />
-      </div>
-      <div class="stories-banner-cta">
-        <div class="stories-icon">📖</div>
-        <h2>{{ locale === "ar" ? "اقرأ قصصنا" : "READ OUR STORIES" }}</h2>
-        <p>{{ locale === "ar"
-          ? "يمكنك الآن قراءة قصصنا عبر الإنترنت"
-          : "Now you can read our stories online" }}</p>
-        <NuxtLink :to="localePath('/stories')" class="btn-read-now">
-          {{ locale === "ar" ? "اقرأ الآن" : "READ NOW" }}
-        </NuxtLink>
-      </div>
+      <NuxtLink :to="localePath('/stories')" class="stories-banner-link">
+        <img src="/images/read-our-stories.png" alt="Read Our Stories" class="stories-banner-full-img" />
+      </NuxtLink>
     </section>
 
     <!-- Latest News -->
@@ -928,81 +917,31 @@ function formatDate(dateStr) {
 
 /* ── Stories Banner ── */
 .stories-banner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 420px;
+  line-height: 0;
 }
 
-.stories-banner-img {
+.stories-banner-link {
+  display: block;
   overflow: hidden;
 }
 
-.stories-banner-img img {
+.stories-banner-full-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
+  object-fit: cover;
+  /* Crop to show only the left half (the image + red CTA section) */
+  object-position: left center;
+  max-height: 500px;
+  transition: transform 0.3s;
 }
 
-.stories-banner-cta {
-  background: #E31C26;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 40px;
-  text-align: center;
-  gap: 16px;
-}
-
-.stories-icon {
-  width: 100px;
-  height: 100px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 48px;
-  margin-bottom: 8px;
-}
-
-.stories-banner-cta h2 {
-  font-size: 32px;
-  font-weight: 900;
-  color: white;
-  letter-spacing: 1px;
-}
-
-.stories-banner-cta p {
-  font-size: 16px;
-  color: rgba(255,255,255,0.85);
-}
-
-.btn-read-now {
-  display: inline-block;
-  background: #2e7d32;
-  color: white;
-  padding: 14px 32px;
-  border-radius: 3px;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: background 0.2s, transform 0.2s;
-  margin-top: 8px;
-}
-.btn-read-now:hover {
-  background: #1b5e20;
-  transform: translateY(-2px);
+.stories-banner-link:hover .stories-banner-full-img {
+  transform: scale(1.02);
 }
 
 @media (max-width: 768px) {
-  .stories-banner { grid-template-columns: 1fr; }
-  .stories-banner-img { height: 260px; }
-  .stories-banner-cta { padding: 32px 24px; }
-  .stories-banner-cta h2 { font-size: 24px; }
+  .stories-banner-full-img { max-height: 300px; }
 }
 
 </style>
