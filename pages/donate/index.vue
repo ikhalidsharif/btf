@@ -1,332 +1,397 @@
 <template>
   <div class="donate-page">
-    <div class="page-hero">
+
+    <!-- Hero -->
+    <div class="donate-hero">
       <div class="container">
-        <h1>{{ t('donate.title') }}</h1>
-        <p>{{ t('donate.subtitle') }}</p>
+        <h1>{{ locale === 'ar' ? 'تبرع الآن' : 'Donate Now' }}</h1>
+        <p>{{ locale === 'ar'
+          ? 'تبرعك يصنع فرقاً حقيقياً في حياة الأسر البحرينية'
+          : 'Your donation makes a real difference in Bahraini families lives'
+        }}</p>
       </div>
     </div>
 
     <div class="container section">
-      <div class="donate-wrapper">
+      <div class="donate-layout">
 
-        <!-- Step 1: Select Project -->
-        <div class="step card">
-          <div class="step-header">
-            <span class="step-num">1</span>
-            <h2>{{ t('donate.selectProject') }}</h2>
-          </div>
+        <!-- Projects -->
+        <div class="projects-col">
+          <h2>{{ locale === 'ar' ? 'اختر مشروعاً' : 'Choose a Project' }}</h2>
           <div class="projects-list">
-            <button
-              v-for="proj in donations"
+            <div
+              v-for="proj in projects"
               :key="proj.id"
-              class="project-btn"
-              :class="{ active: selected?.id === proj.id }"
-              @click="selected = proj"
+              class="project-item"
+              :class="{ active: selectedProject?.id === proj.id }"
+              @click="selectProject(proj)"
             >
-              <span class="proj-title">{{ proj.title }}</span>
-              <span v-if="proj.description" class="proj-desc">{{ proj.description }}</span>
-            </button>
+              <div class="project-img-thumb">
+                <img :src="proj.image" :alt="proj.nameEn" />
+              </div>
+              <div class="project-info">
+                <h3>{{ locale === 'ar' ? proj.nameAr : proj.nameEn }}</h3>
+                <p>{{ locale === 'ar' ? proj.descAr : proj.descEn }}</p>
+                <span class="project-amount">{{ locale === 'ar' ? `${proj.amount} د.ب` : `${proj.amount} BHD` }}</span>
+              </div>
+              <div class="project-check" v-if="selectedProject?.id === proj.id">✓</div>
+            </div>
           </div>
         </div>
 
-        <!-- Step 2: Select Amount -->
-        <div class="step card" :class="{ disabled: !selected }">
-          <div class="step-header">
-            <span class="step-num">2</span>
-            <h2>{{ t('donate.selectAmount') }}</h2>
-          </div>
-          <div class="amounts-grid">
+        <!-- Donation Form -->
+        <div class="form-col">
+          <div class="donate-form card">
+            <h2>{{ locale === 'ar' ? 'تفاصيل التبرع' : 'Donation Details' }}</h2>
+
+            <!-- Selected project -->
+            <div v-if="selectedProject" class="selected-project-badge">
+              {{ selectedProject.icon }} {{ locale === 'ar' ? selectedProject.nameAr : selectedProject.nameEn }}
+            </div>
+
+            <!-- Amount -->
+            <div class="form-group">
+              <label>{{ locale === 'ar' ? 'المبلغ (دينار بحريني)' : 'Amount (BHD)' }}</label>
+              <div class="amount-presets">
+                <button
+                  v-for="amt in presets"
+                  :key="amt"
+                  :class="{ active: amount === amt && !customAmount }"
+                  @click="setAmount(amt)"
+                  class="preset-btn"
+                >{{ amt }} {{ locale === 'ar' ? 'د.ب' : 'BHD' }}</button>
+                <button
+                  :class="{ active: customAmount }"
+                  @click="enableCustom"
+                  class="preset-btn"
+                >{{ locale === 'ar' ? 'مبلغ آخر' : 'Other' }}</button>
+              </div>
+              <input
+                v-if="customAmount"
+                v-model="customAmountValue"
+                type="number"
+                min="1"
+                class="form-input"
+                :placeholder="locale === 'ar' ? 'أدخل المبلغ' : 'Enter amount'"
+              />
+            </div>
+
+            <!-- Donor Info -->
+            <div class="form-group">
+              <label>{{ locale === 'ar' ? 'الاسم الكامل' : 'Full Name' }}</label>
+              <input v-model="form.name" type="text" class="form-input"
+                :placeholder="locale === 'ar' ? 'أدخل اسمك' : 'Enter your name'" />
+            </div>
+
+            <div class="form-group">
+              <label>{{ locale === 'ar' ? 'البريد الإلكتروني' : 'Email' }}</label>
+              <input v-model="form.email" type="email" class="form-input"
+                :placeholder="locale === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email'" />
+            </div>
+
+            <div class="form-group">
+              <label>{{ locale === 'ar' ? 'رقم الهاتف' : 'Phone Number' }}</label>
+              <input v-model="form.phone" type="tel" class="form-input"
+                placeholder="+973 XXXX XXXX" />
+            </div>
+
+            <!-- Donation type -->
+            <div class="form-group">
+              <label>{{ locale === 'ar' ? 'نوع التبرع' : 'Donation Type' }}</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" v-model="donationType" value="once" />
+                  {{ locale === 'ar' ? 'مرة واحدة' : 'One Time' }}
+                </label>
+                <label class="radio-label">
+                  <input type="radio" v-model="donationType" value="monthly" />
+                  {{ locale === 'ar' ? 'شهري' : 'Monthly' }}
+                </label>
+              </div>
+            </div>
+
+            <!-- Error -->
+            <div v-if="error" class="error-msg">{{ error }}</div>
+
+            <!-- Submit -->
             <button
-              v-for="amt in amounts"
-              :key="amt"
-              class="amount-btn"
-              :class="{ active: amount === amt && !customMode }"
-              @click="amount = amt; customMode = false"
+              @click="submitDonation"
+              :disabled="loading || !isValid"
+              class="btn-donate"
             >
-              {{ amt }} {{ t('donate.currency') }}
+              <span v-if="loading">⏳ {{ locale === 'ar' ? 'جاري المعالجة...' : 'Processing...' }}</span>
+              <span v-else>
+                ❤️ {{ locale === 'ar' ? `تبرع بـ ${finalAmount} د.ب` : `Donate ${finalAmount} BHD` }}
+              </span>
             </button>
-            <button
-              class="amount-btn custom-btn"
-              :class="{ active: customMode }"
-              @click="customMode = true; amount = null"
-            >
-              {{ t('donate.customAmount') }}
-            </button>
-          </div>
-          <input
-            v-if="customMode"
-            v-model.number="customAmount"
-            type="number"
-            min="1"
-            class="custom-input"
-            :placeholder="`${t('donate.customAmount')} (${t('donate.currency')})`"
-          />
-        </div>
 
-        <!-- Proceed button -->
-        <div class="donate-action">
-          <div v-if="selected && finalAmount" class="donate-summary">
-            <span>{{ selected.title }}</span>
-            <strong>{{ finalAmount }} {{ t('donate.currency') }}</strong>
+            <!-- Security note -->
+            <p class="security-note">
+              🔒 {{ locale === 'ar' ? 'دفع آمن عبر TAP Payment' : 'Secure payment via TAP Payment' }}
+            </p>
           </div>
-          <button
-            class="btn btn-gold btn-donate"
-            :disabled="!selected || !finalAmount || loading"
-            @click="startPayment"
-          >
-            <span v-if="loading">⏳ جاري التحميل...</span>
-            <span v-else>❤️ {{ t('donate.proceed') }}</span>
-          </button>
-          <p class="secure-note">🔒 {{ t('donate.secure') }}</p>
         </div>
-
       </div>
     </div>
+
   </div>
 </template>
 
 <script setup>
-const { t, locale } = useI18n()
+const { locale } = useI18n()
+const localePath = useLocalePath()
 const config = useRuntimeConfig()
 
 useHead({
-  title: locale.value === 'ar' ? 'تبرع الآن | مؤسسة البحرين' : 'Donate | Bahrain Trust Foundation',
-  script: [{ src: 'https://goSell.gotapai.com/web/assets/js/gosell.js', defer: true }],
+  title: computed(() => locale.value === 'ar' ? 'تبرع | مؤسسة البحرين' : 'Donate | Bahrain Trust Foundation'),
+  script: [{ src: 'https://cdnjs.cloudflare.com/ajax/libs/tap-payments/1.0.0/goSell.js', defer: true }]
 })
 
-// Load donations from JSON
-const { data: allDonations } = await useAsyncData('donations', () =>
-  queryContent('/donations').findOne()
-)
+const projects = [
+  {
+    id: 1,
+    image: '/images/donate/donate-1.jpg',
+    nameAr: 'دعم مشروع مدارس المستشفى للأطفال المرضى',
+    nameEn: 'Support Hospital Schools Project for Sick Children',
+    descAr: 'تقديم برامج تعليمية تلائم الحالة الصحية وتوفير دروس تقوية للأطفال المرضى',
+    descEn: 'Providing educational programs tailored to health conditions and offering tutoring lessons for sick children',
+    amount: 10,
+  },
+  {
+    id: 2,
+    image: '/images/donate/donate-3.jpg',
+    nameAr: 'دعم المواهب الفنية لطلبة مدارس المستشفى',
+    nameEn: 'Support the Artistic Talents of Hospital School Students',
+    descAr: 'ورش تدريبية في الفنون وتوفير مواد وأدوات للأعمال الفنية وتنظيم معارض',
+    descEn: 'Workshops in various arts, provision of materials and tools, organizing exhibitions',
+    amount: 20,
+  },
+  {
+    id: 3,
+    image: '/images/donate/donate-5.jpg',
+    nameAr: 'دعم مشروع فضاء للجميع',
+    nameEn: 'Support Space for All Project',
+    descAr: 'تقديم برامج تعليمية وترفيهية وتمكين الأطفال من تطوير مهاراتهم في بيئة دامجة',
+    descEn: 'Offering educational and recreational programs and enabling children to develop their skills in an inclusive environment',
+    amount: 20,
+  },
+]
 
-const donations = computed(() =>
-  locale.value === 'ar'
-    ? allDonations.value?.ar || []
-    : allDonations.value?.en || []
-)
-
-const amounts = [5, 10, 25, 50, 100]
-const selected = ref(null)
-const amount = ref(null)
-const customMode = ref(false)
-const customAmount = ref(null)
+const selectedProject = ref(projects[0])
+const presets = [5, 10, 20, 50, 100]
+const amount = ref(10)
+const customAmount = ref(false)
+const customAmountValue = ref('')
+const donationType = ref('once')
 const loading = ref(false)
+const error = ref('')
+
+const form = reactive({
+  name: '',
+  email: '',
+  phone: '',
+})
 
 const finalAmount = computed(() => {
-  if (customMode.value) return customAmount.value || null
+  if (customAmount.value && customAmountValue.value) return Number(customAmountValue.value)
   return amount.value
 })
 
-async function startPayment() {
-  if (!selected.value || !finalAmount.value) return
+const isValid = computed(() => {
+  return form.name && form.email && finalAmount.value > 0 && selectedProject.value
+})
+
+function selectProject(proj) {
+  selectedProject.value = proj
+  if (proj.amount) {
+    amount.value = proj.amount
+    customAmount.value = false
+  }
+}
+
+function setAmount(amt) {
+  amount.value = amt
+  customAmount.value = false
+  customAmountValue.value = ''
+}
+
+function enableCustom() {
+  customAmount.value = true
+  amount.value = 0
+}
+
+async function submitDonation() {
+  if (!isValid.value) return
   loading.value = true
+  error.value = ''
 
-  // TAP Checkout integration
-  // https://developers.tap.company/docs/web-card-sdk
-  const handler = window.GoSell?.config({
-    gateway: {
-      publicKey: config.public.tapPublicKey,
-      language: locale.value,
-      supportedCurrencies: 'all',
-      supportedPaymentMethods: 'all',
-      saveCardOption: false,
-      customerCards: false,
-    },
-    customer: {
-      currency: 'BHD',
-    },
-    order: {
-      amount: finalAmount.value,
-      currency: 'BHD',
-      items: [
-        {
-          id: selected.value.id,
-          name: selected.value.title,
-          description: selected.value.description || '',
-          quantity: 1,
-          amount_per_unit: finalAmount.value,
-          total_amount: finalAmount.value,
+  try {
+    // Create TAP charge via our server API
+    const res = await $fetch('/api/donate', {
+      method: 'POST',
+      body: {
+        amount: finalAmount.value,
+        currency: 'BHD',
+        project: locale.value === 'ar' ? selectedProject.value.nameAr : selectedProject.value.nameEn,
+        donationType: donationType.value,
+        customer: {
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
         },
-      ],
-      shipping: null,
-      taxes: null,
-    },
-    transaction: {
-      mode: 'charge',
-      charge: {
-        saveCard: false,
-        threeDSecure: true,
-        description: `Donation: ${selected.value.title}`,
-        metadata: { project: selected.value.id },
-        receipt: { email: true, sms: false },
         redirect: `${window.location.origin}/${locale.value}/donate/success`,
-        post: null,
-      },
-    },
-  })
+      }
+    })
 
-  handler?.openLightBox()
+    if (res.transaction?.url) {
+      // Redirect to TAP payment page
+      window.location.href = res.transaction.url
+    } else {
+      error.value = locale.value === 'ar' ? 'حدث خطأ، يرجى المحاولة مرة أخرى' : 'An error occurred, please try again'
+    }
+  } catch (e) {
+    error.value = locale.value === 'ar' ? 'حدث خطأ في الاتصال' : 'Connection error, please try again'
+  }
+
   loading.value = false
 }
 </script>
 
 <style scoped>
-.page-hero {
-  background: linear-gradient(135deg, var(--gold) 0%, #a06e15 100%);
+.donate-hero {
+  background: linear-gradient(135deg, #E31C26, #8B0000);
   padding: 80px 0 60px;
   color: white;
+  text-align: center;
 }
-.page-hero h1 {
-  font-size: clamp(32px, 4vw, 52px);
-  font-weight: 900;
-  margin-bottom: 12px;
-}
-.page-hero p { font-size: 18px; opacity: 0.9; }
+.donate-hero h1 { font-size: clamp(32px, 4vw, 52px); font-weight: 900; margin-bottom: 12px; }
+.donate-hero p { font-size: 17px; opacity: 0.85; }
 
-.donate-wrapper {
-  max-width: 760px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+.donate-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: start;
 }
 
-.step {
-  padding: 32px;
-  transition: opacity 0.3s;
-}
-.step.disabled { opacity: 0.4; pointer-events: none; }
+/* Projects */
+.projects-col h2 { font-size: 20px; font-weight: 700; color: #3c3950; margin-bottom: 20px; }
 
-.step-header {
+.projects-list { display: flex; flex-direction: column; gap: 10px; }
+
+.project-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1.5px solid #dfe5e8;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
 }
+.project-item:hover { border-color: #E31C26; }
+.project-item.active { border-color: #E31C26; background: #fff5f5; }
 
-.step-num {
-  width: 36px;
-  height: 36px;
-  background: var(--green);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 16px;
+.project-img-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 6px;
+  overflow: hidden;
   flex-shrink: 0;
 }
-
-.step-header h2 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--green-dark);
-}
-
-.projects-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.project-btn {
-  background: var(--gray-light);
-  border: 2px solid transparent;
-  border-radius: var(--radius);
-  padding: 16px 20px;
-  text-align: start;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.project-btn:hover { border-color: var(--green-light); background: white; }
-.project-btn.active {
-  border-color: var(--green);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(26,107,60,0.1);
-}
-
-.proj-title { font-weight: 600; color: var(--text); font-size: 15px; }
-.proj-desc { font-size: 13px; color: var(--text-light); }
-
-.amounts-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.amount-btn {
-  background: var(--gray-light);
-  border: 2px solid transparent;
-  border-radius: var(--radius);
-  padding: 16px;
-  font-size: 17px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: var(--text);
-}
-.amount-btn:hover { border-color: var(--gold); }
-.amount-btn.active {
-  border-color: var(--gold);
-  background: white;
-  color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(200,151,42,0.15);
-}
-.custom-btn { font-size: 14px; font-weight: 600; }
-
-.custom-input {
+.project-img-thumb img {
   width: 100%;
-  margin-top: 16px;
-  padding: 14px 18px;
-  border: 2px solid var(--gold);
-  border-radius: var(--radius);
-  font-size: 17px;
+  height: 100%;
+  object-fit: cover;
+}
+.project-info { flex: 1; }
+.project-info h3 { font-size: 13px; font-weight: 700; color: #3c3950; margin-bottom: 2px; line-height: 1.4; }
+.project-info p { font-size: 11px; color: #99a9b5; margin-bottom: 4px; line-height: 1.4; }
+.project-amount { font-size: 12px; font-weight: 700; color: #E31C26; }
+.project-check { color: #E31C26; font-weight: 700; font-size: 18px; }
+
+/* Form */
+.donate-form { padding: 32px; }
+.donate-form h2 { font-size: 20px; font-weight: 700; color: #3c3950; margin-bottom: 20px; }
+
+.selected-project-badge {
+  background: #fff5f5;
+  border: 1px solid #E31C26;
+  color: #E31C26;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
   font-weight: 600;
-  outline: none;
-  background: white;
+  display: inline-block;
+  margin-bottom: 20px;
 }
 
-.donate-action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 8px 0 40px;
-}
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: #3c3950; margin-bottom: 8px; }
 
-.donate-summary {
-  display: flex;
-  justify-content: space-between;
+.form-input {
   width: 100%;
-  background: white;
-  border-radius: var(--radius);
-  padding: 16px 24px;
-  box-shadow: var(--shadow);
+  padding: 10px 14px;
+  border: 1.5px solid #dfe5e8;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
 }
-.donate-summary span { color: var(--text-light); font-size: 15px; }
-.donate-summary strong { color: var(--green-dark); font-size: 20px; }
+.form-input:focus { outline: none; border-color: #E31C26; }
+
+.amount-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+
+.preset-btn {
+  padding: 8px 16px;
+  border: 1.5px solid #dfe5e8;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: white;
+  color: #3c3950;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.preset-btn:hover { border-color: #E31C26; color: #E31C26; }
+.preset-btn.active { background: #E31C26; color: white; border-color: #E31C26; }
+
+.radio-group { display: flex; gap: 20px; }
+.radio-label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+
+.error-msg {
+  background: #fff5f5;
+  border: 1px solid #E31C26;
+  color: #E31C26;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
 
 .btn-donate {
   width: 100%;
-  justify-content: center;
-  padding: 18px;
-  font-size: 18px;
-  border-radius: var(--radius);
+  background: #E31C26;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+  margin-bottom: 12px;
 }
-.btn-donate:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+.btn-donate:hover:not(:disabled) { background: #b5151e; }
+.btn-donate:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.secure-note {
-  font-size: 13px;
-  color: var(--text-light);
-}
+.security-note { font-size: 12px; color: #99a9b5; text-align: center; }
 
-@media (max-width: 600px) {
-  .amounts-grid { grid-template-columns: repeat(2, 1fr); }
-  .step { padding: 20px; }
+@media (max-width: 768px) {
+  .donate-layout { grid-template-columns: 1fr; }
 }
 </style>
