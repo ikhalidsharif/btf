@@ -54,7 +54,12 @@ const tapId = route.query.tap_id
 const status = route.query.status
 
 // TAP redirects with tap_id on success
-const isSuccess = computed(() => !!tapId && status !== 'CANCELLED' && status !== 'FAILED')
+// TAP sends status=CAPTURED on success, CANCELLED or FAILED on failure
+const isSuccess = computed(() => {
+  if (!tapId) return false
+  if (!status) return true // has tap_id but no status = success
+  return status === 'CAPTURED' || status === 'AUTHORIZED'
+})
 
 useHead({
   title: computed(() => isSuccess.value
