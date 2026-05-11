@@ -45,13 +45,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { locale } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
 
-const tapId = route.query.tap_id as string
-const status = route.query.status as string
+const tapId = route.query.tap_id
+const status = route.query.status
 
 // TAP redirects with tap_id on success
 const isSuccess = computed(() => !!tapId && status !== 'CANCELLED' && status !== 'FAILED')
