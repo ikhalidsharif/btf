@@ -35,9 +35,11 @@ async function main() {
     const isArabic = /[\u0600-\u06FF]/.test(title)
     const dir = isArabic ? 'ar/news' : 'en/news'
 
-    const issueMatch = title.match(/[\u0660-\u0669\u06F0-\u06F9\d]+/)
-    const issueNum = issueMatch ? issueMatch[0] : ''
-    const slug = issueNum ? `${dateStr}-issue-${issueNum}` : `${dateStr}-newsletter`
+    // استخرج اسم الشهر من العنوان بدل رقم العدد
+    const monthMatch = title.match(/(?:يناير|فبراير|مارس|أبريل|مايو|يونيو|يوليو|أغسطس|سبتمبر|أكتوبر|نوفمبر|ديسمبر|January|February|March|April|May|June|July|August|September|October|November|December)/i)
+    const monthSlug = monthMatch ? monthMatch[0] : ''
+    const slug = monthSlug ? `${dateStr}-${monthSlug}` : dateStr
+    const issueNum = ''
     const filename = `${slug}.md`
     const filepath = path.join('content', dir, filename)
 
