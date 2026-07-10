@@ -24,9 +24,9 @@
             <NuxtLink :to="localePath('/donate')" class="btn btn-donate-hero">
               ❤️ {{ locale === "ar" ? "تبرع الآن" : "Donate Now" }}
             </NuxtLink>
-            <NuxtLink :to="localePath('/about')" class="btn btn-outline-hero">
-              {{ locale === "ar" ? "اعرف أكثر" : "Learn More About BTF" }} →
-            </NuxtLink>
+            <a href="https://www.youtube.com/watch?v=EGrbZpgYoj8" target="_blank" rel="noopener" class="btn btn-outline-hero">
+              ▶ {{ locale === "ar" ? "شاهد الفيديو" : "Watch the Video" }}
+            </a>
           </div>
         </div>
       </div>
