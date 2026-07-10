@@ -113,7 +113,7 @@
 
           <!-- EDUCATION -->
           <div class="program-card">
-            <div class="slide-track" :style="{ transform: `translateX(${-eduIndex * 100}%)` }">
+            <div class="slide-track" :style="{ transform: `translate3d(${-eduIndex * 100}%,0,0)` }">
               <div v-for="slide in education" :key="slide.slug" class="slide">
                 <img :src="slide.image" :alt="slide.title" />
                 <div class="slide-overlay">
@@ -138,7 +138,7 @@
 
           <!-- COMMUNITY SERVICE -->
           <div class="program-card">
-            <div class="slide-track" :style="{ transform: `translateX(${-comIndex * 100}%)` }">
+            <div class="slide-track" :style="{ transform: `translate3d(${-comIndex * 100}%,0,0)` }">
               <div v-for="slide in community" :key="slide.slug" class="slide">
                 <img :src="slide.image" :alt="slide.title" />
                 <div class="slide-overlay">
@@ -163,7 +163,7 @@
 
           <!-- CREATIVE ECONOMY -->
           <div class="program-card">
-            <div class="slide-track" :style="{ transform: `translateX(${-creIndex * 100}%)` }">
+            <div class="slide-track" :style="{ transform: `translate3d(${-creIndex * 100}%,0,0)` }">
               <div v-for="slide in creative" :key="slide.slug" class="slide">
                 <img :src="slide.image" :alt="slide.title" />
                 <div class="slide-overlay">
@@ -373,9 +373,7 @@ const creative = [
 
 // Auto-advance sliders
 onMounted(() => {
-  setInterval(() => { eduIndex.value = (eduIndex.value + 1) % education.length }, 5000)
-  setInterval(() => { comIndex.value = (comIndex.value + 1) % community.length }, 5500)
-  setInterval(() => { creIndex.value = (creIndex.value + 1) % creative.length }, 6000)
+  // Programs sliders are now manual-only (prev/next + dots) — no auto-advance.
   setInterval(() => { testiIndex.value = (testiIndex.value + 1) % testimonialGroups.value.length }, 6500)
 })
 
@@ -866,22 +864,32 @@ function formatDate(dateStr) {
 
 .slide-track {
   display: flex;
+  flex-wrap: nowrap;
   height: 100%;
   transition: transform 0.5s ease;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .slide {
-  min-width: 100%;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   height: 100%;
   position: relative;
-  flex-shrink: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.6s ease;
+  backface-visibility: hidden;
 }
 
 .program-card:hover .slide img {
