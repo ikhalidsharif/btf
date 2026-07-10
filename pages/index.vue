@@ -99,85 +99,129 @@
       </div>
     </section>
 
-    <!-- Projects 3-Column Slider -->
-    <section class="projects-section">
-      <div class="projects-columns">
+    <!-- Programs Section -->
+    <section class="programs-section">
+      <div class="container">
+        <div class="section-header center">
+          <h2 class="section-title">{{ locale === "ar" ? "برامجنا" : "Our Programs" }}</h2>
+          <p class="section-subtitle">{{ locale === "ar"
+            ? "نعمل عبر ثلاثة محاور رئيسية لإحداث أثر مستدام في المجتمع"
+            : "We work across three core pillars to create lasting impact in the community" }}</p>
+        </div>
 
-        <!-- EDUCATION -->
-        <div class="proj-column">
-          <div class="slide-track" :style="{ transform: `translateX(${-eduIndex * 100}%)` }">
-            <div v-for="slide in education" :key="slide.slug" class="slide">
-              <img :src="slide.image" :alt="slide.title" />
-              <div class="slide-overlay">
-                <div class="slide-content">
-                  <h3>{{ locale === "ar" ? "التعليم" : "EDUCATION" }}</h3>
-                  <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
-                  <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
-                    {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
-                  </NuxtLink>
+        <div class="programs-grid">
+
+          <!-- EDUCATION -->
+          <div class="program-card">
+            <div class="slide-track" :style="{ transform: `translateX(${-eduIndex * 100}%)` }">
+              <div v-for="slide in education" :key="slide.slug" class="slide">
+                <img :src="slide.image" :alt="slide.title" />
+                <div class="slide-overlay">
+                  <div class="slide-content">
+                    <h3>{{ locale === "ar" ? "التعليم" : "Education" }}</h3>
+                    <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
+                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                      {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
+                    </NuxtLink>
+                  </div>
+                </div>
+                <div class="slide-dots">
+                  <span v-for="(s, i) in education" :key="i"
+                    :class="{ active: i === eduIndex }"
+                    @click="eduIndex = i" />
                 </div>
               </div>
-              <div class="slide-dots">
-                <span v-for="(s, i) in education" :key="i"
-                  :class="{ active: i === eduIndex }"
-                  @click="eduIndex = i" />
+            </div>
+            <button class="slide-prev" @click="eduIndex = (eduIndex - 1 + education.length) % education.length" :aria-label="locale === 'ar' ? 'السابق' : 'Previous'">&#8249;</button>
+            <button class="slide-next" @click="eduIndex = (eduIndex + 1) % education.length" :aria-label="locale === 'ar' ? 'التالي' : 'Next'">&#8250;</button>
+          </div>
+
+          <!-- COMMUNITY SERVICE -->
+          <div class="program-card">
+            <div class="slide-track" :style="{ transform: `translateX(${-comIndex * 100}%)` }">
+              <div v-for="slide in community" :key="slide.slug" class="slide">
+                <img :src="slide.image" :alt="slide.title" />
+                <div class="slide-overlay">
+                  <div class="slide-content">
+                    <h3>{{ locale === "ar" ? "خدمة المجتمع" : "Community Service" }}</h3>
+                    <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
+                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                      {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
+                    </NuxtLink>
+                  </div>
+                </div>
+                <div class="slide-dots">
+                  <span v-for="(s, i) in community" :key="i"
+                    :class="{ active: i === comIndex }"
+                    @click="comIndex = i" />
+                </div>
+              </div>
+            </div>
+            <button class="slide-prev" @click="comIndex = (comIndex - 1 + community.length) % community.length" :aria-label="locale === 'ar' ? 'السابق' : 'Previous'">&#8249;</button>
+            <button class="slide-next" @click="comIndex = (comIndex + 1) % community.length" :aria-label="locale === 'ar' ? 'التالي' : 'Next'">&#8250;</button>
+          </div>
+
+          <!-- CREATIVE ECONOMY -->
+          <div class="program-card">
+            <div class="slide-track" :style="{ transform: `translateX(${-creIndex * 100}%)` }">
+              <div v-for="slide in creative" :key="slide.slug" class="slide">
+                <img :src="slide.image" :alt="slide.title" />
+                <div class="slide-overlay">
+                  <div class="slide-content">
+                    <h3>{{ locale === "ar" ? "الاقتصاد الإبداعي" : "Creative Economy" }}</h3>
+                    <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
+                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                      {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
+                    </NuxtLink>
+                  </div>
+                </div>
+                <div class="slide-dots">
+                  <span v-for="(s, i) in creative" :key="i"
+                    :class="{ active: i === creIndex }"
+                    @click="creIndex = i" />
+                </div>
+              </div>
+            </div>
+            <button class="slide-prev" @click="creIndex = (creIndex - 1 + creative.length) % creative.length" :aria-label="locale === 'ar' ? 'السابق' : 'Previous'">&#8249;</button>
+            <button class="slide-next" @click="creIndex = (creIndex + 1) % creative.length" :aria-label="locale === 'ar' ? 'التالي' : 'Next'">&#8250;</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+      <div class="container">
+        <div class="section-header center">
+          <h2 class="section-title">{{ locale === "ar" ? "قصص ملهمة" : "Testimonials" }}</h2>
+          <p class="section-subtitle">{{ locale === "ar"
+            ? "ماذا يقول المستفيدون والمتطوعون والشركاء عن تجربتهم معنا"
+            : "What beneficiaries, volunteers, and partners say about their experience with us" }}</p>
+        </div>
+
+        <div class="testimonials-carousel">
+          <div class="testimonials-track" :style="{ transform: trackTransform }">
+            <div v-for="(item, i) in testimonialGroups" :key="i" class="testimonial-slide">
+              <div v-for="t in item" :key="t.nameEn" class="testimonial-card">
+                <div class="quote-mark">&ldquo;</div>
+                <p class="testimonial-quote">{{ locale === "ar" ? t.quoteAr : t.quoteEn }}</p>
+                <div class="testimonial-person">
+                  <div class="avatar" :style="{ background: t.color }">{{ t.initial }}</div>
+                  <div>
+                    <strong>{{ locale === "ar" ? t.nameAr : t.nameEn }}</strong>
+                    <span>{{ locale === "ar" ? t.roleAr : t.roleEn }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <button class="slide-prev" @click="eduIndex = (eduIndex - 1 + education.length) % education.length">&#8249;</button>
-          <button class="slide-next" @click="eduIndex = (eduIndex + 1) % education.length">&#8250;</button>
-        </div>
-
-        <!-- COMMUNITY SERVICE -->
-        <div class="proj-column">
-          <div class="slide-track" :style="{ transform: `translateX(${-comIndex * 100}%)` }">
-            <div v-for="slide in community" :key="slide.slug" class="slide">
-              <img :src="slide.image" :alt="slide.title" />
-              <div class="slide-overlay">
-                <div class="slide-content">
-                  <h3>{{ locale === "ar" ? "خدمة المجتمع" : "COMMUNITY SERVICE" }}</h3>
-                  <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
-                  <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
-                    {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
-                  </NuxtLink>
-                </div>
-              </div>
-              <div class="slide-dots">
-                <span v-for="(s, i) in community" :key="i"
-                  :class="{ active: i === comIndex }"
-                  @click="comIndex = i" />
-              </div>
-            </div>
+          <div class="testimonial-dots">
+            <span v-for="(item, i) in testimonialGroups" :key="i"
+              :class="{ active: i === testiIndex }"
+              @click="testiIndex = i" />
           </div>
-          <button class="slide-prev" @click="comIndex = (comIndex - 1 + community.length) % community.length">&#8249;</button>
-          <button class="slide-next" @click="comIndex = (comIndex + 1) % community.length">&#8250;</button>
         </div>
-
-        <!-- CREATIVE ECONOMY -->
-        <div class="proj-column">
-          <div class="slide-track" :style="{ transform: `translateX(${-creIndex * 100}%)` }">
-            <div v-for="slide in creative" :key="slide.slug" class="slide">
-              <img :src="slide.image" :alt="slide.title" />
-              <div class="slide-overlay">
-                <div class="slide-content">
-                  <h3>{{ locale === "ar" ? "الاقتصاد الإبداعي" : "CREATIVE ECONOMY" }}</h3>
-                  <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
-                  <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
-                    {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
-                  </NuxtLink>
-                </div>
-              </div>
-              <div class="slide-dots">
-                <span v-for="(s, i) in creative" :key="i"
-                  :class="{ active: i === creIndex }"
-                  @click="creIndex = i" />
-              </div>
-            </div>
-          </div>
-          <button class="slide-prev" @click="creIndex = (creIndex - 1 + creative.length) % creative.length">&#8249;</button>
-          <button class="slide-next" @click="creIndex = (creIndex + 1) % creative.length">&#8250;</button>
-        </div>
-
       </div>
     </section>
 
@@ -236,6 +280,23 @@
         <NuxtLink :to="localePath('/donate')" class="btn btn-gold btn-lg">
           ❤️ {{ t('home.donate.cta') }}
         </NuxtLink>
+      </div>
+    </section>
+
+    <!-- Our Partners -->
+    <section class="partners-section">
+      <div class="container">
+        <div class="section-header center">
+          <h2 class="section-title">{{ locale === "ar" ? "شركاؤنا" : "Our Partners" }}</h2>
+          <p class="section-subtitle">{{ locale === "ar"
+            ? "نفخر بشراكتنا مع مؤسسات تؤمن بأثر العمل المجتمعي"
+            : "Proud to partner with organizations that believe in community impact" }}</p>
+        </div>
+        <div class="partners-grid">
+          <div v-for="p in partners" :key="p.name" class="partner-logo">
+            <img :src="p.image" :alt="p.name" loading="lazy" />
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -315,7 +376,70 @@ onMounted(() => {
   setInterval(() => { eduIndex.value = (eduIndex.value + 1) % education.length }, 5000)
   setInterval(() => { comIndex.value = (comIndex.value + 1) % community.length }, 5500)
   setInterval(() => { creIndex.value = (creIndex.value + 1) % creative.length }, 6000)
+  setInterval(() => { testiIndex.value = (testiIndex.value + 1) % testimonialGroups.value.length }, 6500)
 })
+
+// ── Testimonials ──
+// Placeholder testimonials — replace with real beneficiary/volunteer/partner quotes.
+const testimonials = [
+  {
+    initial: 'م', color: '#E31C26',
+    nameAr: 'أم عبدالله', nameEn: 'Umm Abdulla',
+    roleAr: 'ولية أمر طالب', roleEn: 'Parent of a Beneficiary Student',
+    quoteAr: 'مدارس بحرين ترست غيّرت حياة ابني، صار متحمس للتعلم ويحلم بمستقبل أفضل.',
+    quoteEn: "Bahrain Trust's schools changed my son's life — he's now excited to learn and dreams of a better future.",
+  },
+  {
+    initial: 'خ', color: '#3c3950',
+    nameAr: 'خالد أحمد', nameEn: 'Khalid Ahmed',
+    roleAr: 'متطوع', roleEn: 'Volunteer',
+    quoteAr: 'التطوع مع بحرين ترست منحني فرصة حقيقية لخدمة مجتمعي ورؤية الأثر بأم عيني.',
+    quoteEn: 'Volunteering with Bahrain Trust gave me a real chance to serve my community and see the impact firsthand.',
+  },
+  {
+    initial: 'س', color: '#00bcd4',
+    nameAr: 'سارة المري', nameEn: 'Sara Al Marri',
+    roleAr: 'شريكة مؤسسة', roleEn: 'Corporate Partner',
+    quoteAr: 'شراكتنا مع بحرين ترست من أنجح مبادرات المسؤولية المجتمعية التي دعمناها.',
+    quoteEn: "Our partnership with Bahrain Trust is one of the most successful CSR initiatives we've supported.",
+  },
+  {
+    initial: 'ي', color: '#c8972a',
+    nameAr: 'يوسف حسن', nameEn: 'Yousif Hassan',
+    roleAr: 'مستفيد من برنامج دافنشي', roleEn: 'Da Vinci Program Graduate',
+    quoteAr: 'البرنامج التدريبي فتح لي أبواباً مهنية ما كنت أتخيلها، أشكر كل فريق العمل.',
+    quoteEn: 'The training program opened professional doors I never imagined. Grateful to the entire team.',
+  },
+  {
+    initial: 'ن', color: '#8B0000',
+    nameAr: 'نورة العلي', nameEn: 'Noora Al Ali',
+    roleAr: 'ولية أمر متطوعة', roleEn: 'Parent & Volunteer',
+    quoteAr: 'أثق بشفافية بحرين ترست ووضوح أثر كل تبرع، لذلك أستمر بالتبرع كل عام.',
+    quoteEn: "I trust Bahrain Trust's transparency and the clear impact of every donation, which is why I give every year.",
+  },
+]
+
+const testiIndex = ref(0)
+const testimonialGroups = computed(() => {
+  const perGroup = 3
+  const groups = []
+  for (let i = 0; i < testimonials.length; i += perGroup) {
+    groups.push(testimonials.slice(i, i + perGroup))
+  }
+  return groups
+})
+const trackTransform = computed(() => `translateX(${-testiIndex.value * 100}%)`)
+
+// ── Partners ──
+// Placeholder logos — swap /public/images/partners/*.svg with real partner logos.
+const partners = [
+  { name: 'Aliya', image: '/images/partners/partner-1.svg' },
+  { name: 'Nexora', image: '/images/partners/partner-2.svg' },
+  { name: 'Falak', image: '/images/partners/partner-3.svg' },
+  { name: 'Wisam', image: '/images/partners/partner-4.svg' },
+  { name: 'Marsa', image: '/images/partners/partner-5.svg' },
+  { name: 'Diram', image: '/images/partners/partner-6.svg' },
+]
 
 // Fetch latest 3 news posts
 const newsPath = locale.value === 'ar' ? '/ar/news' : '/en/news'
@@ -475,73 +599,10 @@ function formatDate(dateStr) {
 }
 .stat span { font-size: 14px; opacity: 0.8; }
 
-/* Projects grid */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
-}
-
-.project-card {
-  display: block;
-  text-decoration: none;
-  overflow: hidden;
-}
-
-.project-img {
-  position: relative;
-  aspect-ratio: 4/3;
-  overflow: hidden;
-}
-
-.project-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.project-card:hover .project-img img {
-  transform: scale(1.05);
-}
-
-.project-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(transparent 40%, rgba(0,0,0,0.75));
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 16px;
-  transition: background 0.3s;
-}
-
-.project-card:hover .project-overlay {
-  background: linear-gradient(transparent 20%, rgba(227,28,38,0.85));
-}
-
-.project-label {
-  color: white;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.project-arrow {
-  color: white;
-  font-size: 18px;
-  opacity: 0;
-  transition: opacity 0.2s;
-  margin-top: 4px;
-}
-
-.project-card:hover .project-arrow { opacity: 1; }
-
 /* ── News Section ── */
 .news-section {
   background: #f4f6f7;
-  padding: 64px 0;
+  padding: 80px 0;
 }
 
 .news-header {
@@ -639,7 +700,7 @@ function formatDate(dateStr) {
 /* Donate CTA */
 .donate-cta {
   background: linear-gradient(135deg, var(--gold) 0%, #b5821e 100%);
-  padding: 64px 0;
+  padding: 80px 0;
 }
 .donate-cta-inner {
   display: flex;
@@ -662,22 +723,17 @@ function formatDate(dateStr) {
 
 /* Mobile */
 @media (max-width: 768px) {
-  .projects-grid { grid-template-columns: 1fr 1fr; }
   .news-grid { grid-template-columns: 1fr; }
   .stats-inner { flex-wrap: wrap; gap: 24px; }
   .stat { flex: 1 1 40%; }
-  .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .news-header { flex-direction: column; align-items: flex-start; gap: 16px; }
   .donate-cta-inner { flex-direction: column; text-align: center; }
-}
-
-@media (max-width: 480px) {
-  .projects-grid { grid-template-columns: 1fr; }
 }
 
 /* Mission & Vision */
 .mission-section {
   background: white;
-  padding: 64px 0;
+  padding: 80px 0;
   text-align: center;
 }
 
@@ -777,25 +833,35 @@ function formatDate(dateStr) {
 }
 
 
-/* ── Projects 3-Column Slider ── */
-.projects-section {
-  background: #000;
-  padding: 0;
-  margin: 0;
-  line-height: 0;
+/* ── Section header (shared) ── */
+.section-header.center { text-align: center; max-width: 620px; margin: 0 auto; }
+.section-header.center .section-subtitle { margin-bottom: 0; }
+
+/* ── Programs Section ── */
+.programs-section {
+  background: white;
+  padding: 80px 0;
 }
 
-.projects-columns {
+.programs-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  height: 400px;
+  gap: 24px;
+  margin-top: 44px;
 }
 
-.proj-column {
+.program-card {
   position: relative;
   overflow: hidden;
-  height: 400px;
+  height: 420px;
+  border-radius: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.program-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.18);
 }
 
 .slide-track {
@@ -815,21 +881,26 @@ function formatDate(dateStr) {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.program-card:hover .slide img {
+  transform: scale(1.06);
 }
 
 .slide-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(transparent 25%, rgba(0,0,0,0.75));
+  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.85) 100%);
   display: flex;
   align-items: flex-end;
 }
 
 .slide-content {
-  padding: 20px;
+  padding: 26px 24px;
   color: white;
   animation: slideUp 0.5s ease;
-  min-height: 130px;
+  min-height: 140px;
 }
 
 @keyframes slideUp {
@@ -838,80 +909,243 @@ function formatDate(dateStr) {
 }
 
 .slide-content h3 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 900;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
 .slide-content p {
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
-  opacity: 0.9;
-  text-transform: uppercase;
-  line-height: 1.4;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  margin-bottom: 14px;
+  opacity: 0.92;
+  line-height: 1.5;
 }
 
 .slide-btn {
-  display: inline-block;
-  border: 1.5px solid white;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid rgba(255,255,255,0.8);
   color: white;
-  padding: 8px 20px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(4px);
+  padding: 9px 22px;
+  border-radius: 30px;
   font-size: 12px;
   font-weight: 700;
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.2s;
+  letter-spacing: 0.3px;
+  transition: all 0.25s;
 }
 .slide-btn:hover {
   background: white;
-  color: #3c3950;
+  color: var(--dark);
+  border-color: white;
 }
 
 .slide-dots {
   position: absolute;
-  bottom: 12px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   gap: 6px;
+  z-index: 2;
 }
 .slide-dots span {
-  width: 8px; height: 8px;
+  width: 7px; height: 7px;
   border-radius: 50%;
   background: rgba(255,255,255,0.5);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
 }
-.slide-dots span.active { background: white; }
+.slide-dots span.active { background: white; transform: scale(1.2); }
 
 .slide-prev, .slide-next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.25);
   border: none;
   color: white;
-  font-size: 28px;
-  width: 36px;
-  height: 48px;
+  font-size: 24px;
+  width: 34px;
+  height: 44px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: background 0.2s, opacity 0.2s;
   z-index: 10;
+  opacity: 0;
 }
-.slide-prev:hover, .slide-next:hover { background: rgba(0,0,0,0.6); }
-.slide-prev { left: 0; }
-.slide-next { right: 0; }
+.program-card:hover .slide-prev,
+.program-card:hover .slide-next { opacity: 1; }
+.slide-prev:hover, .slide-next:hover { background: rgba(0,0,0,0.5); }
+.slide-prev { left: 0; border-radius: 0 8px 8px 0; }
+.slide-next { right: 0; border-radius: 8px 0 0 8px; }
 
-@media (max-width: 768px) {
-  .projects-columns { grid-template-columns: 1fr; height: auto; }
-  .proj-column { height: 300px; }
+@media (max-width: 900px) {
+  .programs-grid { grid-template-columns: 1fr; }
+  .program-card { height: 320px; }
+}
+
+/* ── Testimonials ── */
+.testimonials-section {
+  background: var(--off-white, #f4f6f7);
+  padding: 80px 0;
+}
+
+.testimonials-carousel {
+  margin-top: 44px;
+  overflow: hidden;
+}
+
+.testimonials-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.testimonial-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.testimonial-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.quote-mark {
+  font-size: 48px;
+  line-height: 1;
+  color: var(--red, #E31C26);
+  opacity: 0.25;
+  font-family: Georgia, serif;
+  margin-bottom: 4px;
+}
+
+.testimonial-quote {
+  font-size: 15px;
+  color: #3c3950;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.testimonial-person {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: white;
+  font-weight: 800;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.testimonial-person strong {
+  display: block;
+  font-size: 14px;
+  color: #3c3950;
+}
+.testimonial-person span {
+  font-size: 12px;
+  color: #5f727f;
+}
+
+.testimonial-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+}
+.testimonial-dots span {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #dfe5e8;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.testimonial-dots span.active { background: var(--red, #E31C26); transform: scale(1.2); }
+
+@media (max-width: 900px) {
+  .testimonial-slide { grid-template-columns: 1fr; }
+}
+
+/* ── Our Partners ── */
+.partners-section {
+  background: white;
+  padding: 80px 0;
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
+  margin-top: 44px;
+  align-items: center;
+}
+
+.partner-logo {
+  background: var(--off-white, #f4f6f7);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88px;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.partner-logo img {
+  max-width: 100%;
+  max-height: 40px;
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: filter 0.3s, opacity 0.3s;
+}
+
+.partner-logo:hover {
+  background: white;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
+}
+
+.partner-logo:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .partners-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .partners-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 
