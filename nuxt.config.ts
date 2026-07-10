@@ -36,8 +36,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       tapPublicKey: process.env.TAP_PUBLIC_KEY || '',
-      supabaseUrl: 'https://atfcckxxcomreukjzuxa.supabase.co',
-      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0ZmNja3h4Y29tcmV1a2p6dXhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0NTkwMDcsImV4cCI6MjA5NDAzNTAwN30.NTKDuqdG33Aa2fLpfUi0ExHmTEJ7AwUApYMrn9d0tHQ',
+      supabaseUrl: 'https://gdhjyokwozlgocsmlfoj.supabase.co',
+      supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkaGp5b2t3b3psZ29jc21sZm9qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2ODc5NDMsImV4cCI6MjA5OTI2Mzk0M30.mPRjFSP8vUC52BxKrqsapx0inaBq3psPVliKNko-XsA',
     },
   },
 

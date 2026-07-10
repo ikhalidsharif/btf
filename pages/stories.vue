@@ -101,7 +101,8 @@ useHead({
   ]
 })
 
-const SUPABASE = 'https://atfcckxxcomreukjzuxa.supabase.co/storage/v1/object/public/stories'
+const config = useRuntimeConfig()
+const SUPABASE = `${config.public.supabaseUrl}/storage/v1/object/public/stories`
 const WP = 'https://bahraintrust.org/wp-content/uploads/real3d-flipbook'
 
 const books = [
