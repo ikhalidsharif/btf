@@ -202,7 +202,12 @@
 
         <div class="testimonials-carousel">
           <div class="testimonials-track" :style="{ transform: trackTransform }">
-            <div v-for="(item, i) in testimonialGroups" :key="i" class="testimonial-slide">
+            <div
+              v-for="(item, i) in testimonialGroups"
+              :key="i"
+              class="testimonial-slide"
+              :style="{ gridTemplateColumns: `repeat(${perView}, 1fr)` }"
+            >
               <div v-for="t in item" :key="t.nameEn" class="testimonial-card">
                 <div class="quote-mark">&ldquo;</div>
                 <p class="testimonial-quote">{{ locale === "ar" ? t.quoteAr : t.quoteEn }}</p>
@@ -216,6 +221,20 @@
               </div>
             </div>
           </div>
+
+          <button
+            v-if="testimonialGroups.length > 1"
+            class="testi-prev"
+            :aria-label="locale === 'ar' ? 'السابق' : 'Previous'"
+            @click="testiIndex = (testiIndex - 1 + testimonialGroups.length) % testimonialGroups.length"
+          >&#8249;</button>
+          <button
+            v-if="testimonialGroups.length > 1"
+            class="testi-next"
+            :aria-label="locale === 'ar' ? 'التالي' : 'Next'"
+            @click="testiIndex = (testiIndex + 1) % testimonialGroups.length"
+          >&#8250;</button>
+
           <div class="testimonial-dots">
             <span v-for="(item, i) in testimonialGroups" :key="i"
               :class="{ active: i === testiIndex }"
@@ -418,15 +437,38 @@ const testimonials = [
 ]
 
 const testiIndex = ref(0)
+const perView = ref(3)
+
+function updatePerView() {
+  const w = window.innerWidth
+  perView.value = w <= 640 ? 1 : w <= 960 ? 2 : 3
+}
+
 const testimonialGroups = computed(() => {
-  const perGroup = 3
+  const perGroup = perView.value
   const groups = []
   for (let i = 0; i < testimonials.length; i += perGroup) {
     groups.push(testimonials.slice(i, i + perGroup))
   }
   return groups
 })
-const trackTransform = computed(() => `translateX(${-testiIndex.value * 100}%)`)
+
+// Keep the active index in range whenever the number of groups changes (e.g. on resize)
+watch(testimonialGroups, (groups) => {
+  if (testiIndex.value > groups.length - 1) testiIndex.value = 0
+})
+
+const trackTransform = computed(() => `translate3d(${-testiIndex.value * 100}%,0,0)`)
+
+let resizeHandler
+onMounted(() => {
+  updatePerView()
+  resizeHandler = () => updatePerView()
+  window.addEventListener('resize', resizeHandler)
+})
+onUnmounted(() => {
+  if (resizeHandler) window.removeEventListener('resize', resizeHandler)
+})
 
 // ── Partners ──
 // Placeholder logos — swap /public/images/partners/*.svg with real partner logos.
@@ -1008,21 +1050,27 @@ function formatDate(dateStr) {
 }
 
 .testimonials-carousel {
+  position: relative;
   margin-top: 44px;
-  overflow: hidden;
 }
 
 .testimonials-track {
   display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
   transition: transform 0.5s ease;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .testimonial-slide {
-  min-width: 100%;
-  flex-shrink: 0;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  align-items: stretch;
 }
 
 .testimonial-card {
@@ -1033,6 +1081,7 @@ function formatDate(dateStr) {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .testimonial-card:hover {
@@ -1055,12 +1104,14 @@ function formatDate(dateStr) {
   line-height: 1.8;
   margin-bottom: 24px;
   flex: 1;
+  word-break: break-word;
 }
 
 .testimonial-person {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
 .avatar {
@@ -1086,6 +1137,30 @@ function formatDate(dateStr) {
   color: #5f727f;
 }
 
+/* Prev / Next arrows */
+.testi-prev, .testi-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  color: var(--dark, #3c3950);
+  font-size: 22px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+}
+.testi-prev:hover, .testi-next:hover { background: var(--red, #E31C26); color: white; }
+.testi-prev { inset-inline-start: -20px; }
+.testi-next { inset-inline-end: -20px; }
+
 .testimonial-dots {
   display: flex;
   justify-content: center;
@@ -1102,7 +1177,13 @@ function formatDate(dateStr) {
 .testimonial-dots span.active { background: var(--red, #E31C26); transform: scale(1.2); }
 
 @media (max-width: 900px) {
-  .testimonial-slide { grid-template-columns: 1fr; }
+  .testi-prev, .testi-next { display: none; }
+}
+
+@media (max-width: 480px) {
+  .testimonial-card { padding: 24px 20px; }
+  .quote-mark { font-size: 38px; }
+  .testimonial-quote { font-size: 14px; margin-bottom: 18px; }
 }
 
 /* ── Our Partners ── */
