@@ -120,7 +120,7 @@
         <div class="programs-grid">
 
           <!-- EDUCATION -->
-          <div class="program-card">
+          <div class="program-card" @touchstart.passive="eduSwipe.onTouchStart" @touchend="eduSwipe.onTouchEnd">
             <div class="slide-track" :style="{ transform: `translate3d(${-eduIndex * 100}%,0,0)` }">
               <div v-for="slide in education" :key="slide.slug" class="slide">
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
@@ -145,7 +145,7 @@
           </div>
 
           <!-- COMMUNITY SERVICE -->
-          <div class="program-card">
+          <div class="program-card" @touchstart.passive="comSwipe.onTouchStart" @touchend="comSwipe.onTouchEnd">
             <div class="slide-track" :style="{ transform: `translate3d(${-comIndex * 100}%,0,0)` }">
               <div v-for="slide in community" :key="slide.slug" class="slide">
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
@@ -170,7 +170,7 @@
           </div>
 
           <!-- CREATIVE ECONOMY -->
-          <div class="program-card">
+          <div class="program-card" @touchstart.passive="creSwipe.onTouchStart" @touchend="creSwipe.onTouchEnd">
             <div class="slide-track" :style="{ transform: `translate3d(${-creIndex * 100}%,0,0)` }">
               <div v-for="slide in creative" :key="slide.slug" class="slide">
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
@@ -208,7 +208,7 @@
             : "What beneficiaries, volunteers, and partners say about their experience with us" }}</p>
         </div>
 
-        <div class="testimonials-carousel">
+        <div class="testimonials-carousel" @touchstart.passive="testiSwipe.onTouchStart" @touchend="testiSwipe.onTouchEnd">
           <div class="testimonials-track" :style="{ transform: trackTransform }">
             <div
               v-for="(item, i) in testimonialGroups"
@@ -412,6 +412,41 @@ const creative = [
   { title: 'GIFT SHOP', titleAr: 'المتجر', slug: '/gift-shop', image: '/images/projects/creative-giftshop.jpg' },
 ]
 
+// ── Touch swipe (mobile) ──
+// Generic helper: swipe left → next, swipe right → prev.
+// Ignores mostly-vertical touches so page scrolling still works normally.
+function useSwipe(onNext, onPrev) {
+  let startX = 0
+  let startY = 0
+  return {
+    onTouchStart(e) {
+      startX = e.touches[0].clientX
+      startY = e.touches[0].clientY
+    },
+    onTouchEnd(e) {
+      const dx = e.changedTouches[0].clientX - startX
+      const dy = e.changedTouches[0].clientY - startY
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) onNext()
+        else onPrev()
+      }
+    },
+  }
+}
+
+const eduSwipe = useSwipe(
+  () => { eduIndex.value = (eduIndex.value + 1) % education.length },
+  () => { eduIndex.value = (eduIndex.value - 1 + education.length) % education.length },
+)
+const comSwipe = useSwipe(
+  () => { comIndex.value = (comIndex.value + 1) % community.length },
+  () => { comIndex.value = (comIndex.value - 1 + community.length) % community.length },
+)
+const creSwipe = useSwipe(
+  () => { creIndex.value = (creIndex.value + 1) % creative.length },
+  () => { creIndex.value = (creIndex.value - 1 + creative.length) % creative.length },
+)
+
 // Auto-advance sliders
 onMounted(() => {
   // Programs sliders are now manual-only (prev/next + dots) — no auto-advance.
@@ -479,6 +514,11 @@ const testimonialGroups = computed(() => {
 watch(testimonialGroups, (groups) => {
   if (testiIndex.value > groups.length - 1) testiIndex.value = 0
 })
+
+const testiSwipe = useSwipe(
+  () => { testiIndex.value = (testiIndex.value + 1) % testimonialGroups.value.length },
+  () => { testiIndex.value = (testiIndex.value - 1 + testimonialGroups.value.length) % testimonialGroups.value.length },
+)
 
 const trackTransform = computed(() => `translate3d(${-testiIndex.value * 100}%,0,0)`)
 
@@ -926,6 +966,7 @@ function formatDate(dateStr) {
   border-radius: 18px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   transition: transform 0.35s ease, box-shadow 0.35s ease;
+  touch-action: pan-y;
 }
 
 .program-card:hover {
@@ -1081,6 +1122,7 @@ function formatDate(dateStr) {
 .testimonials-carousel {
   position: relative;
   margin-top: 44px;
+  touch-action: pan-y;
 }
 
 .testimonials-track {
