@@ -214,7 +214,7 @@
               v-for="(item, i) in testimonialGroups"
               :key="i"
               class="testimonial-slide"
-              :style="{ gridTemplateColumns: `repeat(${perView}, 1fr)` }"
+              :style="{ gridTemplateColumns: `repeat(${item.length}, 1fr)` }"
             >
               <div v-for="t in item" :key="t.nameEn" class="testimonial-card">
                 <div class="quote-mark">&ldquo;</div>
