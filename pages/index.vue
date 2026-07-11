@@ -208,13 +208,13 @@
             : "What beneficiaries, volunteers, and partners say about their experience with us" }}</p>
         </div>
 
-        <div class="testimonials-carousel" @touchstart.passive="testiSwipe.onTouchStart" @touchend="testiSwipe.onTouchEnd">
-          <div class="testimonials-track" :style="{ transform: trackTransform }">
+        <div class="testimonials-carousel">
+          <div class="testimonials-track" ref="testiTrackRef">
             <div
               v-for="(item, i) in testimonialGroups"
               :key="i"
+              :ref="(el) => setTestiSlideRef(el, i)"
               class="testimonial-slide"
-              :dir="locale === 'ar' ? 'rtl' : 'ltr'"
               :style="{ gridTemplateColumns: `repeat(${item.length}, 1fr)` }"
             >
               <div v-for="t in item" :key="t.nameEn" class="testimonial-card">
@@ -235,19 +235,19 @@
             v-if="testimonialGroups.length > 1"
             class="testi-prev"
             :aria-label="locale === 'ar' ? 'السابق' : 'Previous'"
-            @click="testiIndex = (testiIndex - 1 + testimonialGroups.length) % testimonialGroups.length"
+            @click="prevTesti"
           >&#8249;</button>
           <button
             v-if="testimonialGroups.length > 1"
             class="testi-next"
             :aria-label="locale === 'ar' ? 'التالي' : 'Next'"
-            @click="testiIndex = (testiIndex + 1) % testimonialGroups.length"
+            @click="nextTesti"
           >&#8250;</button>
 
           <div class="testimonial-dots">
             <span v-for="(item, i) in testimonialGroups" :key="i"
               :class="{ active: i === testiIndex }"
-              @click="testiIndex = i" />
+              @click="goToTesti(i)" />
           </div>
         </div>
       </div>
@@ -448,12 +448,6 @@ const creSwipe = useSwipe(
   () => { creIndex.value = (creIndex.value - 1 + creative.length) % creative.length },
 )
 
-// Auto-advance sliders
-onMounted(() => {
-  // Programs sliders are now manual-only (prev/next + dots) — no auto-advance.
-  setInterval(() => { testiIndex.value = (testiIndex.value + 1) % testimonialGroups.value.length }, 6500)
-})
-
 // ── Testimonials ──
 // Placeholder testimonials — replace with real beneficiary/volunteer/partner quotes.
 const testimonials = [
@@ -496,11 +490,20 @@ const testimonials = [
 
 const testiIndex = ref(0)
 const perView = ref(3)
+const testiTrackRef = ref(null)
+const testiSlideRefs = ref([])
+
+function setTestiSlideRef(el, i) {
+  if (el) testiSlideRefs.value[i] = el
+}
 
 function updatePerView() {
   const w = window.innerWidth
   const next = w <= 640 ? 1 : w <= 960 ? 2 : 3
-  if (next !== perView.value) testiIndex.value = 0
+  if (next !== perView.value) {
+    testiIndex.value = 0
+    testiSlideRefs.value = []
+  }
   perView.value = next
 }
 
@@ -513,26 +516,51 @@ const testimonialGroups = computed(() => {
   return groups
 })
 
-// Keep the active index in range whenever the number of groups changes (e.g. on resize)
-watch(testimonialGroups, (groups) => {
-  if (testiIndex.value > groups.length - 1) testiIndex.value = 0
+// Navigation uses the browser's own scrollIntoView — it's direction-aware
+// (works correctly in RTL out of the box) and can never push content
+// outside the viewport, unlike manual translateX math.
+function goToTesti(i) {
+  testiSlideRefs.value[i]?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+}
+function nextTesti() {
+  goToTesti((testiIndex.value + 1) % testimonialGroups.value.length)
+}
+function prevTesti() {
+  goToTesti((testiIndex.value - 1 + testimonialGroups.value.length) % testimonialGroups.value.length)
+}
+
+// Keep the dots in sync with whichever slide is actually scrolled into view
+// (covers swipe, arrow clicks, and auto-advance uniformly).
+let testiObserver
+function observeTestiSlides() {
+  if (testiObserver) testiObserver.disconnect()
+  if (!('IntersectionObserver' in window) || !testiTrackRef.value) return
+  testiObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.6) {
+        const idx = testiSlideRefs.value.indexOf(entry.target)
+        if (idx !== -1) testiIndex.value = idx
+      }
+    })
+  }, { root: testiTrackRef.value, threshold: 0.6 })
+  testiSlideRefs.value.forEach((el) => el && testiObserver.observe(el))
+}
+
+watch(testimonialGroups, () => {
+  nextTick(() => observeTestiSlides())
 })
-
-const testiSwipe = useSwipe(
-  () => { testiIndex.value = (testiIndex.value + 1) % testimonialGroups.value.length },
-  () => { testiIndex.value = (testiIndex.value - 1 + testimonialGroups.value.length) % testimonialGroups.value.length },
-)
-
-const trackTransform = computed(() => `translate3d(${-testiIndex.value * 100}%,0,0)`)
 
 let resizeHandler
 onMounted(() => {
   updatePerView()
+  observeTestiSlides()
+  setInterval(() => nextTesti(), 6500)
   resizeHandler = () => updatePerView()
   window.addEventListener('resize', resizeHandler)
 })
 onUnmounted(() => {
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
+  if (testiObserver) testiObserver.disconnect()
 })
 
 // ── Partners ──
@@ -1132,11 +1160,15 @@ function formatDate(dateStr) {
 .testimonials-track {
   display: flex;
   flex-wrap: nowrap;
-  overflow: hidden;
-  transition: transform 0.5s ease;
-  will-change: transform;
-  backface-visibility: hidden;
-  direction: ltr;
+  align-items: flex-start;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.testimonials-track::-webkit-scrollbar {
+  display: none;
 }
 
 .testimonial-slide {
@@ -1144,6 +1176,8 @@ function formatDate(dateStr) {
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   display: grid;
   gap: 24px;
   align-items: stretch;
