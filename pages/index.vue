@@ -2,9 +2,17 @@
   <div class="home">
     <!-- Hero with YouTube Video Background -->
     <section class="hero">
-      <!-- YouTube iframe background -->
+      <!-- YouTube background: lightweight poster first, iframe loads after page is idle -->
       <div class="video-bg">
+        <img
+          v-if="!heroVideoLoaded"
+          src="https://img.youtube.com/vi/EGrbZpgYoj8/maxresdefault.jpg"
+          alt=""
+          class="video-poster"
+          fetchpriority="high"
+        />
         <iframe
+          v-else
           src="https://www.youtube.com/embed/EGrbZpgYoj8?autoplay=1&mute=1&loop=1&playlist=EGrbZpgYoj8&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1"
           frameborder="0"
           allow="autoplay; encrypted-media"
@@ -115,7 +123,7 @@
           <div class="program-card">
             <div class="slide-track" :style="{ transform: `translate3d(${-eduIndex * 100}%,0,0)` }">
               <div v-for="slide in education" :key="slide.slug" class="slide">
-                <img :src="slide.image" :alt="slide.title" />
+                <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
                     <h3>{{ locale === "ar" ? "التعليم" : "Education" }}</h3>
@@ -140,7 +148,7 @@
           <div class="program-card">
             <div class="slide-track" :style="{ transform: `translate3d(${-comIndex * 100}%,0,0)` }">
               <div v-for="slide in community" :key="slide.slug" class="slide">
-                <img :src="slide.image" :alt="slide.title" />
+                <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
                     <h3>{{ locale === "ar" ? "خدمة المجتمع" : "Community Service" }}</h3>
@@ -165,7 +173,7 @@
           <div class="program-card">
             <div class="slide-track" :style="{ transform: `translate3d(${-creIndex * 100}%,0,0)` }">
               <div v-for="slide in creative" :key="slide.slug" class="slide">
-                <img :src="slide.image" :alt="slide.title" />
+                <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
                     <h3>{{ locale === "ar" ? "الاقتصاد الإبداعي" : "Creative Economy" }}</h3>
@@ -248,7 +256,7 @@
     <!-- Stories Banner -->
     <section class="stories-banner">
       <NuxtLink :to="localePath('/stories')" class="stories-banner-link">
-        <img src="/images/read-our-stories.png" alt="Read Our Stories" class="stories-banner-full-img" />
+        <img src="/images/read-our-stories.png" alt="Read Our Stories" class="stories-banner-full-img" loading="lazy" decoding="async" />
       </NuxtLink>
     </section>
 
@@ -327,6 +335,20 @@ const localePath = useLocalePath()
 
 useHead({
   title: locale.value === 'ar' ? 'مؤسسة البحرين للتنمية والتطوير' : 'Bahrain Trust Foundation',
+})
+
+// ── Hero video (performance) ──
+// Show a static YouTube thumbnail immediately; swap in the real iframe only
+// once the page is idle/interactive, so the YouTube player's heavy JS never
+// blocks first paint / LCP.
+const heroVideoLoaded = ref(false)
+onMounted(() => {
+  const loadHeroVideo = () => { heroVideoLoaded.value = true }
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadHeroVideo, { timeout: 3000 })
+  } else {
+    setTimeout(loadHeroVideo, 1500)
+  }
 })
 
 const stats = [
@@ -527,6 +549,13 @@ function formatDate(dateStr) {
   height: 56.25vw;
   min-width: 100%;
   min-height: 100%;
+}
+.video-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Dark overlay */
