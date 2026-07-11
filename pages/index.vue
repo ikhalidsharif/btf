@@ -122,7 +122,7 @@
           <!-- EDUCATION -->
           <div class="program-card" @touchstart.passive="eduSwipe.onTouchStart" @touchend="eduSwipe.onTouchEnd">
             <div class="slide-track" :style="{ transform: `translate3d(${-eduIndex * 100}%,0,0)` }">
-              <div v-for="slide in education" :key="slide.slug" class="slide">
+              <div v-for="slide in education" :key="slide.slug" class="slide" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
@@ -147,7 +147,7 @@
           <!-- COMMUNITY SERVICE -->
           <div class="program-card" @touchstart.passive="comSwipe.onTouchStart" @touchend="comSwipe.onTouchEnd">
             <div class="slide-track" :style="{ transform: `translate3d(${-comIndex * 100}%,0,0)` }">
-              <div v-for="slide in community" :key="slide.slug" class="slide">
+              <div v-for="slide in community" :key="slide.slug" class="slide" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
@@ -172,7 +172,7 @@
           <!-- CREATIVE ECONOMY -->
           <div class="program-card" @touchstart.passive="creSwipe.onTouchStart" @touchend="creSwipe.onTouchEnd">
             <div class="slide-track" :style="{ transform: `translate3d(${-creIndex * 100}%,0,0)` }">
-              <div v-for="slide in creative" :key="slide.slug" class="slide">
+              <div v-for="slide in creative" :key="slide.slug" class="slide" :dir="locale === 'ar' ? 'rtl' : 'ltr'">
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
@@ -214,6 +214,7 @@
               v-for="(item, i) in testimonialGroups"
               :key="i"
               class="testimonial-slide"
+              :dir="locale === 'ar' ? 'rtl' : 'ltr'"
               :style="{ gridTemplateColumns: `repeat(${item.length}, 1fr)` }"
             >
               <div v-for="t in item" :key="t.nameEn" class="testimonial-card">
@@ -981,6 +982,7 @@ function formatDate(dateStr) {
   transition: transform 0.5s ease;
   will-change: transform;
   backface-visibility: hidden;
+  direction: ltr;
 }
 
 .slide {
@@ -1132,6 +1134,7 @@ function formatDate(dateStr) {
   transition: transform 0.5s ease;
   will-change: transform;
   backface-visibility: hidden;
+  direction: ltr;
 }
 
 .testimonial-slide {
