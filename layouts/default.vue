@@ -142,7 +142,7 @@
         </div>
 
         <div class="footer-links">
-          <h4>{{ locale === 'ar' ? 'روابط سريعة' : 'Quick Links' }}</h4>
+          <h3 class="footer-heading">{{ locale === 'ar' ? 'روابط سريعة' : 'Quick Links' }}</h3>
           <NuxtLink :to="localePath('/about')">{{ locale === 'ar' ? 'عن المؤسسة' : 'About Us' }}</NuxtLink>
           <NuxtLink :to="localePath('/projects')">{{ locale === 'ar' ? 'المشاريع' : 'Projects' }}</NuxtLink>
           <NuxtLink :to="localePath('/news')">{{ locale === 'ar' ? 'الأخبار' : 'News' }}</NuxtLink>
@@ -152,7 +152,7 @@
         </div>
 
         <div class="footer-contact">
-          <h4>{{ locale === 'ar' ? 'تواصل معنا' : 'Contact Us' }}</h4>
+          <h3 class="footer-heading">{{ locale === 'ar' ? 'تواصل معنا' : 'Contact Us' }}</h3>
           <p>📍 {{ locale === 'ar' ? 'مركز صفية علي كانو للفنون، بوغزال، البحرين' : 'Safiya Ali Kanoo Hub for Arts, Bughazal, Bahrain' }}</p>
           <p>📞 (+973) 1722 3781</p>
           <p>📧 info@bahraintrust.org</p>
@@ -160,7 +160,7 @@
         </div>
 
         <div class="footer-donate">
-          <h4>{{ locale === 'ar' ? 'ادعم مشاريعنا' : 'Support Our Projects' }}</h4>
+          <h3 class="footer-heading">{{ locale === 'ar' ? 'ادعم مشاريعنا' : 'Support Our Projects' }}</h3>
           <p>{{ locale === 'ar' ? 'تبرعك يصنع فرقاً في حياة الأسر البحرينية' : 'Your donation makes a difference in Bahraini families lives' }}</p>
           <NuxtLink :to="localePath('/donate')" class="btn-footer-donate">
             ❤️ {{ locale === 'ar' ? 'تبرع الآن' : 'Donate Now' }}
@@ -186,6 +186,13 @@ const switchLocalePath = useSwitchLocalePath()
 const dir = computed(() => locale.value === 'ar' ? 'rtl' : 'ltr')
 const menuOpen = ref(false)
 const isScrolled = ref(false)
+
+useHead({
+  htmlAttrs: {
+    lang: computed(() => locale.value === 'ar' ? 'ar' : 'en'),
+    dir,
+  },
+})
 
 function switchLocale() {
   const newLocale = locale.value === 'ar' ? 'en' : 'ar'
@@ -421,7 +428,7 @@ onMounted(() => {
 }
 .footer-socials a:hover { background: #00bcd4; }
 
-.footer-links h4, .footer-contact h4, .footer-donate h4 {
+.footer-heading {
   font-size: 13px;
   font-weight: 700;
   color: #00bcd4;
@@ -449,7 +456,7 @@ onMounted(() => {
 .btn-footer-donate:hover { background: #b5151e; }
 
 .footer-bottom { padding: 20px 0; }
-.footer-bottom p { font-size: 12px; opacity: 0.4; text-align: center; }
+.footer-bottom p { font-size: 12px; color: #b5b3c2; text-align: center; }
 
 /* ── Mobile ── */
 @media (max-width: 900px) {

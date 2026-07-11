@@ -23,6 +23,13 @@ export default defineNuxtConfig({
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap',
+          media: 'print',
+          onload: "this.media='all'",
+        },
+      ],
+      noscript: [
+        {
+          children: '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap">',
         },
       ],
       style: [

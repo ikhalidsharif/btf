@@ -6,7 +6,7 @@
       <div class="video-bg">
         <img
           v-if="!heroVideoLoaded"
-          src="https://img.youtube.com/vi/EGrbZpgYoj8/maxresdefault.jpg"
+          src="https://img.youtube.com/vi/EGrbZpgYoj8/hqdefault.jpg"
           alt=""
           class="video-poster"
           fetchpriority="high"
@@ -128,7 +128,7 @@
                   <div class="slide-content">
                     <h3>{{ locale === "ar" ? "التعليم" : "Education" }}</h3>
                     <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
-                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn" :aria-label="(locale === 'ar' ? slide.titleAr : slide.title) + (locale === 'ar' ? ' - اضغط هنا' : ' - Click Here')">
                       {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
                     </NuxtLink>
                   </div>
@@ -153,7 +153,7 @@
                   <div class="slide-content">
                     <h3>{{ locale === "ar" ? "خدمة المجتمع" : "Community Service" }}</h3>
                     <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
-                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn" :aria-label="(locale === 'ar' ? slide.titleAr : slide.title) + (locale === 'ar' ? ' - اضغط هنا' : ' - Click Here')">
                       {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
                     </NuxtLink>
                   </div>
@@ -178,7 +178,7 @@
                   <div class="slide-content">
                     <h3>{{ locale === "ar" ? "الاقتصاد الإبداعي" : "Creative Economy" }}</h3>
                     <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
-                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn">
+                    <NuxtLink :to="localePath(slide.slug)" class="slide-btn" :aria-label="(locale === 'ar' ? slide.titleAr : slide.title) + (locale === 'ar' ? ' - اضغط هنا' : ' - Click Here')">
                       {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
                     </NuxtLink>
                   </div>
@@ -684,7 +684,7 @@ function formatDate(dateStr) {
 .news-header .section-subtitle { margin-bottom: 0; }
 
 .btn-view-all {
-  color: #E31C26;
+  color: var(--red-dark);
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
