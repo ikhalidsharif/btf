@@ -499,7 +499,9 @@ const perView = ref(3)
 
 function updatePerView() {
   const w = window.innerWidth
-  perView.value = w <= 640 ? 1 : w <= 960 ? 2 : 3
+  const next = w <= 640 ? 1 : w <= 960 ? 2 : 3
+  if (next !== perView.value) testiIndex.value = 0
+  perView.value = next
 }
 
 const testimonialGroups = computed(() => {
