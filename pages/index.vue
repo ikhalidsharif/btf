@@ -208,7 +208,7 @@
             : "What beneficiaries, volunteers, and partners say about their experience with us" }}</p>
         </div>
 
-        <div class="testimonials-carousel">
+        <div class="testimonials-carousel" ref="testiCarouselRef">
           <div class="testimonials-track" ref="testiTrackRef">
             <div
               v-for="(item, i) in testimonialGroups"
@@ -491,7 +491,9 @@ const testimonials = [
 const testiIndex = ref(0)
 const perView = ref(3)
 const testiTrackRef = ref(null)
+const testiCarouselRef = ref(null)
 const testiSlideRefs = ref([])
+const testiInView = ref(false)
 
 function setTestiSlideRef(el, i) {
   if (el) testiSlideRefs.value[i] = el
@@ -517,8 +519,10 @@ const testimonialGroups = computed(() => {
 })
 
 // Navigation uses the browser's own scrollIntoView — it's direction-aware
-// (works correctly in RTL out of the box) and can never push content
-// outside the viewport, unlike manual translateX math.
+// (works correctly in RTL out of the box, no manual scrollLeft sign math)
+// and can never push content outside the horizontal viewport. block:'nearest'
+// only affects vertical position if the element isn't already visible, which
+// is why auto-advance below is gated on the section actually being on screen.
 function goToTesti(i) {
   testiSlideRefs.value[i]?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
 }
@@ -550,17 +554,35 @@ watch(testimonialGroups, () => {
   nextTick(() => observeTestiSlides())
 })
 
+// Auto-advance must only run while the section is actually on screen —
+// otherwise it silently yanks the whole page back to this section.
+let testiVisibilityObserver
 let resizeHandler
 onMounted(() => {
   updatePerView()
   observeTestiSlides()
-  setInterval(() => nextTesti(), 6500)
+
+  if ('IntersectionObserver' in window && testiCarouselRef.value) {
+    testiVisibilityObserver = new IntersectionObserver(
+      ([entry]) => { testiInView.value = entry.isIntersecting },
+      { threshold: 0.3 },
+    )
+    testiVisibilityObserver.observe(testiCarouselRef.value)
+  } else {
+    testiInView.value = true
+  }
+
+  setInterval(() => {
+    if (testiInView.value) nextTesti()
+  }, 6500)
+
   resizeHandler = () => updatePerView()
   window.addEventListener('resize', resizeHandler)
 })
 onUnmounted(() => {
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
   if (testiObserver) testiObserver.disconnect()
+  if (testiVisibilityObserver) testiVisibilityObserver.disconnect()
 })
 
 // ── Partners ──
