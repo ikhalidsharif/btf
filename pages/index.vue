@@ -254,6 +254,55 @@
     </section>
 
 
+    <!-- Our Micro Schools -->
+    <section class="feature-section">
+      <div class="container">
+        <div class="feature-grid">
+          <div class="feature-image fade-up">
+            <img src="/images/projects/education-hospital.jpg" :alt="locale === 'ar' ? 'المدارس المصغرة' : 'Our Micro Schools'" />
+          </div>
+          <div class="feature-text fade-up">
+            <span class="feature-eyebrow">{{ locale === 'ar' ? 'برنامجنا التعليمي' : 'Our Education Program' }}</span>
+            <h2 class="section-title">{{ locale === 'ar' ? 'المدارس المصغرة' : 'Our Micro Schools' }}</h2>
+            <p>{{ locale === 'ar'
+              ? 'نوفّر بيئات تعليمية مصغرة تصل للأطفال أينما كانوا — داخل المستشفيات لمرافقة الأطفال المرضى في رحلتهم العلاجية، وداخل المجتمعات المحلية لتقريب التعليم الجيد من كل طفل.'
+              : 'We bring compact, high-quality learning environments to children wherever they are — inside hospitals to support sick children through their treatment journey, and inside local communities to make quality education more accessible to every child.' }}</p>
+            <div class="feature-ctas">
+              <NuxtLink :to="localePath('/projects/hospital-micro-schools')" class="btn btn-primary">
+                {{ locale === 'ar' ? 'مدارس المستشفيات' : 'Hospital Schools' }}
+              </NuxtLink>
+              <NuxtLink :to="localePath('/projects/micro-schools')" class="btn btn-outline">
+                {{ locale === 'ar' ? 'المدارس المجتمعية' : 'Community Schools' }}
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3alimny Program -->
+    <section class="feature-section feature-section-alt">
+      <div class="container">
+        <div class="feature-grid feature-grid-reverse">
+          <div class="feature-text fade-up">
+            <span class="feature-eyebrow">{{ locale === 'ar' ? 'برنامج علّمني' : '3alimny Program' }}</span>
+            <h2 class="section-title">{{ locale === 'ar' ? 'برنامج علّمني' : '3alimny Program' }}</h2>
+            <p>{{ locale === 'ar'
+              ? 'برنامج تعليمي يهدف إلى تمكين الأفراد بمهارات عملية ومعرفة تطبيقية تساعدهم على تطوير أنفسهم ومستقبلهم، ضمن رؤية المؤسسة في التنمية المستدامة من خلال التعليم.'
+              : "An educational program that empowers individuals with practical skills and applied knowledge to develop themselves and their future, as part of the Foundation's vision for sustainable development through education." }}</p>
+            <div class="feature-ctas">
+              <NuxtLink :to="localePath('/projects/3alimny')" class="btn btn-primary">
+                {{ locale === 'ar' ? 'اعرف أكثر' : 'Learn More' }}
+              </NuxtLink>
+            </div>
+          </div>
+          <div class="feature-image fade-up">
+            <img src="/images/projects/education-davinci.jpg" :alt="locale === 'ar' ? 'برنامج علّمني' : '3alimny Program'" />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Stories Banner -->
     <section class="stories-banner">
       <NuxtLink :to="localePath('/stories')" class="stories-banner-link">
@@ -1504,6 +1553,63 @@ function formatDate(dateStr) {
   .partners-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+
+/* ── Stories Banner ── */
+/* ── Feature Sections (Micro Schools / 3alimny) ── */
+.feature-section {
+  background: white;
+  padding: 80px 0;
+}
+.feature-section-alt {
+  background: var(--off-white, #f4f6f7);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.feature-grid-reverse .feature-text { order: 1; }
+.feature-grid-reverse .feature-image { order: 2; }
+
+.feature-eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 10px;
+}
+
+.feature-text .section-title { margin-bottom: 14px; }
+.feature-text p {
+  color: var(--text-light);
+  font-size: 16px;
+  line-height: 1.9;
+  margin-bottom: 28px;
+}
+
+.feature-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.feature-image img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 900px) {
+  .feature-grid { grid-template-columns: 1fr; gap: 28px; }
+  .feature-grid-reverse .feature-text { order: 2; }
+  .feature-grid-reverse .feature-image { order: 1; }
+}
 
 /* ── Stories Banner ── */
 .stories-banner {
