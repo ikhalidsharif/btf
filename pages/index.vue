@@ -311,6 +311,56 @@
       </div>
     </section>
 
+    <!-- Our Videos: TikTok + YouTube -->
+    <section class="videos-section">
+      <div class="container">
+        <div class="section-header center">
+          <h2 class="section-title">{{ locale === "ar" ? "شاهدونا" : "Watch Us" }}</h2>
+          <p class="section-subtitle">{{ locale === "ar"
+            ? "تابعوا آخر فيديوهاتنا على تيك توك ويوتيوب"
+            : "Follow our latest videos on TikTok and YouTube" }}</p>
+        </div>
+
+        <div class="videos-grid">
+          <div class="video-col">
+            <h3 class="video-col-title">TikTok</h3>
+            <div class="tiktok-embed-wrap">
+              <blockquote
+                class="tiktok-embed"
+                cite="https://www.tiktok.com/@bahraintrust"
+                data-unique-id="bahraintrust"
+                data-embed-type="creator"
+                style="max-width: 720px; min-width: 288px;"
+              >
+                <section>
+                  <a target="_blank" href="https://www.tiktok.com/@bahraintrust?refer=creator_embed">@bahraintrust</a>
+                </section>
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="video-col">
+            <h3 class="video-col-title">YouTube Shorts</h3>
+            <div class="shorts-grid">
+              <div v-for="id in youtubeShorts" :key="id" class="shorts-embed-wrap">
+                <iframe
+                  :src="`https://www.youtube.com/embed/${id}`"
+                  title="Bahrain Trust Foundation — YouTube Shorts"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <a href="https://www.youtube.com/@bahraintrust/shorts" target="_blank" rel="noopener" class="video-col-link">
+              {{ locale === "ar" ? "زيارة القناة ←" : "Visit Channel →" }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Our Partners -->
     <section class="partners-section">
       <div class="container">
@@ -336,7 +386,16 @@ const localePath = useLocalePath()
 
 useHead({
   title: locale.value === 'ar' ? 'مؤسسة البحرين للتنمية والتطوير' : 'Bahrain Trust Foundation',
+  script: [
+    { src: 'https://www.tiktok.com/embed.js', async: true },
+  ],
 })
+
+// ── YouTube Shorts (curated) ──
+// Update this list whenever you want to feature different Shorts —
+// there's no reliable way to auto-pull "Shorts only" from a channel
+// without the YouTube Data API, so these are picked manually.
+const youtubeShorts = ['asSkXP0RPIQ', '-KCatnuH7Hc']
 
 // ── Hero video (performance) ──
 // Show a static YouTube thumbnail immediately; swap in the real iframe only
@@ -1322,6 +1381,76 @@ function formatDate(dateStr) {
   .testimonial-card { padding: 24px 20px; }
   .quote-mark { font-size: 38px; }
   .testimonial-quote { font-size: 14px; margin-bottom: 18px; }
+}
+
+/* ── Watch Us (TikTok + YouTube) ── */
+.videos-section {
+  background: white;
+  padding: 80px 0;
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 44px;
+  align-items: start;
+}
+
+.video-col-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.tiktok-embed-wrap {
+  display: flex;
+  justify-content: center;
+  background: var(--off-white, #f4f6f7);
+  border-radius: 18px;
+  padding: 12px;
+  min-height: 420px;
+}
+.tiktok-embed-wrap :deep(.tiktok-embed) {
+  margin: 0 auto;
+}
+
+.shorts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.shorts-embed-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9/16;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.shorts-embed-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-col-link {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+  .videos-grid { grid-template-columns: 1fr; gap: 32px; }
 }
 
 /* ── Our Partners ── */
