@@ -40,22 +40,22 @@
         <div class="who-text fade-up">
           <h2 class="section-title">{{ locale === 'ar' ? 'من نحن' : 'Who We Are' }}</h2>
           <p>{{ locale === 'ar'
-            ? 'مؤسسة بحرين ترست مؤسسة خيرية غير ربحية تهدف إلى تحسين جودة حياة الناس وإحداث أثر إيجابي محلياً وعالمياً. نؤمن أن التعليم والتدريب عنصران أساسيان لتمكين الأفراد، ونسعى لتطوير حلول عملية وذكية تسهم في التنمية المستدامة للمجتمع.'
-            : "Bahrain Trust Foundation is a non-profit organization that aims to improve the quality of people's lives and create a positive impact locally and globally. We believe that education and training are crucial in empowering individuals, and we strive to develop practical and smart solutions that contribute to the sustainable development of the community." }}</p>
+            ? 'مؤسسة بحرين ترست هي مؤسسة خيرية غير ربحية. تهدف إلى تطوير جودة الحياة وإحداث فرق إيجابي في حياة الناس محلياً وإقليمياً. وتؤمن بأن التعليم والتدريب هي خدمات بالغة الأهمية لتمكين الأفراد، حيث تسعى المؤسسة جاهدة لتطوير نماذج عملية وذكية تسهم في التنمية المستدامة للمجتمع.'
+            : "Bahrain Trust Foundation is a non-profit organization that aims to improve the quality of people's lives and create a positive impact locally and regionally. We believe that education and training are crucial services for empowering individuals, and we strive to develop practical and smart models that contribute to the sustainable development of the community." }}</p>
           <p>{{ locale === 'ar'
-            ? 'تأسست المؤسسة عام 2010 ومسجّلة رسمياً لدى وزارة التنمية الاجتماعية بمملكة البحرين، ونعمل بالشراكة مع مؤسسات القطاعين العام والخاص لتوسيع أثرنا.'
-            : 'The Foundation was founded in 2010 and is officially registered with the Ministry of Social Development in the Kingdom of Bahrain. We work in partnership with public and private institutions to expand our impact.' }}</p>
+            ? 'تأسست المؤسسة عام 2010 ومسجّلة رسمياً لدى وزارة التنمية الاجتماعية بمملكة البحرين.'
+            : 'The Foundation was founded in 2010 and is officially registered with the Ministry of Social Development in the Kingdom of Bahrain.' }}</p>
           <div class="who-ctas">
             <NuxtLink :to="localePath('/donate')" class="btn btn-primary">
               ❤️ {{ locale === 'ar' ? 'ادعم مشاريعنا' : 'Support Our Projects' }}
             </NuxtLink>
-            <NuxtLink :to="localePath('/volunteer')" class="btn btn-outline">
-              {{ locale === 'ar' ? 'انضم كمتطوع' : 'Become a Volunteer' }}
-            </NuxtLink>
+            <a href="https://youtu.be/bQB1-5iqRC8" target="_blank" rel="noopener" class="btn btn-outline">
+              ▶ {{ locale === 'ar' ? 'تعرّف علينا أكثر' : 'Get to Know Us More' }}
+            </a>
           </div>
         </div>
         <div class="who-image fade-up">
-          <img src="/images/projects/community.jpg" :alt="locale === 'ar' ? 'بحرين ترست' : 'Bahrain Trust Foundation'" />
+          <img src="/images/team/board/board-group-photo.jpg" :alt="locale === 'ar' ? 'مجلس أمناء بحرين ترست' : 'Bahrain Trust Foundation Board of Trustees'" />
         </div>
       </div>
     </div>
@@ -67,7 +67,7 @@
           <div class="mv-block">
             <h2>{{ locale === 'ar' ? 'رسالتنا' : 'OUR MISSION' }}</h2>
             <p>{{ locale === 'ar'
-              ? 'إيجاد حلول ذكية وعملية لحياة أفضل للأفراد في المجتمع'
+              ? 'خلق حلول ذكية تؤمّن حياة أفضل لأفراد المجتمع.'
               : 'To create smart and practical solutions for a better life for people in the community' }}</p>
           </div>
           <div class="mv-divider" />
@@ -131,6 +131,30 @@
             <div class="board-avatar" :style="{ background: m.color }">{{ m.initial }}</div>
             <h3>{{ locale === 'ar' ? m.nameAr : m.nameEn }}</h3>
             <span class="board-title">{{ locale === 'ar' ? m.titleAr : m.titleEn }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Team -->
+    <section class="team-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'فريق العمل' : 'Our Team' }}</h2>
+        <p class="section-subtitle center">{{ locale === 'ar'
+          ? 'الأشخاص اللي يخلّون رؤيتنا حقيقة كل يوم'
+          : 'The people who turn our vision into reality every day' }}</p>
+
+        <div v-for="dept in teamDepartments" :key="dept.titleEn" class="team-dept">
+          <h3 class="team-dept-title">{{ locale === 'ar' ? dept.titleAr : dept.titleEn }}</h3>
+          <div class="team-grid">
+            <div v-for="p in dept.people" :key="p.nameEn" class="team-card card fade-up">
+              <div v-if="p.photo" class="team-avatar team-avatar-photo">
+                <img :src="p.photo" :alt="locale === 'ar' ? p.nameAr : p.nameEn" loading="lazy" decoding="async" />
+              </div>
+              <div v-else class="team-avatar" :style="{ background: p.color }">{{ p.initial }}</div>
+              <h4>{{ locale === 'ar' ? p.nameAr : p.nameEn }}</h4>
+              <span class="team-title">{{ locale === 'ar' ? p.titleAr : p.titleEn }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -214,6 +238,61 @@ const boardMembers = [
     initial: 'ح', color: '#5f727f',
     nameAr: 'السيد الحارث العطاوي', nameEn: 'Mr. Al Harith Al Attawi',
     titleAr: 'أمين الصندوق', titleEn: 'Financial Secretary',
+  },
+]
+
+// ── Team directory ──
+// Real photos are used where available (from the 2026 staff photos batch).
+// A few people don't have a usable photo yet (Khulood Nasser, Marwa Al
+// Abbasi — hers was a PDF, Badreya Harmes, Maryam Binarafa) and fall back
+// to an initial avatar in the meantime.
+const teamDepartments = [
+  {
+    titleAr: 'المكتب الرئيسي', titleEn: 'Head Office',
+    people: [
+      { nameAr: 'هالة مبارك', nameEn: 'Hala Mubarak', titleAr: 'رئيس الموارد المالية والبشرية', titleEn: 'Head of Finance & Human Resources', photo: '/images/team/main-office/hala-mubarak.jpg' },
+      { nameAr: 'لولوه الصقر', nameEn: 'Lulwa Alsaqer', titleAr: 'رئيس الإعلام والعلاقات العامة', titleEn: 'Head of Media & Public Relations', photo: '/images/team/main-office/lulwa-alsaqer.jpg' },
+      { nameAr: 'أحمد أيوب', nameEn: 'Ahmed Ayoob', titleAr: 'رئيس التسويق والشراكة المؤسسية', titleEn: 'Head of Corporate Partnership & Marketing', photo: '/images/team/main-office/ahmed-ayoob.jpg' },
+      { nameAr: 'ليلى البلوشي', nameEn: 'Layla Al Balushi', titleAr: 'محاسب عام', titleEn: 'General Accountant', photo: '/images/team/main-office/layla-al-balushi.jpg' },
+    ],
+  },
+  {
+    titleAr: 'قطاع التعليم المجتمعي', titleEn: 'Community Education Sector',
+    people: [
+      { nameAr: 'بدرية هرمس', nameEn: 'Badreya Harmes', titleAr: 'رئيس قطاع التعليم المجتمعي', titleEn: 'Head of Community Education Sector', initial: 'ب', color: '#3c3950' },
+      { nameAr: 'آية الدوسري', nameEn: 'Ayah Al Doseri', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', photo: '/images/team/community-education/ayah-al-doseri.jpg' },
+      { nameAr: 'مريم بن عرفة', nameEn: 'Maryam Binarafa', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', initial: 'م', color: '#c8972a' },
+    ],
+  },
+  {
+    titleAr: 'مدارس المستشفى', titleEn: 'Hospital Schools',
+    people: [
+      { nameAr: 'سكينة العيسى', nameEn: 'Sakina Al Isa', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital-school/sakina-al-isa.jpg' },
+      { nameAr: 'وداد حسين', nameEn: 'Wedad Hussein', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital-school/wedad-hussein.jpg' },
+      { nameAr: 'عفاف نايف', nameEn: 'Afaf Nayef', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', photo: '/images/team/hospital-school/afaf-nayef.jpg' },
+      { nameAr: 'خلود ناصر', nameEn: 'Khulood Nasser', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', initial: 'خ', color: '#00bcd4' },
+      { nameAr: 'حنان مسعد', nameEn: 'Hanan Masaad', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، عيادة الأطفال', titleEn: 'Facilitator, Military Hospital Micro School — Pediatric Clinic', photo: '/images/team/hospital-school/hanan-masaad.jpg' },
+      { nameAr: 'خديجة الموالي', nameEn: 'Khadija Al Mawali', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، جناح الأطفال 31', titleEn: "Facilitator, Military Hospital Micro School — Children's Ward 31", photo: '/images/team/hospital-school/khadija-al-mawali.jpg' },
+      { nameAr: 'مريم الصيبعي', nameEn: 'Mariam Al Saibai', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital-school/mariam-al-saibai.jpg' },
+      { nameAr: 'سارة الجبر', nameEn: 'Sara Al Jabor', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital-school/sara-al-jabor.jpg' },
+      { nameAr: 'هند عبداللطيف', nameEn: 'Hind Abdullatef', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', photo: '/images/team/hospital-school/hind-a-latif.jpg' },
+      { nameAr: 'مروة العباسي', nameEn: 'Marwa Al Abbasi', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', initial: 'م', color: '#8B0000' },
+    ],
+  },
+  {
+    titleAr: 'فضاء للجميع', titleEn: 'Space for All',
+    people: [
+      { nameAr: 'لولوة الحايكي', nameEn: 'Lulwa Al Hayki', titleAr: 'مشرف فضاء حصة للفن', titleEn: 'Hessa Art Space Supervisor', photo: '/images/team/space-for-all/lulwa-al-hayki.jpg' },
+      { nameAr: 'نسرين هلّول', nameEn: 'Nisrine Halloul', titleAr: 'مشرف فضاء عادل سلمان كانو', titleEn: 'Adel Salman Kanoo Space Supervisor', photo: '/images/team/space-for-all/nisrine-halloul.jpg' },
+    ],
+  },
+  {
+    titleAr: 'قطاع الإبداع والابتكار — مركز صفية علي كانو للفنون', titleEn: 'Creative & Innovation Sector — Safeya Ali Kanoo Hub for Arts',
+    people: [
+      { nameAr: 'عواطف البلوشي', nameEn: 'Awatif Al Baluchi', titleAr: 'مشرف مركز صفية علي كانو للفنون', titleEn: 'Safeya Ali Kanoo Hub for Arts Supervisor', photo: '/images/team/creativity-innovation/awatif-al-baluchi.jpg' },
+      { nameAr: 'إيمان عيسى', nameEn: 'Eman Isa', titleAr: 'منسق إداري', titleEn: 'Admin Coordinator', photo: '/images/team/creativity-innovation/eman-isa.jpg' },
+      { nameAr: 'فاضل عبدالله', nameEn: 'Fadhel Abdulla', titleAr: 'أمن واستقبال', titleEn: 'Security & Reception', photo: '/images/team/creativity-innovation/fadhel-abdulla.jpg' },
+    ],
   },
 ]
 </script>
@@ -329,6 +408,35 @@ const boardMembers = [
   letter-spacing: 0.3px;
 }
 
+/* Our Team */
+.team-section { background: var(--off-white); padding: 80px 0; }
+
+.team-dept { margin-top: 48px; }
+.team-dept:first-of-type { margin-top: 44px; }
+.team-dept-title {
+  font-size: 15px; font-weight: 800; letter-spacing: 0.5px;
+  color: var(--red); margin-bottom: 20px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--gray-light);
+}
+
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.team-card { padding: 24px 16px; text-align: center; background: white; }
+.team-card h4 { font-size: 14px; color: var(--dark); margin: 4px 0 4px; line-height: 1.4; }
+
+.team-avatar {
+  width: 72px; height: 72px; margin: 0 auto 14px;
+  border-radius: 50%; color: white; font-weight: 800; font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.team-avatar-photo { background: var(--gray-light); }
+.team-avatar-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.team-title {
+  display: block; font-size: 11px; color: var(--text-light);
+  line-height: 1.5;
+}
+
 /* Location */
 .location-section { padding: 16px 0 64px; }
 .location-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -358,11 +466,13 @@ const boardMembers = [
   .mv-divider { display: none; }
   .pillars-grid { grid-template-columns: 1fr; }
   .board-grid { grid-template-columns: repeat(3, 1fr); }
+  .team-grid { grid-template-columns: repeat(3, 1fr); }
   .location-inner { grid-template-columns: 1fr; }
   .stats-inner { grid-template-columns: 1fr; gap: 20px; }
 }
 
 @media (max-width: 560px) {
   .board-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
