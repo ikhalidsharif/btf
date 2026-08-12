@@ -13,7 +13,7 @@
           <a href="https://twitter.com/bahrain_trust" target="_blank" class="social-icon">𝕏</a>
           <a href="https://www.linkedin.com/company/bahrain-trust-foundation/" target="_blank" class="social-icon">IN</a>
           <a href="https://www.facebook.com/BahrainTrustFoundation/" target="_blank" class="social-icon">FB</a>
-          <NuxtLink :to="localePath('/volunteer')" class="btn-volunteer">
+          <NuxtLink :to="localePath('/volunteer/apply')" class="btn-volunteer">
             {{ locale === 'ar' ? 'انضم كمتطوع' : 'Become a Volunteer' }}
           </NuxtLink>
         </div>
@@ -97,7 +97,7 @@
           </NuxtLink>
 
           <!-- Volunteer -->
-          <NuxtLink :to="localePath('/volunteer')" class="nav-item" @click="menuOpen = false">
+          <NuxtLink :to="localePath('/volunteer/apply')" class="nav-item" @click="menuOpen = false">
             {{ locale === 'ar' ? 'تطوع' : 'Volunteer' }}
           </NuxtLink>
 
@@ -147,7 +147,7 @@
           <NuxtLink :to="localePath('/projects')">{{ locale === 'ar' ? 'المشاريع' : 'Projects' }}</NuxtLink>
           <NuxtLink :to="localePath('/news')">{{ locale === 'ar' ? 'الأخبار' : 'News' }}</NuxtLink>
           <NuxtLink :to="localePath('/donate')">{{ locale === 'ar' ? 'تبرع' : 'Donate' }}</NuxtLink>
-          <NuxtLink :to="localePath('/volunteer')">{{ locale === 'ar' ? 'تطوع' : 'Volunteer' }}</NuxtLink>
+          <NuxtLink :to="localePath('/volunteer/apply')">{{ locale === 'ar' ? 'تطوع' : 'Volunteer' }}</NuxtLink>
           <NuxtLink :to="localePath('/contact')">{{ locale === 'ar' ? 'تواصل معنا' : 'Contact' }}</NuxtLink>
         </div>
 
