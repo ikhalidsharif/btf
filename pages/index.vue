@@ -694,20 +694,17 @@ onUnmounted(() => {
 })
 
 // ── Partners ──
-// Real logos hotlinked from the old WordPress site (bahraintrust.org blocks
-// automated fetching/robots, so these couldn't be downloaded and re-hosted
-// locally — verify they still load correctly and consider self-hosting them
-// under /public/images/partners/ for reliability once you have the files).
-// Only including files whose names clearly identify them as logos; the
-// gallery also had ~19 files named like "Screen-Shot-..." or iPhone photo
-// UUIDs (e.g. "894E7800-E0C5-...") that could be event photos rather than
-// clean logos — add those in once you confirm what they actually are.
+// Logos self-hosted under /public/images/partners/ (downloaded from the old
+// WordPress site before it's decommissioned). Only including files whose
+// names clearly identify them as logos; the gallery also had ~19 files
+// named like "Screen-Shot-..." or iPhone photo UUIDs that could be event
+// photos rather than clean logos — add those in once confirmed.
 const partners = [
-  { name: 'Tamkeen', image: 'https://bahraintrust.org/wp-content/uploads/2021/10/tamkeen.png' },
-  { name: 'ONE GCC', image: 'https://bahraintrust.org/wp-content/uploads/2021/10/ONEGCC-logo-150x150-1.png' },
-  { name: 'Khutwa', image: 'https://bahraintrust.org/wp-content/uploads/2021/10/KhutwaLogo-blue-150x150-1.jpg' },
-  { name: 'Baladeya', image: 'https://bahraintrust.org/wp-content/uploads/2021/10/baladeya-logo-smallerx2-150x150-1.jpg' },
-  { name: 'Telp', image: 'https://bahraintrust.org/wp-content/uploads/2021/10/Telp-Logo-scaled.jpg' },
+  { name: 'Tamkeen', image: '/images/partners/tamkeen.png' },
+  { name: 'ONE GCC', image: '/images/partners/onegcc.png' },
+  { name: 'Khutwa', image: '/images/partners/khutwa.jpg' },
+  { name: 'Baladeya', image: '/images/partners/baladeya.jpg' },
+  { name: 'Telp', image: '/images/partners/telp.jpg' },
 ]
 
 // Fetch latest 3 news posts

@@ -57,7 +57,7 @@
                 <NuxtLink :to="localePath('/projects/hospital-micro-schools')" @click="menuOpen = false">{{ locale === 'ar' ? 'مدارس المستشفيات' : 'Hospital Micro Schools' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/space-for-all')" @click="menuOpen = false">{{ locale === 'ar' ? 'فضاء للجميع' : 'Space for All' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/micro-schools')" @click="menuOpen = false">{{ locale === 'ar' ? 'المدارس المصغرة' : 'Micro-Schools' }}</NuxtLink>
-                <NuxtLink :to="localePath('/projects/story-writing')" @click="menuOpen = false">{{ locale === 'ar' ? 'مسابقة تأليف القصص' : 'Story Writing Competition' }}</NuxtLink>
+                <NuxtLink :to="localePath('/stories')" @click="menuOpen = false">{{ locale === 'ar' ? 'مسابقة تأليف القصص' : 'Story Writing Competition' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/da-vinci')" @click="menuOpen = false">{{ locale === 'ar' ? 'برنامج دافنشي' : 'Da Vinci Training Program' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/bahrain-endowment')" @click="menuOpen = false">{{ locale === 'ar' ? 'وقف البحرين' : 'Bahrain Endowment' }}</NuxtLink>
               </div>
@@ -66,7 +66,7 @@
                 <NuxtLink :to="localePath('/projects/good-will-trips')" @click="menuOpen = false">{{ locale === 'ar' ? 'رحلات الخير' : 'Good Will Trips' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/volunteer-teams')" @click="menuOpen = false">{{ locale === 'ar' ? 'فرق التطوع' : 'Volunteer Teams' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/in-kind-support')" @click="menuOpen = false">{{ locale === 'ar' ? 'الدعم العيني' : 'In-Kind Support' }}</NuxtLink>
-                <NuxtLink :to="localePath('/projects/events')" @click="menuOpen = false">{{ locale === 'ar' ? 'الفعاليات' : 'Events' }}</NuxtLink>
+                <NuxtLink :to="localePath('/events')" @click="menuOpen = false">{{ locale === 'ar' ? 'الفعاليات' : 'Events' }}</NuxtLink>
               </div>
               <div class="mega-col">
                 <div class="mega-heading">{{ locale === 'ar' ? 'الاقتصاد الإبداعي' : 'Creative Economy' }}</div>

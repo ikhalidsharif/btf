@@ -55,7 +55,7 @@
           </div>
         </div>
         <div class="who-image fade-up">
-          <img src="/images/team/board/board-group-photo.jpg" :alt="locale === 'ar' ? 'مجلس أمناء بحرين ترست' : 'Bahrain Trust Foundation Board of Trustees'" />
+          <img src="/images/team/board/group-photo.jpg" :alt="locale === 'ar' ? 'مجلس أمناء بحرين ترست' : 'Bahrain Trust Foundation Board of Trustees'" />
         </div>
       </div>
     </div>
@@ -260,38 +260,38 @@ const teamDepartments = [
     titleAr: 'قطاع التعليم المجتمعي', titleEn: 'Community Education Sector',
     people: [
       { nameAr: 'بدرية هرمس', nameEn: 'Badreya Harmes', titleAr: 'رئيس قطاع التعليم المجتمعي', titleEn: 'Head of Community Education Sector', initial: 'ب', color: '#3c3950' },
-      { nameAr: 'آية الدوسري', nameEn: 'Ayah Al Doseri', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', photo: '/images/team/community-education/ayah-al-doseri.jpg' },
+      { nameAr: 'آية الدوسري', nameEn: 'Ayah Al Doseri', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', photo: '/images/team/community/ayah-al-doseri.jpg' },
       { nameAr: 'مريم بن عرفة', nameEn: 'Maryam Binarafa', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', initial: 'م', color: '#c8972a' },
     ],
   },
   {
     titleAr: 'مدارس المستشفى', titleEn: 'Hospital Schools',
     people: [
-      { nameAr: 'سكينة العيسى', nameEn: 'Sakina Al Isa', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital-school/sakina-al-isa.jpg' },
-      { nameAr: 'وداد حسين', nameEn: 'Wedad Hussein', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital-school/wedad-hussein.jpg' },
-      { nameAr: 'عفاف نايف', nameEn: 'Afaf Nayef', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', photo: '/images/team/hospital-school/afaf-nayef.jpg' },
+      { nameAr: 'سكينة العيسى', nameEn: 'Sakina Al Isa', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital/sakina-al-isa.jpg' },
+      { nameAr: 'وداد حسين', nameEn: 'Wedad Hussein', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital/wedad-hussein.jpg' },
+      { nameAr: 'عفاف نايف', nameEn: 'Afaf Nayef', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', photo: '/images/team/hospital/afaf-nayef.jpg' },
       { nameAr: 'خلود ناصر', nameEn: 'Khulood Nasser', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', initial: 'خ', color: '#00bcd4' },
-      { nameAr: 'حنان مسعد', nameEn: 'Hanan Masaad', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، عيادة الأطفال', titleEn: 'Facilitator, Military Hospital Micro School — Pediatric Clinic', photo: '/images/team/hospital-school/hanan-masaad.jpg' },
-      { nameAr: 'خديجة الموالي', nameEn: 'Khadija Al Mawali', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، جناح الأطفال 31', titleEn: "Facilitator, Military Hospital Micro School — Children's Ward 31", photo: '/images/team/hospital-school/khadija-al-mawali.jpg' },
-      { nameAr: 'مريم الصيبعي', nameEn: 'Mariam Al Saibai', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital-school/mariam-al-saibai.jpg' },
-      { nameAr: 'سارة الجبر', nameEn: 'Sara Al Jabor', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital-school/sara-al-jabor.jpg' },
-      { nameAr: 'هند عبداللطيف', nameEn: 'Hind Abdullatef', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', photo: '/images/team/hospital-school/hind-a-latif.jpg' },
+      { nameAr: 'حنان مسعد', nameEn: 'Hanan Masaad', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، عيادة الأطفال', titleEn: 'Facilitator, Military Hospital Micro School — Pediatric Clinic', photo: '/images/team/hospital/hanan-masaad.jpg' },
+      { nameAr: 'خديجة الموالي', nameEn: 'Khadija Al Mawali', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، جناح الأطفال 31', titleEn: "Facilitator, Military Hospital Micro School — Children's Ward 31", photo: '/images/team/hospital/khadija-al-mawali.jpg' },
+      { nameAr: 'مريم الصيبعي', nameEn: 'Mariam Al Saibai', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital/mariam-al-saibai.jpg' },
+      { nameAr: 'سارة الجبر', nameEn: 'Sara Al Jabor', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital/sara-al-jabor.jpg' },
+      { nameAr: 'هند عبداللطيف', nameEn: 'Hind Abdullatef', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', photo: '/images/team/hospital/hind-a-latif.jpg' },
       { nameAr: 'مروة العباسي', nameEn: 'Marwa Al Abbasi', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', initial: 'م', color: '#8B0000' },
     ],
   },
   {
     titleAr: 'فضاء للجميع', titleEn: 'Space for All',
     people: [
-      { nameAr: 'لولوة الحايكي', nameEn: 'Lulwa Al Hayki', titleAr: 'مشرف فضاء حصة للفن', titleEn: 'Hessa Art Space Supervisor', photo: '/images/team/space-for-all/lulwa-al-hayki.jpg' },
-      { nameAr: 'نسرين هلّول', nameEn: 'Nisrine Halloul', titleAr: 'مشرف فضاء عادل سلمان كانو', titleEn: 'Adel Salman Kanoo Space Supervisor', photo: '/images/team/space-for-all/nisrine-halloul.jpg' },
+      { nameAr: 'لولوة الحايكي', nameEn: 'Lulwa Al Hayki', titleAr: 'مشرف فضاء حصة للفن', titleEn: 'Hessa Art Space Supervisor', photo: '/images/team/space/lulwa-al-hayki.jpg' },
+      { nameAr: 'نسرين هلّول', nameEn: 'Nisrine Halloul', titleAr: 'مشرف فضاء عادل سلمان كانو', titleEn: 'Adel Salman Kanoo Space Supervisor', photo: '/images/team/space/nisrine-halloul.jpg' },
     ],
   },
   {
     titleAr: 'قطاع الإبداع والابتكار — مركز صفية علي كانو للفنون', titleEn: 'Creative & Innovation Sector — Safeya Ali Kanoo Hub for Arts',
     people: [
-      { nameAr: 'عواطف البلوشي', nameEn: 'Awatif Al Baluchi', titleAr: 'مشرف مركز صفية علي كانو للفنون', titleEn: 'Safeya Ali Kanoo Hub for Arts Supervisor', photo: '/images/team/creativity-innovation/awatif-al-baluchi.jpg' },
-      { nameAr: 'إيمان عيسى', nameEn: 'Eman Isa', titleAr: 'منسق إداري', titleEn: 'Admin Coordinator', photo: '/images/team/creativity-innovation/eman-isa.jpg' },
-      { nameAr: 'فاضل عبدالله', nameEn: 'Fadhel Abdulla', titleAr: 'أمن واستقبال', titleEn: 'Security & Reception', photo: '/images/team/creativity-innovation/fadhel-abdulla.jpg' },
+      { nameAr: 'عواطف البلوشي', nameEn: 'Awatif Al Baluchi', titleAr: 'مشرف مركز صفية علي كانو للفنون', titleEn: 'Safeya Ali Kanoo Hub for Arts Supervisor', photo: '/images/team/creativity/awatif-al-baluchi.jpg' },
+      { nameAr: 'إيمان عيسى', nameEn: 'Eman Isa', titleAr: 'منسق إداري', titleEn: 'Admin Coordinator', photo: '/images/team/creativity/eman-isa.jpg' },
+      { nameAr: 'فاضل عبدالله', nameEn: 'Fadhel Abdulla', titleAr: 'أمن واستقبال', titleEn: 'Security & Reception', photo: '/images/team/creativity/fadhel-abdulla.jpg' },
     ],
   },
 ]
