@@ -254,30 +254,26 @@ const errorMsg = ref('')
 // Submits straight into the Foundation's existing Google Form/Sheet so
 // responses land in the same place as before — no new database needed.
 //
-// ⚠️ ACTION NEEDED: the entry.XXXXXXX field IDs below are PLACEHOLDERS.
-// Get the real ones from Chrome DevTools → Network tab → submit the
-// Google Form once with test data → find the "formResponse" request →
-// its Payload/Form Data tab lists every entry.XXXXXXX = value pair.
-// Replace each placeholder below with the matching real ID.
+// Verified against the form's own FB_PUBLIC_LOAD_DATA_ structure.
 const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfHD7ZQM3kjNITizyhCROSAHESyhI-6SKi2_TzmMQXd982TCA/formResponse'
 
 const ENTRY = {
-  fullName: 'entry.PLACEHOLDER_1',
-  gender: 'entry.PLACEHOLDER_2',
-  birthDate: 'entry.PLACEHOLDER_3', // Google splits dates into _month/_day/_year — see note below
-  nationality: 'entry.PLACEHOLDER_4',
-  cpr: 'entry.PLACEHOLDER_5',
-  email: 'entry.PLACEHOLDER_6',
-  phone: 'entry.PLACEHOLDER_7',
-  address: 'entry.PLACEHOLDER_8',
-  qualification: 'entry.PLACEHOLDER_9',
-  fieldOfStudy: 'entry.PLACEHOLDER_10',
-  healthConditions: 'entry.PLACEHOLDER_11',
-  volunteeredBefore: 'entry.PLACEHOLDER_12',
-  previousExperience: 'entry.PLACEHOLDER_13',
-  skills: 'entry.PLACEHOLDER_14',
-  motivation: 'entry.PLACEHOLDER_15',
-  projects: 'entry.PLACEHOLDER_16',
+  fullName: 'entry.1122539974',
+  gender: 'entry.2056172152',
+  birthDate: 'entry.1875196333', // split into _month/_day/_year — see note below
+  nationality: 'entry.847242140',
+  cpr: 'entry.823834245',
+  email: 'entry.981866934',
+  phone: 'entry.2076656407',
+  address: 'entry.603399992',
+  qualification: 'entry.1926016320',
+  fieldOfStudy: 'entry.1763016946',
+  healthConditions: 'entry.566700043',
+  volunteeredBefore: 'entry.835352389',
+  previousExperience: 'entry.1565215589',
+  skills: 'entry.206465370',
+  motivation: 'entry.1689329840',
+  projects: 'entry.2144654963',
 }
 
 const genderLabel = { male: 'ذكر', female: 'أنثى' }
@@ -323,7 +319,10 @@ async function handleSubmit() {
       const opt = projectOptions.find((o) => o.value === p)
       fd.append(ENTRY.projects, opt ? `${opt.ar} | ${opt.en}` : p)
     })
-    if (form.projectsHasOther && form.projectsOther) fd.append(ENTRY.projects, form.projectsOther)
+    if (form.projectsHasOther && form.projectsOther) {
+      fd.append(ENTRY.projects, '__other_option__')
+      fd.append(`${ENTRY.projects}.other_option_response`, form.projectsOther)
+    }
 
     // Google Forms doesn't send CORS headers back, so the response is
     // opaque — we can't read success/failure from it directly. no-cors
