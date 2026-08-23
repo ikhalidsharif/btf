@@ -107,6 +107,7 @@
 
           <div class="section-card">
             <h2>المشاريع الحالية ({{ projects.length }})</h2>
+            <p v-if="projectLoadError" class="error-msg">{{ projectLoadError }}</p>
             <div v-if="loadingProjects" class="loading-text">جاري التحميل...</div>
             <div v-else class="rows-table">
               <div v-for="proj in projects" :key="proj.id" class="row-item" :class="{ inactive: !proj.active }">
@@ -173,6 +174,7 @@
 
           <div class="section-card">
             <h2>التقارير الحالية ({{ reports.length }})</h2>
+            <p v-if="reportLoadError" class="error-msg">{{ reportLoadError }}</p>
             <div v-if="loadingReports" class="loading-text">جاري التحميل...</div>
             <div v-else class="rows-table">
               <div v-for="rep in reports" :key="rep.id" class="row-item">
@@ -229,6 +231,7 @@ const loadingProjects = ref(false)
 const savingProject = ref(false)
 const editingProject = ref(null)
 const projectSaveMsg = ref('')
+const projectLoadError = ref('')
 
 const defaultProjectForm = {
   name_ar: '', name_en: '',
@@ -250,7 +253,16 @@ function categoryLabel(val) { return categoryLabels[val] || val }
 
 async function loadProjects() {
   loadingProjects.value = true
-  projects.value = await query('donation_projects', '?order=sort_order.asc')
+  projectLoadError.value = ''
+  const data = await query('donation_projects', '?order=sort_order.asc')
+  if (Array.isArray(data)) {
+    projects.value = data
+  } else {
+    projects.value = []
+    projectLoadError.value = data?.message
+      ? `⚠️ خطأ من قاعدة البيانات: ${data.message}`
+      : '⚠️ تعذّر تحميل المشاريع'
+  }
   loadingProjects.value = false
 }
 
@@ -259,19 +271,26 @@ async function saveProject() {
   savingProject.value = true
   projectSaveMsg.value = ''
 
+  let res
   if (editingProject.value) {
-    await update('donation_projects', editingProject.value, { ...projectForm })
-    projectSaveMsg.value = '✅ تم تعديل المشروع بنجاح'
-    cancelEditProject()
+    res = await update('donation_projects', editingProject.value, { ...projectForm })
   } else {
-    await insert('donation_projects', { ...projectForm })
-    projectSaveMsg.value = '✅ تم إضافة المشروع بنجاح'
-    Object.assign(projectForm, defaultProjectForm)
+    res = await insert('donation_projects', { ...projectForm })
+  }
+
+  if (Array.isArray(res) || (res && !res.message && !res.code)) {
+    projectSaveMsg.value = editingProject.value ? '✅ تم تعديل المشروع بنجاح' : '✅ تم إضافة المشروع بنجاح'
+    if (editingProject.value) cancelEditProject()
+    else Object.assign(projectForm, defaultProjectForm)
+  } else {
+    projectSaveMsg.value = res?.message
+      ? `❌ فشل الحفظ: ${res.message} — تأكد إنك ضفت أعمدة category/is_urgent/long_desc_ar/long_desc_en بجدول donation_projects`
+      : '❌ فشل الحفظ'
   }
 
   await loadProjects()
   savingProject.value = false
-  setTimeout(() => projectSaveMsg.value = '', 3000)
+  setTimeout(() => projectSaveMsg.value = '', 8000)
 }
 
 function editProject(proj) {
@@ -309,6 +328,7 @@ const loadingReports = ref(false)
 const savingReport = ref(false)
 const editingReport = ref(null)
 const reportSaveMsg = ref('')
+const reportLoadError = ref('')
 
 const defaultReportForm = {
   year: '', cover_image_url: '', pdf_url: '',
@@ -318,7 +338,16 @@ const reportForm = reactive({ ...defaultReportForm })
 
 async function loadReports() {
   loadingReports.value = true
-  reports.value = await query('annual_reports', '?order=sort_order.asc,year.desc')
+  reportLoadError.value = ''
+  const data = await query('annual_reports', '?order=sort_order.asc,year.desc')
+  if (Array.isArray(data)) {
+    reports.value = data
+  } else {
+    reports.value = []
+    reportLoadError.value = data?.message
+      ? `⚠️ خطأ من قاعدة البيانات: ${data.message}`
+      : '⚠️ جدول annual_reports غير موجود بعد — شغّل كود SQL لإنشائه بـ Supabase أولاً'
+  }
   loadingReports.value = false
 }
 
@@ -327,19 +356,26 @@ async function saveReport() {
   savingReport.value = true
   reportSaveMsg.value = ''
 
+  let res
   if (editingReport.value) {
-    await update('annual_reports', editingReport.value, { ...reportForm })
-    reportSaveMsg.value = '✅ تم تعديل التقرير بنجاح'
-    cancelEditReport()
+    res = await update('annual_reports', editingReport.value, { ...reportForm })
   } else {
-    await insert('annual_reports', { ...reportForm })
-    reportSaveMsg.value = '✅ تم إضافة التقرير بنجاح'
-    Object.assign(reportForm, defaultReportForm)
+    res = await insert('annual_reports', { ...reportForm })
+  }
+
+  if (Array.isArray(res) || (res && !res.message && !res.code)) {
+    reportSaveMsg.value = editingReport.value ? '✅ تم تعديل التقرير بنجاح' : '✅ تم إضافة التقرير بنجاح'
+    if (editingReport.value) cancelEditReport()
+    else Object.assign(reportForm, defaultReportForm)
+  } else {
+    reportSaveMsg.value = res?.message
+      ? `❌ فشل الحفظ: ${res.message}`
+      : '❌ فشل الحفظ — تأكد إن جدول annual_reports موجود بـ Supabase'
   }
 
   await loadReports()
   savingReport.value = false
-  setTimeout(() => reportSaveMsg.value = '', 3000)
+  setTimeout(() => reportSaveMsg.value = '', 6000)
 }
 
 function editReport(rep) {
