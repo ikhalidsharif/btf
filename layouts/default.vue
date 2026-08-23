@@ -44,7 +44,7 @@
               <NuxtLink :to="localePath('/about')" @click="menuOpen = false">{{ locale === 'ar' ? 'من نحن' : 'About Us' }}</NuxtLink>
               <NuxtLink :to="localePath('/partners')" @click="menuOpen = false">{{ locale === 'ar' ? 'الشركاء والرعاة' : 'Our Partners & Sponsors' }}</NuxtLink>
               <NuxtLink :to="localePath('/gallery')" @click="menuOpen = false">{{ locale === 'ar' ? 'معرض الصور' : 'Gallery' }}</NuxtLink>
-              <NuxtLink :to="localePath('/publications')" @click="menuOpen = false">{{ locale === 'ar' ? 'إصداراتنا' : 'Our Publications' }}</NuxtLink>
+              <NuxtLink :to="localePath('/publications')" @click="menuOpen = false">{{ locale === 'ar' ? 'تقاريرنا السنوية' : 'Our Annual Reports' }}</NuxtLink>
             </div>
           </div>
 

@@ -5,7 +5,7 @@
     <div class="page-hero">
       <div class="container">
         <span class="hero-eyebrow">{{ locale === 'ar' ? 'شركاؤنا' : 'Our Partners' }}</span>
-        <h1>{{ locale === 'ar' ? 'الشركاء والرعاة' : 'Our Partners & Sponsors' }}</h1>
+        <h1>{{ locale === 'ar' ? 'يثقون فينا' : 'They Trust Us' }}</h1>
         <p>{{ locale === 'ar'
           ? 'أثرنا ما كان ممكن يتحقق لولا شراكات حقيقية تؤمن برسالتنا'
           : "Our impact wouldn't be possible without genuine partnerships that believe in our mission" }}</p>
@@ -16,15 +16,15 @@
     <div class="container section">
       <div class="intro-text fade-up">
         <p>{{ locale === 'ar'
-          ? 'تؤمن مؤسسة بحرين ترست بأن العمل الخيري المستدام يُبنى على شراكات حقيقية. نفخر بالتعاون مع جهات حكومية ومؤسسات خاصة وأفراد ووجهاء يشاركوننا نفس الرؤية في تمكين المجتمع من خلال التعليم وخدمة المجتمع والاقتصاد الإبداعي — سواء عبر الدعم المالي، أو المساحات، أو الخبرات، أو التطوع.'
-          : 'Bahrain Trust Foundation believes that sustainable charitable work is built on genuine partnerships. We are proud to collaborate with government entities, private institutions, individuals, and dignitaries who share our vision of empowering the community through education, community service, and the creative economy — whether through funding, spaces, expertise, or volunteering.' }}</p>
+          ? 'تؤمن مؤسسة بحرين ترست بأن العمل الخيري المستدام يُبنى على شراكات حقيقية. نفخر بالتعاون مع جهات حكومية ومؤسسات خاصة وأفراد ووجهاء يشاركوننا نفس الرؤية في تمكين المجتمع من خلال التعليم المجتمعي وخدمة المجتمع والإبداع والابتكار — سواء عبر الدعم المالي، أو المساحات، أو الخبرات، أو التطوع.'
+          : 'Bahrain Trust Foundation believes that sustainable charitable work is built on genuine partnerships. We are proud to collaborate with government entities, private institutions, individuals, and dignitaries who share our vision of empowering the community through community education, community service, and creativity & innovation — whether through funding, spaces, expertise, or volunteering.' }}</p>
       </div>
     </div>
 
     <!-- Partner logos -->
     <section class="partners-section">
       <div class="container">
-        <h2 class="section-title center">{{ locale === 'ar' ? 'يثقون بنا' : 'They Trust Us' }}</h2>
+        <h2 class="section-title center">{{ locale === 'ar' ? 'شركاؤنا وداعمونا' : 'Our Partners & Supporters' }}</h2>
         <div class="partners-grid">
           <div v-for="p in partners" :key="p.name" class="partner-logo">
             <img :src="p.image" :alt="p.name" loading="lazy" />

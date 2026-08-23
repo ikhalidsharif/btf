@@ -16,24 +16,6 @@
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats-bar">
-      <div class="container stats-inner">
-        <div class="stat">
-          <strong>20,508</strong>
-          <span>{{ locale === 'ar' ? 'طالب مستفيد من مدارسنا' : 'Beneficiary students from our micro schools' }}</span>
-        </div>
-        <div class="stat">
-          <strong>2,353</strong>
-          <span>{{ locale === 'ar' ? 'حقيبة مدرسية وزعت' : 'School bags distributed to students' }}</span>
-        </div>
-        <div class="stat">
-          <strong>1,996</strong>
-          <span>{{ locale === 'ar' ? 'صندوق رمضان وزع' : 'Ramadan boxes distributed inside & outside Bahrain' }}</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Who we are -->
     <div class="container section">
       <div class="who-grid">
@@ -83,15 +65,15 @@
 
     <!-- Pillars -->
     <div class="container section">
-      <h2 class="section-title center">{{ locale === 'ar' ? 'ركائزنا' : 'Our Pillars' }}</h2>
-      <p class="section-subtitle center">{{ locale === 'ar' ? 'ثلاثة محاور تقود عملنا في المجتمع' : 'Three pillars that guide our work in the community' }}</p>
+      <h2 class="section-title center">{{ locale === 'ar' ? 'قطاعاتنا' : 'Our Sectors' }}</h2>
+      <p class="section-subtitle center">{{ locale === 'ar' ? 'ثلاثة قطاعات تقود عملنا في المجتمع' : 'Three sectors that guide our work in the community' }}</p>
       <div class="pillars-grid">
         <div class="pillar-card card fade-up">
           <div class="pillar-icon">🎓</div>
-          <h3>{{ locale === 'ar' ? 'التعليم' : 'Education' }}</h3>
+          <h3>{{ locale === 'ar' ? 'التعليم المجتمعي' : 'Community Education' }}</h3>
           <p>{{ locale === 'ar'
-            ? 'تعزيز التعليم الشامل والمستدام محلياً وإقليمياً من خلال برامج مبتكرة'
-            : 'Enhancing inclusive and sustainable education locally and regionally through innovative programs' }}</p>
+            ? 'تعزيز التعليم الشامل والمستدام محلياً وعالمياً من خلال المدارس المصغرة وبرامج تعليمية مبتكرة'
+            : 'Enhancing inclusive and sustainable education locally and globally through micro schools and innovative programs' }}</p>
         </div>
         <div class="pillar-card card fade-up">
           <div class="pillar-icon">🤝</div>
@@ -102,10 +84,10 @@
         </div>
         <div class="pillar-card card fade-up">
           <div class="pillar-icon">💡</div>
-          <h3>{{ locale === 'ar' ? 'الاقتصاد الإبداعي' : 'Creative Economy' }}</h3>
+          <h3>{{ locale === 'ar' ? 'الإبداع والابتكار' : 'Creativity & Innovation' }}</h3>
           <p>{{ locale === 'ar'
-            ? 'تمكين الأفراد من الاستفادة من الاقتصاد الإبداعي من خلال الحلول المبتكرة والتدريب المهني'
-            : 'Empowering individuals to benefit from the creative economy through innovative solutions and vocational training' }}</p>
+            ? 'تمكين الأفراد من صقل مواهبهم الفنية والإبداعية من خلال حلول مبتكرة وتدريب مهني'
+            : 'Empowering individuals to refine their artistic and creative talents through innovative solutions and vocational training' }}</p>
         </div>
       </div>
     </div>
@@ -113,7 +95,7 @@
     <!-- Board of Trustees -->
     <section class="board-section">
       <div class="container">
-        <h2 class="section-title center">{{ locale === 'ar' ? 'مجلس الإدارة' : 'Board of Trustees' }}</h2>
+        <h2 class="section-title center">{{ locale === 'ar' ? 'مجلس الأمناء' : 'Board of Trustees' }}</h2>
         <p class="section-subtitle center">{{ locale === 'ar'
           ? 'نخبة من القيادات البحرينية المتطوعة تقود رؤية المؤسسة ومسيرتها'
           : "A group of dedicated Bahraini leaders volunteering their time to guide the Foundation's vision" }}</p>
@@ -123,6 +105,7 @@
           <div class="board-avatar board-avatar-lg" :style="{ background: chairman.color }">{{ chairman.initial }}</div>
           <h3>{{ locale === 'ar' ? chairman.nameAr : chairman.nameEn }}</h3>
           <span class="board-title">{{ locale === 'ar' ? chairman.titleAr : chairman.titleEn }}</span>
+          <p class="board-bio">{{ locale === 'ar' ? chairman.bioAr : chairman.bioEn }}</p>
         </div>
 
         <!-- Rest of the board -->
@@ -131,6 +114,7 @@
             <div class="board-avatar" :style="{ background: m.color }">{{ m.initial }}</div>
             <h3>{{ locale === 'ar' ? m.nameAr : m.nameEn }}</h3>
             <span class="board-title">{{ locale === 'ar' ? m.titleAr : m.titleEn }}</span>
+            <p class="board-bio">{{ locale === 'ar' ? m.bioAr : m.bioEn }}</p>
           </div>
         </div>
       </div>
@@ -205,12 +189,16 @@ useHead({
   title: locale.value === 'ar' ? 'عن المؤسسة | مؤسسة البحرين ترست' : 'About Us | Bahrain Trust Foundation',
 })
 
-// Board of Trustees — placeholder initials used in place of photos.
-// Swap in real board member photos when available.
+// Board of Trustees — placeholder initials used in place of photos (only a
+// group photo exists so far, no individual portraits). Bios below are
+// short, generic descriptions inferred from each member's role — replace
+// with their real bios as soon as you have them.
 const chairman = {
   initial: 'ف', color: '#E31C26',
   nameAr: 'د. فاطمة البلوشي', nameEn: 'Dr. Fatima Al Baloochi',
-  titleAr: 'رئيسة مجلس الإدارة (مؤسِّسة)', titleEn: 'Chairman of the Board (Founder)',
+  titleAr: 'رئيسة مجلس الأمناء (مؤسِّسة)', titleEn: 'Chairman of the Board of Trustees (Founder)',
+  bioAr: 'قائدة مؤسِّسة لرؤية بحرين ترست، تقود مجلس الأمناء منذ التأسيس بشغف لخدمة المجتمع البحريني.',
+  bioEn: "A founding leader of Bahrain Trust's vision, chairing the Board of Trustees since inception with a passion for serving the Bahraini community.",
 }
 
 const boardMembers = [
@@ -218,26 +206,36 @@ const boardMembers = [
     initial: 'ع', color: '#3c3950',
     nameAr: 'د. عبدالرحمن العطاوي', nameEn: 'Dr. Abdulrahman Al Attawi',
     titleAr: 'عضو مؤسس', titleEn: 'Founder',
+    bioAr: 'أحد الأعضاء المؤسسين للمؤسسة، ساهم في وضع أسس رؤيتها ورسالتها.',
+    bioEn: "One of the Foundation's founding members, instrumental in shaping its vision and mission.",
   },
   {
     initial: 'ف', color: '#c8972a',
     nameAr: 'د. فاتن المؤيد', nameEn: 'Dr. Faten Almoayyed',
     titleAr: 'نائبة الرئيس', titleEn: 'Vice President',
+    bioAr: 'تدعم رئاسة المجلس بخبرتها القيادية لضمان استمرارية عمل المؤسسة وتطورها.',
+    bioEn: "Supports the board's leadership with her expertise, helping guide the Foundation's continuity and growth.",
   },
   {
     initial: 'ل', color: '#00bcd4',
     nameAr: 'الشيخة لبنى آل خليفة', nameEn: 'Sh. Lubna Al Khalifa',
     titleAr: 'أمينة السر (مؤسِّسة)', titleEn: 'Secretary (Founder)',
+    bioAr: 'عضوة مؤسسة تتولى أمانة سر المجلس وتوثيق مسيرة المؤسسة.',
+    bioEn: "A founding member serving as board secretary, documenting the Foundation's journey.",
   },
   {
     initial: 'س', color: '#8B0000',
     nameAr: 'السيدة سوزي كانو', nameEn: 'Mrs. Suzy Kanoo',
-    titleAr: 'عضو مجلس الإدارة', titleEn: 'Board Member',
+    titleAr: 'عضو مجلس الأمناء', titleEn: 'Board Member',
+    bioAr: 'عضوة فاعلة بمجلس الأمناء، تسهم برؤيتها في توجيه مشاريع المؤسسة.',
+    bioEn: "An active Board of Trustees member, contributing her vision to guide the Foundation's projects.",
   },
   {
     initial: 'ح', color: '#5f727f',
     nameAr: 'السيد الحارث العطاوي', nameEn: 'Mr. Al Harith Al Attawi',
     titleAr: 'أمين الصندوق', titleEn: 'Financial Secretary',
+    bioAr: 'يتولى الإشراف المالي على المؤسسة لضمان الشفافية والاستدامة في مشاريعها.',
+    bioEn: "Oversees the Foundation's finances, ensuring transparency and sustainability across its projects.",
   },
 ]
 
@@ -406,6 +404,9 @@ const teamDepartments = [
 .board-title {
   display: inline-block; font-size: 12px; font-weight: 700; color: var(--red);
   letter-spacing: 0.3px;
+}
+.board-bio {
+  font-size: 13px; color: var(--text-light); line-height: 1.7; margin-top: 12px;
 }
 
 /* Our Team */
