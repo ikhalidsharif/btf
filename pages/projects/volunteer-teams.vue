@@ -68,12 +68,6 @@ const teams = [
     descAr: 'فريق تطوعي شبابي معنيّ بمشاريع مؤسسة بحرين ترست داخل وخارج المملكة.',
     descEn: "A youth volunteer team involved in Bahrain Trust Foundation's projects both inside and outside the Kingdom.",
   },
-  {
-    nameAr: 'فريق يداً بيد', nameEn: 'Hand by Hand Team',
-    foundedAr: 'تأسس 2021 — المدرسة الكندية البحرين، انضم للمؤسسة 2024', foundedEn: 'Founded 2021 — Canadian School Bahrain, joined the Foundation in 2024',
-    descAr: 'يهدف لتعزيز روح المبادرة والمسؤولية الاجتماعية بين الطلاب، ويعمل على تنفيذ مشاريع خيرية داخل وخارج البحرين.',
-    descEn: 'Promotes initiative and social responsibility among students, working on charitable projects in and beyond Bahrain.',
-  },
 ]
 </script>
 
@@ -95,7 +89,7 @@ const teams = [
 .lead-text { text-align: center; max-width: 700px; margin: 0 auto; font-size: 17px; color: var(--text-light); line-height: 1.9; }
 
 .teams-section { background: var(--off-white); padding: 40px 0 80px; }
-.teams-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.teams-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 700px; margin: 16px auto 0; }
 .team-card-lg { padding: 32px 26px; }
 .team-card-lg h3 { font-size: 19px; color: var(--dark); margin-bottom: 8px; }
 .team-since { display: block; font-size: 12px; font-weight: 700; color: var(--red); margin-bottom: 16px; line-height: 1.5; }

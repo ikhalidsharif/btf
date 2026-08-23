@@ -35,7 +35,7 @@
     <div class="stats-bar">
       <div class="container stats-inner">
         <div class="stat">
-          <strong>18</strong>
+          <strong>20</strong>
           <span>{{ locale === 'ar' ? 'مدرسة مصغّرة حول العالم' : 'Micro schools worldwide' }}</span>
         </div>
         <div class="stat">

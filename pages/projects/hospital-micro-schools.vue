@@ -85,7 +85,7 @@ useHead({
 
 const branches = [
   {
-    nameAr: 'مدرسة دينا كانو المصغرة بمجمع السلمانية الطبي',
+    nameAr: 'مدرسة دينا كانو المصغرة',
     nameEn: 'Deena Kanoo Micro-School',
     sinceAr: 'منذ 2017 — بدعم من الوجيه السيّد محمد إبراهيم المؤيّد',
     sinceEn: 'Since 2017 — Supported by Mr. Mohamed Ibrahim Al Moayyed',

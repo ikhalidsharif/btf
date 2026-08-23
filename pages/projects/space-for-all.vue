@@ -127,7 +127,7 @@ const services = [
 
 const branches = [
   {
-    nameAr: 'فضاء حصة', nameEn: 'Space Hessa',
+    nameAr: 'فضاء حصة للفن', nameEn: 'Hessa Space for Arts',
     sinceAr: 'منذ 2021 — بدعم من عائلة الشيخة حصة بنت محمد آل خليفة رحمها الله',
     sinceEn: 'Since 2021 — Supported by the family of Sheikha Hessa bint Mohammed Al Khalifa',
     locationAr: 'حيّ النور — ديار المحرق', locationEn: 'Al Noor Neighborhood — Diyar Al Muharraq',

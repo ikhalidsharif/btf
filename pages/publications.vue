@@ -15,15 +15,28 @@
     <!-- Reports -->
     <div class="container section">
       <div class="reports-grid">
-        <div v-for="r in reports" :key="r.year" class="report-card card fade-up">
-          <div class="report-icon">📄</div>
-          <h3>{{ locale === 'ar' ? `التقرير السنوي ${r.year}` : `Annual Report ${r.year}` }}</h3>
-          <p>{{ locale === 'ar' ? r.descAr : r.descEn }}</p>
-          <a v-if="r.file" :href="r.file" target="_blank" rel="noopener" class="btn btn-outline">
-            {{ locale === 'ar' ? 'تحميل PDF' : 'Download PDF' }}
-          </a>
-          <span v-else class="report-soon">{{ locale === 'ar' ? 'قريباً' : 'Coming Soon' }}</span>
-        </div>
+        <component
+          :is="r.file ? 'a' : 'div'"
+          v-for="r in reports"
+          :key="r.year"
+          v-bind="r.file ? { href: r.file, target: '_blank', rel: 'noopener' } : {}"
+          class="report-card"
+          :class="{ 'report-card-clickable': r.file }"
+        >
+          <div class="report-cover">
+            <img :src="r.cover" :alt="locale === 'ar' ? `التقرير السنوي ${r.year}` : `Annual Report ${r.year}`" loading="lazy" />
+            <div v-if="r.file" class="report-cover-overlay">
+              <span class="report-cover-icon">📄</span>
+              <span>{{ locale === 'ar' ? 'اقرأ التقرير' : 'Read Report' }}</span>
+            </div>
+          </div>
+          <div class="report-body">
+            <h3>{{ locale === 'ar' ? `التقرير السنوي ${r.year}` : `Annual Report ${r.year}` }}</h3>
+            <p>{{ locale === 'ar' ? r.descAr : r.descEn }}</p>
+            <span v-if="r.file" class="report-link">{{ locale === 'ar' ? 'تحميل PDF ←' : 'Download PDF →' }}</span>
+            <span v-else class="report-soon">{{ locale === 'ar' ? 'قريباً' : 'Coming Soon' }}</span>
+          </div>
+        </component>
       </div>
     </div>
 
@@ -49,13 +62,18 @@ useHead({
   title: locale.value === 'ar' ? 'تقاريرنا السنوية | مؤسسة البحرين ترست' : 'Our Annual Reports | Bahrain Trust Foundation',
 })
 
-// Placeholder entries — replace `file` with the real PDF path once uploaded
-// to /public/reports/, e.g. file: '/reports/annual-report-2025.pdf'.
-// Entries with file: null show a "Coming Soon" badge instead of a broken link.
+// Cover images are real (from the old site — filenames indicated they were
+// the designed report covers). PDFs are hosted on the Foundation's Google
+// Drive (not self-hosted) — links open in a new tab.
 const reports = [
-  { year: '2025', file: null, descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2025.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2025." },
-  { year: '2024', file: null, descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2024.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2024." },
-  { year: '2023', file: null, descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2023.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2023." },
+  { year: '2024', cover: '/images/reports/cover-2024.jpg', file: 'https://drive.google.com/file/d/1QkTgj2dgSLEco8QK4jmvGP9YTr7Xl3dP/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2024.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2024." },
+  { year: '2023', cover: '/images/reports/cover-2023.jpg', file: 'https://drive.google.com/file/d/1fKJCcrqmdGNiVm0dCj45YFf5hckS7Etw/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2023.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2023." },
+  { year: '2022', cover: '/images/reports/cover-2022.jpg', file: 'https://drive.google.com/file/d/1iEOtsdbvOvsW7fdvLAVmSUhDOZgI9Eoq/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2022.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2022." },
+  { year: '2021', cover: '/images/reports/cover-2021.png', file: 'https://drive.google.com/file/d/1-B66iszaeMOiT1dywsbkgMkeHumwmf4O/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2021.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2021." },
+  { year: '2020', cover: '/images/reports/cover-2020.png', file: 'https://drive.google.com/file/d/1FzVh0GjxQH3OY007MkK8-KGCymQVDAny/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2020.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2020." },
+  { year: '2019', cover: '/images/reports/cover-2019.jpg', file: 'https://drive.google.com/file/d/1_eVIL4iseemlGs9lWH6QiUV_df0Y8vnJ/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2019.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2019." },
+  { year: '2018', cover: '/images/reports/cover-2018.png', file: 'https://drive.google.com/file/d/15WkfPy1rYu1R7n7qyI69YU54EYY66q8R/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2018.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2018." },
+  { year: '2017', cover: '/images/reports/cover-2017.jpg', file: 'https://drive.google.com/file/d/1gr5vZbthaFqH6eGS7i4XtL5joZpw7fVS/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2017.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2017." },
 ]
 </script>
 
@@ -74,11 +92,50 @@ const reports = [
 .page-hero h1 { font-size: clamp(32px,4vw,52px); font-weight: 900; margin-bottom: 14px; }
 .page-hero p { font-size: 17px; opacity: 0.9; max-width: 640px; margin: 0 auto; }
 
-.reports-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.report-card { padding: 32px 26px; text-align: center; }
-.report-icon { font-size: 36px; margin-bottom: 14px; }
-.report-card h3 { font-size: 17px; color: var(--dark); margin-bottom: 10px; }
-.report-card p { font-size: 13px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; }
+.reports-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+
+.report-card {
+  display: block;
+  text-decoration: none;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.report-card-clickable { cursor: pointer; }
+.report-card-clickable:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.16);
+}
+
+.report-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+.report-cover img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.report-card-clickable:hover .report-cover img { transform: scale(1.08); }
+
+.report-cover-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  padding-bottom: 18px; gap: 4px;
+  color: white; opacity: 0; transition: opacity 0.3s ease;
+}
+.report-card-clickable:hover .report-cover-overlay { opacity: 1; }
+.report-cover-icon { font-size: 22px; }
+.report-cover-overlay span:last-child { font-size: 12px; font-weight: 700; }
+
+.report-body { padding: 20px 18px 24px; text-align: center; }
+.report-body h3 { font-size: 16px; color: var(--dark); margin-bottom: 8px; }
+.report-body p { font-size: 12px; color: var(--text-light); line-height: 1.6; margin-bottom: 14px; }
+.report-link { display: inline-block; font-size: 13px; font-weight: 700; color: var(--red); }
 .report-soon {
   display: inline-block; font-size: 12px; font-weight: 700; color: var(--text-light);
   background: var(--off-white); padding: 8px 18px; border-radius: 20px;
@@ -97,9 +154,12 @@ const reports = [
 .btn-outline-white:hover { background: rgba(255,255,255,0.1); border-color: white; }
 
 @media (max-width: 900px) {
-  .reports-grid { grid-template-columns: 1fr 1fr; }
+  .reports-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
-@media (max-width: 560px) {
+@media (max-width: 650px) {
+  .reports-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media (max-width: 400px) {
   .reports-grid { grid-template-columns: 1fr; }
 }
 </style>
