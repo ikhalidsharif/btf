@@ -195,7 +195,7 @@ useHead({
 // with their real bios as soon as you have them.
 const chairman = {
   initial: 'ف', color: '#E31C26',
-  nameAr: 'د. فاطمة البلوشي', nameEn: 'Dr. Fatima Al Baloochi',
+  nameAr: 'د. فاطمة البلوشي', nameEn: 'Dr. Fatima Al Balooshi',
   titleAr: 'رئيسة مجلس الأمناء (مؤسِّسة)', titleEn: 'Chairman of the Board of Trustees (Founder)',
   bioAr: 'قائدة مؤسِّسة لرؤية بحرين ترست، تقود مجلس الأمناء منذ التأسيس بشغف لخدمة المجتمع البحريني.',
   bioEn: "A founding leader of Bahrain Trust's vision, chairing the Board of Trustees since inception with a passion for serving the Bahraini community.",
@@ -287,7 +287,7 @@ const teamDepartments = [
   {
     titleAr: 'قطاع الإبداع والابتكار — مركز صفية علي كانو للفنون', titleEn: 'Creative & Innovation Sector — Safeya Ali Kanoo Hub for Arts',
     people: [
-      { nameAr: 'عواطف البلوشي', nameEn: 'Awatif Al Baluchi', titleAr: 'مشرف مركز صفية علي كانو للفنون', titleEn: 'Safeya Ali Kanoo Hub for Arts Supervisor', photo: '/images/team/creativity/awatif-al-baluchi.jpg' },
+      { nameAr: 'عواطف البلوشي', nameEn: 'Awatif Al Balooshi', titleAr: 'مشرف مركز صفية علي كانو للفنون', titleEn: 'Safeya Ali Kanoo Hub for Arts Supervisor', photo: '/images/team/creativity/awatif-al-baluchi.jpg' },
       { nameAr: 'إيمان عيسى', nameEn: 'Eman Isa', titleAr: 'منسق إداري', titleEn: 'Admin Coordinator', photo: '/images/team/creativity/eman-isa.jpg' },
       { nameAr: 'فاضل عبدالله', nameEn: 'Fadhel Abdulla', titleAr: 'أمن واستقبال', titleEn: 'Security & Reception', photo: '/images/team/creativity/fadhel-abdulla.jpg' },
     ],
