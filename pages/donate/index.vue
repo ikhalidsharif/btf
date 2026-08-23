@@ -4,118 +4,87 @@
     <!-- Hero -->
     <div class="donate-hero">
       <div class="container">
-        <h1>{{ locale === 'ar' ? 'تبرع الآن' : 'Donate Now' }}</h1>
+        <h1>{{ locale === 'ar' ? 'التبرع المباشر' : 'Direct Donation' }}</h1>
         <p>{{ locale === 'ar'
-          ? 'تبرعك يصنع فرقاً حقيقياً في حياة الأسر البحرينية'
-          : 'Your donation makes a real difference in Bahraini families lives'
-        }}</p>
+          ? 'اختر المشروع المراد التبرع له'
+          : 'Choose the project you would like to support' }}</p>
       </div>
     </div>
 
     <div class="container section">
-      <div class="donate-layout">
 
-        <!-- Projects -->
-        <div class="projects-col">
-          <h2>{{ locale === 'ar' ? 'اختر مشروعاً' : 'Choose a Project' }}</h2>
-          <div class="projects-list">
-            <div
-              v-for="proj in projects"
-              :key="proj.id"
-              class="project-item"
-              :class="{ active: selectedProject?.id === proj.id }"
-              @click="selectProject(proj)"
-            >
-              <div class="project-img-thumb">
-                <img :src="proj.image" :alt="proj.nameEn" />
-              </div>
-              <div class="project-info">
-                <h3>{{ locale === 'ar' ? proj.nameAr : proj.nameEn }}</h3>
-                <p>{{ locale === 'ar' ? proj.descAr : proj.descEn }}</p>
-                <span class="project-amount">{{ locale === 'ar' ? `${proj.amount} د.ب` : `${proj.amount} BHD` }}</span>
-              </div>
-              <div class="project-check" v-if="selectedProject.value?.id === proj.id">✓</div>
-            </div>
+      <!-- Quick generic donation + category filter bar -->
+      <div class="quick-bar card">
+        <div class="quick-amount">
+          <span class="quick-label">{{ locale === 'ar' ? 'مبلغ التبرع' : 'Donation Amount' }}</span>
+          <div class="stepper">
+            <button type="button" @click="quickAmount = Math.max(1, quickAmount - 5)">−</button>
+            <span>{{ quickAmount }} {{ locale === 'ar' ? 'د.ب' : 'BHD' }}</span>
+            <button type="button" @click="quickAmount += 5">+</button>
           </div>
+          <NuxtLink :to="localePath(`/donate/general?amount=${quickAmount}`)" class="btn btn-primary quick-btn">
+            {{ locale === 'ar' ? 'تبرع عام الآن' : 'Donate Now' }}
+          </NuxtLink>
+        </div>
+        <div class="quick-filters">
+          <button
+            v-for="cat in categories"
+            :key="cat.value"
+            class="filter-pill"
+            :class="{ active: activeCategory === cat.value }"
+            @click="activeCategory = cat.value"
+          >{{ locale === 'ar' ? cat.ar : cat.en }}</button>
+        </div>
+      </div>
+
+      <div class="catalog-layout">
+
+        <!-- Grid -->
+        <div class="projects-grid">
+          <NuxtLink
+            v-for="proj in filteredProjects"
+            :key="proj.id"
+            :to="localePath(`/donate/${proj.id}`)"
+            class="project-card card"
+          >
+            <div class="project-img">
+              <img :src="proj.image" :alt="locale === 'ar' ? proj.nameAr : proj.nameEn" loading="lazy" />
+              <span v-if="proj.isUrgent" class="badge badge-urgent">{{ locale === 'ar' ? 'عاجل' : 'Urgent' }}</span>
+            </div>
+            <div class="project-body">
+              <h3>{{ locale === 'ar' ? proj.nameAr : proj.nameEn }}</h3>
+              <p>{{ locale === 'ar' ? proj.descAr : proj.descEn }}</p>
+              <div class="project-footer">
+                <span class="project-amount">{{ proj.amount }} {{ locale === 'ar' ? 'د.ب' : 'BHD' }}</span>
+                <span class="project-cta">{{ locale === 'ar' ? 'تبرع الآن ←' : 'Donate Now →' }}</span>
+              </div>
+            </div>
+          </NuxtLink>
+
+          <p v-if="!filteredProjects.length" class="empty-state">
+            {{ locale === 'ar' ? 'ما فيه مشاريع بهذا التصنيف حالياً' : 'No projects in this category right now' }}
+          </p>
         </div>
 
-        <!-- Donation Form -->
-        <div class="form-col">
-          <div class="donate-form card">
-            <h2>{{ locale === 'ar' ? 'تفاصيل التبرع' : 'Donation Details' }}</h2>
-
-            <!-- Selected project -->
-            <div v-if="selectedProject" class="selected-project-badge">
-              {{ selectedProject?.icon }} {{ locale === 'ar' ? selectedProject?.nameAr : selectedProject?.nameEn }}
-            </div>
-
-            <!-- Amount -->
-            <div class="form-group">
-              <label>{{ locale === 'ar' ? 'المبلغ (دينار بحريني)' : 'Amount (BHD)' }}</label>
-              <div class="amount-presets">
-                <button
-                  v-for="amt in presets"
-                  :key="amt"
-                  :class="{ active: amount === amt && !customAmount }"
-                  @click="setAmount(amt)"
-                  class="preset-btn"
-                >{{ amt }} {{ locale === 'ar' ? 'د.ب' : 'BHD' }}</button>
-                <button
-                  :class="{ active: customAmount }"
-                  @click="enableCustom"
-                  class="preset-btn"
-                >{{ locale === 'ar' ? 'مبلغ آخر' : 'Other' }}</button>
-              </div>
-              <input
-                v-if="customAmount"
-                v-model="customAmountValue"
-                type="number"
-                min="1"
-                class="form-input"
-                :placeholder="locale === 'ar' ? 'أدخل المبلغ' : 'Enter amount'"
-              />
-            </div>
-
-            <!-- Donor Info -->
-            <div class="form-group">
-              <label>{{ locale === 'ar' ? 'الاسم الكامل' : 'Full Name' }}</label>
-              <input v-model="form.name" type="text" class="form-input"
-                :placeholder="locale === 'ar' ? 'أدخل اسمك' : 'Enter your name'" />
-            </div>
-
-            <div class="form-group">
-              <label>{{ locale === 'ar' ? 'البريد الإلكتروني' : 'Email' }}</label>
-              <input v-model="form.email" type="email" class="form-input"
-                :placeholder="locale === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email'" />
-            </div>
-
-            <div class="form-group">
-              <label>{{ locale === 'ar' ? 'رقم الهاتف' : 'Phone Number' }}</label>
-              <input v-model="form.phone" type="tel" class="form-input"
-                placeholder="+973 XXXX XXXX" />
-            </div>
-
-            <!-- Error -->
-            <div v-if="error" class="error-msg">{{ error }}</div>
-
-            <!-- Submit -->
-            <button
-              @click="submitDonation"
-              :disabled="loading || !isValid"
-              class="btn-donate"
-            >
-              <span v-if="loading">⏳ {{ locale === 'ar' ? 'جاري المعالجة...' : 'Processing...' }}</span>
-              <span v-else>
-                ❤️ {{ locale === 'ar' ? `تبرع بـ ${finalAmount} د.ب` : `Donate ${finalAmount} BHD` }}
-              </span>
-            </button>
-
-            <!-- Security note -->
-            <p class="security-note">
-              🔒 {{ locale === 'ar' ? 'دفع آمن عبر TAP Payment' : 'Secure payment via TAP Payment' }}
-            </p>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-card card">
+            <input
+              v-model="searchQuery"
+              type="text"
+              class="form-input"
+              :placeholder="locale === 'ar' ? 'ابحث عن مشروع' : 'Search for a project'"
+            />
           </div>
-        </div>
+          <div class="sidebar-card card">
+            <h4>{{ locale === 'ar' ? 'تصنيفات المشاريع' : 'Project Categories' }}</h4>
+            <label v-for="cat in categories" :key="cat.value" class="sidebar-check">
+              <input type="radio" :value="cat.value" v-model="activeCategory" />
+              {{ locale === 'ar' ? cat.ar : cat.en }}
+            </label>
+          </div>
+        </aside>
+
       </div>
     </div>
 
@@ -128,10 +97,12 @@ const localePath = useLocalePath()
 const { query } = useSupabase()
 
 useHead({
-  title: computed(() => locale.value === 'ar' ? 'تبرع | مؤسسة البحرين' : 'Donate | Bahrain Trust Foundation'),
+  title: computed(() => locale.value === 'ar' ? 'تبرع | مؤسسة البحرين ترست' : 'Donate | Bahrain Trust Foundation'),
 })
 
-// Load projects from Supabase
+// Load projects from Supabase. `category` and `is_urgent` are optional
+// columns — see the note at the bottom of this file for the SQL to add
+// them; projects without a category fall into "التبرع العام".
 const { data: rawProjects } = await useAsyncData('donation-projects', () =>
   query('donation_projects', '?active=eq.true&order=sort_order.asc,id.asc')
 )
@@ -144,85 +115,42 @@ const projects = computed(() => (rawProjects.value || []).map((p) => ({
   descAr: p.desc_ar,
   descEn: p.desc_en,
   amount: p.amount,
+  category: p.category || 'general',
+  isUrgent: !!p.is_urgent,
 })))
 
-const selectedProject = ref(null)
-watch(projects, (val) => { if (val.length && !selectedProject.value) selectedProject.value = val[0] }, { immediate: true })
-const presets = [5, 10, 20, 50, 100]
-const amount = ref(10)
-const customAmount = ref(false)
-const customAmountValue = ref('')
-const loading = ref(false)
-const error = ref('')
+const categories = [
+  { value: 'all', ar: 'الكل', en: 'All' },
+  { value: 'general', ar: 'التبرع العام', en: 'General' },
+  { value: 'education', ar: 'التعليم المجتمعي', en: 'Community Education' },
+  { value: 'community', ar: 'خدمة المجتمع', en: 'Community Service' },
+  { value: 'creative', ar: 'الإبداع والابتكار', en: 'Creativity & Innovation' },
+]
 
-const form = reactive({
-  name: '',
-  email: '',
-  phone: '',
-})
+const activeCategory = ref('all')
+const searchQuery = ref('')
+const quickAmount = ref(10)
 
-const finalAmount = computed(() => {
-  if (customAmount.value && customAmountValue.value) return Number(customAmountValue.value)
-  return amount.value
-})
-
-const isValid = computed(() => {
-  return form.name && form.email && finalAmount.value > 0 && selectedProject.value
-})
-
-function selectProject(proj) {
-  selectedProject.value = proj
-  if (proj.amount) {
-    amount.value = proj.amount
-    customAmount.value = false
+const filteredProjects = computed(() => {
+  let list = projects.value
+  if (activeCategory.value !== 'all') {
+    list = list.filter((p) => p.category === activeCategory.value)
   }
-}
-
-function setAmount(amt) {
-  amount.value = amt
-  customAmount.value = false
-  customAmountValue.value = ''
-}
-
-function enableCustom() {
-  customAmount.value = true
-  amount.value = 0
-}
-
-async function submitDonation() {
-  if (!isValid.value) return
-  loading.value = true
-  error.value = ''
-
-  try {
-    // Create TAP charge via our server API
-    const res = await $fetch('/api/donate', {
-      method: 'POST',
-      body: {
-        amount: finalAmount.value,
-        currency: 'BHD',
-        project: locale.value === 'ar' ? selectedProject.value.nameAr : selectedProject.value.nameEn,
-        customer: {
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-        },
-        redirect: `${window.location.origin}/${locale.value}/donate/success`,
-      }
-    })
-
-    if (res.transaction?.url) {
-      // Redirect to TAP payment page
-      window.location.href = res.transaction.url
-    } else {
-      error.value = locale.value === 'ar' ? 'حدث خطأ، يرجى المحاولة مرة أخرى' : 'An error occurred, please try again'
-    }
-  } catch (e) {
-    error.value = locale.value === 'ar' ? 'حدث خطأ في الاتصال' : 'Connection error, please try again'
+  if (searchQuery.value.trim()) {
+    const q = searchQuery.value.trim().toLowerCase()
+    list = list.filter((p) =>
+      p.nameAr?.toLowerCase().includes(q) || p.nameEn?.toLowerCase().includes(q)
+    )
   }
+  return list
+})
 
-  loading.value = false
-}
+// ── To enable categories & urgent badges, add these columns in Supabase ──
+// alter table donation_projects add column category text default 'general';
+// alter table donation_projects add column is_urgent boolean default false;
+// alter table donation_projects add column long_desc_ar text;
+// alter table donation_projects add column long_desc_en text;
+// category values expected: general | education | community | creative
 </script>
 
 <style scoped>
@@ -235,130 +163,81 @@ async function submitDonation() {
 .donate-hero h1 { font-size: clamp(32px, 4vw, 52px); font-weight: 900; margin-bottom: 12px; }
 .donate-hero p { font-size: 17px; opacity: 0.85; }
 
-.donate-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 40px;
-  align-items: start;
-}
-
-/* Projects */
-.projects-col h2 { font-size: 20px; font-weight: 700; color: #3c3950; margin-bottom: 20px; }
-
-.projects-list { display: flex; flex-direction: column; gap: 10px; }
-
-.project-item {
+/* Quick bar */
+.quick-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border: 1.5px solid #dfe5e8;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: white;
-}
-.project-item:hover { border-color: #E31C26; }
-.project-item.active { border-color: #E31C26; background: #fff5f5; }
-
-.project-img-thumb {
-  width: 72px;
-  height: 72px;
-  border-radius: 6px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.project-img-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.project-info { flex: 1; }
-.project-info h3 { font-size: 13px; font-weight: 700; color: #3c3950; margin-bottom: 2px; line-height: 1.4; }
-.project-info p { font-size: 11px; color: #99a9b5; margin-bottom: 4px; line-height: 1.4; }
-.project-amount { font-size: 12px; font-weight: 700; color: #E31C26; }
-.project-check { color: #E31C26; font-weight: 700; font-size: 18px; }
-
-/* Form */
-.donate-form { padding: 32px; }
-.donate-form h2 { font-size: 20px; font-weight: 700; color: #3c3950; margin-bottom: 20px; }
-
-.selected-project-badge {
-  background: #fff5f5;
-  border: 1px solid #E31C26;
-  color: #E31C26;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 20px;
-}
-
-.form-group { margin-bottom: 18px; }
-.form-group label { display: block; font-size: 13px; font-weight: 600; color: #3c3950; margin-bottom: 8px; }
-
-.form-input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1.5px solid #dfe5e8;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
-}
-.form-input:focus { outline: none; border-color: #E31C26; }
-
-.amount-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-
-.preset-btn {
-  padding: 8px 16px;
-  border: 1.5px solid #dfe5e8;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  background: white;
-  color: #3c3950;
-  font-family: inherit;
-  transition: all 0.2s;
-}
-.preset-btn:hover { border-color: #E31C26; color: #E31C26; }
-.preset-btn.active { background: #E31C26; color: white; border-color: #E31C26; }
-
-
-
-.error-msg {
-  background: #fff5f5;
-  border: 1px solid #E31C26;
-  color: #E31C26;
-  padding: 10px 14px;
-  border-radius: 4px;
-  font-size: 13px;
-  margin-bottom: 14px;
-}
-
-.btn-donate {
-  width: 100%;
-  background: #E31C26;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  background: linear-gradient(135deg, #3c3950, #212331);
   color: white;
-  border: none;
-  padding: 16px;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.2s;
-  margin-bottom: 12px;
 }
-.btn-donate:hover:not(:disabled) { background: #b5151e; }
-.btn-donate:disabled { opacity: 0.6; cursor: not-allowed; }
+.quick-amount { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.quick-label { font-size: 13px; font-weight: 700; opacity: 0.85; }
+.stepper {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.1); border-radius: 6px; padding: 6px 10px;
+}
+.stepper button {
+  width: 26px; height: 26px; border-radius: 4px; border: none;
+  background: rgba(255,255,255,0.15); color: white; font-size: 16px; cursor: pointer;
+}
+.stepper span { font-weight: 700; font-size: 14px; min-width: 70px; text-align: center; }
+.quick-btn { white-space: nowrap; }
 
-.security-note { font-size: 12px; color: #99a9b5; text-align: center; }
+.quick-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-pill {
+  padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  background: rgba(255,255,255,0.1); color: white; border: none; cursor: pointer;
+  transition: background 0.2s;
+}
+.filter-pill:hover { background: rgba(255,255,255,0.2); }
+.filter-pill.active { background: white; color: var(--dark); }
 
-@media (max-width: 768px) {
-  .donate-layout { grid-template-columns: 1fr; }
+/* Layout */
+.catalog-layout { display: grid; grid-template-columns: 1fr 260px; gap: 28px; align-items: start; }
+
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.empty-state { grid-column: 1 / -1; text-align: center; color: var(--text-light); padding: 40px 0; }
+
+.project-card { display: flex; flex-direction: column; text-decoration: none; overflow: hidden; }
+.project-img { position: relative; aspect-ratio: 4/3; overflow: hidden; }
+.project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.project-card:hover .project-img img { transform: scale(1.06); }
+
+.badge {
+  position: absolute; top: 10px; inset-inline-start: 10px;
+  font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; color: white;
+}
+.badge-urgent { background: #E31C26; }
+
+.project-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+.project-body h3 { font-size: 15px; color: var(--dark); margin-bottom: 6px; line-height: 1.4; }
+.project-body p { font-size: 12px; color: var(--text-light); line-height: 1.6; margin-bottom: 14px; flex: 1; }
+.project-footer { display: flex; align-items: center; justify-content: space-between; }
+.project-amount { font-size: 14px; font-weight: 800; color: var(--red); }
+.project-cta { font-size: 12px; font-weight: 700; color: var(--dark); }
+
+/* Sidebar */
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+.sidebar-card { padding: 18px; }
+.sidebar-card h4 { font-size: 13px; color: var(--dark); margin-bottom: 12px; }
+.sidebar-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dark); margin-bottom: 10px; cursor: pointer; }
+.form-input {
+  width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-light);
+  border-radius: 4px; font-size: 13px; font-family: inherit; box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .catalog-layout { grid-template-columns: 1fr; }
+  .sidebar { order: -1; }
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .projects-grid { grid-template-columns: 1fr; }
+  .quick-bar { flex-direction: column; align-items: stretch; }
 }
 </style>
