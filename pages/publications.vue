@@ -57,15 +57,20 @@
 <script setup>
 const { locale } = useI18n()
 const localePath = useLocalePath()
+const { query } = useSupabase()
 
 useHead({
   title: locale.value === 'ar' ? 'تقاريرنا السنوية | مؤسسة البحرين ترست' : 'Our Annual Reports | Bahrain Trust Foundation',
 })
 
-// Cover images are real (from the old site — filenames indicated they were
-// the designed report covers). PDFs are hosted on the Foundation's Google
-// Drive (not self-hosted) — links open in a new tab.
-const reports = [
+// Reports now come from Supabase (manageable via /admin → التقارير السنوية).
+// Falls back to the known 2017-2024 reports if the table is empty/not yet
+// seeded, so the page never shows blank while you're setting things up.
+const { data: rawReports } = await useAsyncData('annual-reports', () =>
+  query('annual_reports', '?order=sort_order.asc,year.desc')
+)
+
+const fallbackReports = [
   { year: '2024', cover: '/images/reports/cover-2024.jpg', file: 'https://drive.google.com/file/d/1QkTgj2dgSLEco8QK4jmvGP9YTr7Xl3dP/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2024.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2024." },
   { year: '2023', cover: '/images/reports/cover-2023.jpg', file: 'https://drive.google.com/file/d/1fKJCcrqmdGNiVm0dCj45YFf5hckS7Etw/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2023.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2023." },
   { year: '2022', cover: '/images/reports/cover-2022.jpg', file: 'https://drive.google.com/file/d/1iEOtsdbvOvsW7fdvLAVmSUhDOZgI9Eoq/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2022.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2022." },
@@ -75,6 +80,19 @@ const reports = [
   { year: '2018', cover: '/images/reports/cover-2018.png', file: 'https://drive.google.com/file/d/15WkfPy1rYu1R7n7qyI69YU54EYY66q8R/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2018.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2018." },
   { year: '2017', cover: '/images/reports/cover-2017.jpg', file: 'https://drive.google.com/file/d/1gr5vZbthaFqH6eGS7i4XtL5joZpw7fVS/view', descAr: 'ملخص شامل لأنشطة ومشاريع المؤسسة خلال عام 2017.', descEn: "A comprehensive summary of the Foundation's activities and projects in 2017." },
 ]
+
+const reports = computed(() => {
+  if (rawReports.value && rawReports.value.length) {
+    return rawReports.value.map((r) => ({
+      year: r.year,
+      cover: r.cover_image_url,
+      file: r.pdf_url || null,
+      descAr: r.desc_ar,
+      descEn: r.desc_en,
+    }))
+  }
+  return fallbackReports
+})
 </script>
 
 <style scoped>
