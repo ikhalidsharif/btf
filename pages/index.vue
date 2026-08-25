@@ -705,18 +705,18 @@ onUnmounted(() => {
 // named like "Screen-Shot-..." or iPhone photo UUIDs that could be event
 // photos rather than clean logos — add those in once confirmed.
 const partners = [
-  { name: 'Tamkeen', image: '/images/partners/tamkeen.png' },
+  { name: 'Government Hospitals', image: '/images/partners/government-hospitals-logo.png' },
+  { name: 'Shaffra', image: '/images/partners/logo-shaffra.png' },
+  { name: 'Diyar Al Muharraq', image: '/images/partners/diyar-grey-logo.png' },
   { name: 'BBK', image: '/images/partners/bbk.png' },
-  { name: 'Ahli United Bank', image: '/images/partners/ahli-united-bank.png' },
-  { name: 'Al Salam Bank', image: '/images/partners/al-salam-bank.png' },
+  { name: 'Al Kooheji Foundation', image: '/images/partners/alkooheji.png' },
+  { name: 'BUB', image: '/images/partners/bub-logo.png' },
   { name: 'AUBH', image: '/images/partners/aubh.png' },
+  { name: 'Ibn Khuldoon National School', image: '/images/partners/ikns-logo.png' },
   { name: 'BACA', image: '/images/partners/baca.png' },
-  { name: 'Ministry of Education', image: '/images/partners/moe-logo.png' },
+  { name: 'Tamkeen', image: '/images/partners/tamkeen.png' },
+  { name: 'Ahli United Bank', image: '/images/partners/ahli-united-bank.png' },
   { name: 'Ministry of Social Development', image: '/images/partners/mosd-logo.png' },
-  { name: 'University of Bahrain', image: '/images/partners/uob-logo.png' },
-  { name: 'Khutwa', image: '/images/partners/khutwa.jpg' },
-  { name: 'Baladeya', image: '/images/partners/baladeya.jpg' },
-  { name: 'Telp', image: '/images/partners/telp.jpg' },
 ]
 
 // Fetch latest 3 news posts
