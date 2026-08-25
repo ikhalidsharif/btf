@@ -424,6 +424,11 @@
             <img :src="p.image" :alt="p.name" loading="lazy" />
           </div>
         </div>
+        <div class="partners-more">
+          <NuxtLink :to="localePath('/partners')" class="btn btn-outline">
+            {{ locale === "ar" ? "شاهد جميع شركائنا ←" : "See All Our Partners →" }}
+          </NuxtLink>
+        </div>
       </div>
     </section>
   </div>
@@ -701,6 +706,14 @@ onUnmounted(() => {
 // photos rather than clean logos — add those in once confirmed.
 const partners = [
   { name: 'Tamkeen', image: '/images/partners/tamkeen.png' },
+  { name: 'BBK', image: '/images/partners/bbk.png' },
+  { name: 'Ahli United Bank', image: '/images/partners/ahli-united-bank.png' },
+  { name: 'Al Salam Bank', image: '/images/partners/al-salam-bank.png' },
+  { name: 'AUBH', image: '/images/partners/aubh.png' },
+  { name: 'BACA', image: '/images/partners/baca.png' },
+  { name: 'Ministry of Education', image: '/images/partners/moe-logo.png' },
+  { name: 'Ministry of Social Development', image: '/images/partners/mosd-logo.png' },
+  { name: 'University of Bahrain', image: '/images/partners/uob-logo.png' },
   { name: 'Khutwa', image: '/images/partners/khutwa.jpg' },
   { name: 'Baladeya', image: '/images/partners/baladeya.jpg' },
   { name: 'Telp', image: '/images/partners/telp.jpg' },
@@ -1506,29 +1519,34 @@ function formatDate(dateStr) {
 
 .partners-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
   margin-top: 44px;
-  align-items: center;
 }
 
 .partner-logo {
   background: var(--off-white, #f4f6f7);
   border-radius: 14px;
-  padding: 20px;
+  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 88px;
+  height: 110px;
   transition: background 0.25s, transform 0.25s;
 }
 
 .partner-logo img {
-  max-width: 100%;
-  max-height: 40px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   filter: grayscale(100%);
-  opacity: 0.6;
+  opacity: 0.7;
   transition: filter 0.3s, opacity 0.3s;
+}
+
+.partners-more {
+  text-align: center;
+  margin-top: 36px;
 }
 
 .partner-logo:hover {
