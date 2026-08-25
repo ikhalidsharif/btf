@@ -15,19 +15,23 @@
     <!-- Intro -->
     <div class="container section">
       <p class="lead-text fade-up">{{ locale === 'ar'
-        ? 'ثلاثة فرق تطوعية شبابية، كل واحد منها انطلق من مؤسسة تعليمية بحرينية، ويعمل اليوم على مشاريع مؤسسة بحرين ترست داخل وخارج المملكة.'
-        : "Three youth volunteer teams, each launched from a Bahraini educational institution, now working on Bahrain Trust Foundation's projects both inside and outside the Kingdom." }}</p>
+        ? 'فريقان تطوعيان شبابيان، كل واحد منهما انطلق من مؤسسة تعليمية بحرينية، ويعملان اليوم على مشاريع مؤسسة بحرين ترست داخل وخارج المملكة.'
+        : "Two youth volunteer teams, each launched from a Bahraini educational institution, now working on Bahrain Trust Foundation's projects both inside and outside the Kingdom." }}</p>
     </div>
 
     <!-- Teams -->
     <section class="teams-section">
       <div class="container">
         <div class="teams-grid">
-          <div v-for="t in teams" :key="t.nameEn" class="team-card-lg card fade-up">
+          <NuxtLink v-for="t in teams" :key="t.nameEn" :to="localePath(t.slug)" class="team-card-lg card fade-up">
+            <div class="team-logo">
+              <img :src="t.logo" :alt="locale === 'ar' ? t.nameAr : t.nameEn" />
+            </div>
             <h3>{{ locale === 'ar' ? t.nameAr : t.nameEn }}</h3>
             <span class="team-since">{{ locale === 'ar' ? t.foundedAr : t.foundedEn }}</span>
             <p>{{ locale === 'ar' ? t.descAr : t.descEn }}</p>
-          </div>
+            <span class="team-link">{{ locale === 'ar' ? 'شاهد إنجازاتهم ←' : 'See Their Achievements →' }}</span>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -38,7 +42,7 @@
         <h2>{{ locale === 'ar' ? 'كوّن فريقك، وابدأ التغيير' : 'Form Your Team, Start the Change' }}</h2>
         <p>{{ locale === 'ar' ? 'من مدرستك أو جامعتك، تقدر تصنع فرقاً' : 'From your school or university, you can make a difference' }}</p>
         <div class="cta-buttons">
-          <NuxtLink :to="localePath('/volunteer')" class="btn btn-primary">{{ locale === 'ar' ? 'انضم كمتطوع' : 'Become a Volunteer' }}</NuxtLink>
+          <NuxtLink :to="localePath('/volunteer/apply')" class="btn btn-primary">{{ locale === 'ar' ? 'انضم كمتطوع' : 'Become a Volunteer' }}</NuxtLink>
           <NuxtLink :to="localePath('/projects')" class="btn btn-outline-white">{{ locale === 'ar' ? 'كل المشاريع' : 'All Projects' }}</NuxtLink>
         </div>
       </div>
@@ -57,13 +61,17 @@ useHead({
 
 const teams = [
   {
+    slug: '/projects/volunteer-teams/sw-5air',
     nameAr: 'فريق سو خير', nameEn: 'Sw 5air Team',
+    logo: '/images/projects/volunteer-teams/sw-5air/logo.png',
     foundedAr: 'تأسس 2023 — مدرسة ابن خلدون الوطنية', foundedEn: 'Founded 2023 — Ibn Khuldoon National School',
     descAr: 'فريق تطوعي شبابي يعمل لصالح مشاريع مؤسسة بحرين ترست داخل وخارج مملكة البحرين.',
     descEn: "A youth volunteer team working on Bahrain Trust Foundation's projects both inside and outside the Kingdom of Bahrain.",
   },
   {
+    slug: '/projects/volunteer-teams/yazak',
     nameAr: 'فريق يزاك', nameEn: 'Yazak Team',
+    logo: '/images/projects/volunteer-teams/yazak/logo.png',
     foundedAr: 'تأسس 2023 — الجامعة الأمريكية بمملكة البحرين', foundedEn: 'Founded 2023 — American University of Bahrain',
     descAr: 'فريق تطوعي شبابي معنيّ بمشاريع مؤسسة بحرين ترست داخل وخارج المملكة.',
     descEn: "A youth volunteer team involved in Bahrain Trust Foundation's projects both inside and outside the Kingdom.",
@@ -90,10 +98,17 @@ const teams = [
 
 .teams-section { background: var(--off-white); padding: 40px 0 80px; }
 .teams-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 700px; margin: 16px auto 0; }
-.team-card-lg { padding: 32px 26px; }
+.team-card-lg {
+  display: block; text-decoration: none; padding: 32px 26px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.team-card-lg:hover { transform: translateY(-6px); box-shadow: 0 16px 36px rgba(0,0,0,0.12); }
+.team-logo { height: 64px; display: flex; align-items: center; margin-bottom: 16px; }
+.team-logo img { max-height: 100%; max-width: 180px; object-fit: contain; }
 .team-card-lg h3 { font-size: 19px; color: var(--dark); margin-bottom: 8px; }
 .team-since { display: block; font-size: 12px; font-weight: 700; color: var(--red); margin-bottom: 16px; line-height: 1.5; }
-.team-card-lg p { font-size: 14px; color: var(--text-light); line-height: 1.8; }
+.team-card-lg p { font-size: 14px; color: var(--text-light); line-height: 1.8; margin-bottom: 16px; }
+.team-link { font-size: 13px; font-weight: 700; color: var(--red); }
 
 .cta-section { background: var(--dark); padding: 64px 0; }
 .cta-inner { text-align: center; color: white; }
