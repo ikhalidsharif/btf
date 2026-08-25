@@ -119,6 +119,9 @@ const partners = [
   { name: 'Mahfouza Al Zayani Award', image: '/images/partners/جائزة-محفوظة-الزياني.png' },
   { name: 'Muharraq Governorate', image: '/images/partners/شعار-محافظة-المحرق-الرسمي.png' },
   { name: 'Deena Kanoo Real Estate', image: '/images/partners/عقارات-دينا-كانو.png' },
+  { name: 'BACA', image: '/images/partners/baca.png' },
+  { name: 'AUBH', image: '/images/partners/aubh.png' },
+  { name: 'Al Ayam', image: '/images/partners/alayam.png' },
 ]
 
 const reasons = [
