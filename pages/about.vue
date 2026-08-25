@@ -401,12 +401,12 @@ const teamDepartments = [
 .board-card h3 { font-size: 15px; color: var(--dark); margin: 4px 0 6px; line-height: 1.4; }
 
 .board-avatar {
-  width: 64px; height: 64px; margin: 0 auto 16px;
-  border-radius: 50%; color: white; font-weight: 800; font-size: 22px;
+  width: 96px; height: 96px; margin: 0 auto 16px;
+  border-radius: 50%; color: white; font-weight: 800; font-size: 28px;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
-.board-avatar-lg { width: 88px; height: 88px; font-size: 30px; }
+.board-avatar-lg { width: 130px; height: 130px; font-size: 38px; }
 .board-avatar-photo { background: var(--gray-light); }
 .board-avatar-photo img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -434,8 +434,8 @@ const teamDepartments = [
 .team-card h4 { font-size: 14px; color: var(--dark); margin: 4px 0 4px; line-height: 1.4; }
 
 .team-avatar {
-  width: 72px; height: 72px; margin: 0 auto 14px;
-  border-radius: 50%; color: white; font-weight: 800; font-size: 24px;
+  width: 104px; height: 104px; margin: 0 auto 14px;
+  border-radius: 50%; color: white; font-weight: 800; font-size: 32px;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
