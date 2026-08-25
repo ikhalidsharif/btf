@@ -497,7 +497,7 @@ const projects = [
   {
     labelEn: 'STORY WRITING',
     labelAr: 'مسابقة تأليف القصص',
-    slug: '/projects/story-writing',
+    slug: '/projects/story-writing-competition',
     image: '/images/projects/story.jpg',
     desc: { ar: 'مسابقة تأليف القصص', en: 'Story Writing Competition' }
   },
@@ -510,7 +510,7 @@ const creIndex = ref(0)
 const education = [
   { title: 'SPACE FOR ALL', titleAr: 'فضاء للجميع', slug: '/projects/space-for-all', image: '/images/projects/education-space.jpg' },
   { title: 'DA VINCI TRAINING PROGRAM', titleAr: 'برنامج دافنشي التدريبي', slug: '/projects/da-vinci', image: '/images/projects/education-davinci.jpg' },
-  { title: 'STORY WRITING COMPETITION', titleAr: 'مسابقة تأليف القصص', slug: '/projects/story-writing', image: '/images/projects/education-story.jpg' },
+  { title: 'STORY WRITING COMPETITION', titleAr: 'مسابقة تأليف القصص', slug: '/projects/story-writing-competition', image: '/images/projects/education-story.jpg' },
   { title: 'MICRO-SCHOOLS', titleAr: 'المدارس المصغرة', slug: '/projects/micro-schools', image: '/images/projects/education-micro.jpg' },
   { title: 'HOSPITAL MICRO SCHOOLS', titleAr: 'مدارس المستشفيات', slug: '/projects/hospital-micro-schools', image: '/images/projects/education-hospital.jpg' },
 ]

@@ -187,7 +187,7 @@ const creative = [
     descAr: 'منتجات يدوية تدعم ريادة الأعمال والمشاريع الصغيرة.',
   },
   {
-    slug: '/stories', image: '/images/projects/education-story.jpg',
+    slug: '/projects/story-writing-competition', image: '/images/projects/education-story.jpg',
     title: 'Children & Youth Story Writing Competition', titleAr: 'مسابقة تأليف قصص الأطفال والناشئة',
     desc: 'Nurturing young writers and encouraging Arabic literacy through storytelling.',
     descAr: 'رعاية المواهب الكتابية الشابة وتعزيز حب اللغة العربية من خلال القصص.',

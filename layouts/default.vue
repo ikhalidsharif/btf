@@ -73,7 +73,7 @@
                 <div class="mega-heading">{{ locale === 'ar' ? 'الإبداع والابتكار' : 'Creativity & Innovation' }}</div>
                 <NuxtLink :to="localePath('/projects/safeya-kanoo-hub')" @click="menuOpen = false">{{ locale === 'ar' ? 'مركز صفية علي كانو للفنون' : 'Safeya Ali Kanoo Hub for Arts' }}</NuxtLink>
                 <NuxtLink :to="localePath('/gift-shop')" @click="menuOpen = false">{{ locale === 'ar' ? 'متجر الهدايا' : 'Gift Shop' }}</NuxtLink>
-                <NuxtLink :to="localePath('/stories')" @click="menuOpen = false">{{ locale === 'ar' ? 'مسابقة تأليف قصص الأطفال والناشئة' : 'Children & Youth Story Writing Competition' }}</NuxtLink>
+                <NuxtLink :to="localePath('/projects/story-writing-competition')" @click="menuOpen = false">{{ locale === 'ar' ? 'مسابقة تأليف قصص الأطفال والناشئة' : 'Children & Youth Story Writing Competition' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/quran-competition')" @click="menuOpen = false">{{ locale === 'ar' ? 'مسابقة محمد بن يوسف البلوشي لتلاوة وحفظ القرآن الكريم' : 'Mohammed bin Yousif Al Baloushi Quran Competition' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/3alimny-exhibition')" @click="menuOpen = false">{{ locale === 'ar' ? 'معرض "علّمني" لفن الطفل' : '"3alimny" Child Art Exhibition' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/bahraini-woman-portrait')" @click="menuOpen = false">{{ locale === 'ar' ? 'معرض "بورتريه المرأة البحرينية"' : '"Portrait of the Bahraini Woman" Exhibition' }}</NuxtLink>
