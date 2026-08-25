@@ -5,7 +5,7 @@
     <div class="page-hero">
       <div class="container">
         <span class="hero-eyebrow">{{ locale === 'ar' ? 'خدمة المجتمع' : 'Community Service' }}</span>
-        <h1>{{ locale === 'ar' ? 'المساعدات العينية' : 'In-Kind Support' }}</h1>
+        <h1>{{ locale === 'ar' ? 'مبادراتنا مع المجتمع' : 'Our Community Initiatives' }}</h1>
         <p>{{ locale === 'ar'
           ? 'نصل للأسر المتعففة محلياً وعالمياً على مدار العام'
           : 'Reaching families in need, locally and globally, all year round' }}</p>
@@ -26,10 +26,26 @@
           </div>
         </div>
         <div class="intro-image fade-up">
-          <img src="/images/projects/community-inkind.jpg" :alt="locale === 'ar' ? 'المساعدات العينية' : 'In-Kind Support'" />
+          <img src="/images/projects/community-initiatives/ramadan-abroad/photo-1.jpg" :alt="locale === 'ar' ? 'مبادراتنا مع المجتمع' : 'Our Community Initiatives'" />
         </div>
       </div>
     </div>
+
+    <!-- Initiatives Gallery -->
+    <section class="initiatives-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'من مبادراتنا' : 'From Our Initiatives' }}</h2>
+        <div v-for="group in initiativeGroups" :key="group.nameEn" class="initiative-group">
+          <h3 class="initiative-group-title">{{ locale === 'ar' ? group.nameAr : group.nameEn }}</h3>
+          <div class="photo-grid">
+            <div v-for="img in group.photos" :key="img" class="photo-item">
+              <img :src="img" :alt="locale === 'ar' ? group.nameAr : group.nameEn" loading="lazy" />
+              <span class="photo-label">{{ locale === 'ar' ? group.nameAr : group.nameEn }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Local & Global -->
     <section class="two-col-section">
@@ -76,7 +92,7 @@ const { locale } = useI18n()
 const localePath = useLocalePath()
 
 useHead({
-  title: locale.value === 'ar' ? 'المساعدات العينية | مؤسسة البحرين ترست' : 'In-Kind Support | Bahrain Trust Foundation',
+  title: locale.value === 'ar' ? 'مبادراتنا مع المجتمع | مؤسسة البحرين ترست' : 'Our Community Initiatives | Bahrain Trust Foundation',
 })
 
 const localItems = [
@@ -90,6 +106,21 @@ const globalItems = [
   { ar: 'توزيع السلال الرمضانية للأسر المتعففة', en: 'Ramadan boxes distribution' },
   { ar: 'توزيع معونة الشتاء للأسر المتعففة', en: 'Winter aid distribution' },
   { ar: 'حفر بئر وإمداده للقرية', en: 'Drilling a well and supplying it to the village', video: 'https://youtu.be/e4PCsU3BJ70' },
+]
+
+const initiativeGroups = [
+  {
+    nameAr: 'قسائم مشتريات رمضانية — داخل البحرين', nameEn: 'Ramadan Shopping Vouchers — Inside Bahrain',
+    photos: Array.from({ length: 6 }, (_, i) => `/images/projects/community-initiatives/ramadan-bahrain/photo-${i + 1}.jpg`),
+  },
+  {
+    nameAr: 'سلال رمضانية — خارج البحرين', nameEn: 'Ramadan Boxes — Outside Bahrain',
+    photos: Array.from({ length: 5 }, (_, i) => `/images/projects/community-initiatives/ramadan-abroad/photo-${i + 1}.jpg`),
+  },
+  {
+    nameAr: 'إفطار صائم', nameEn: 'Iftar Saem',
+    photos: Array.from({ length: 6 }, (_, i) => `/images/projects/community-initiatives/iftar-saem/photo-${i + 1}.jpg`),
+  },
 ]
 </script>
 
@@ -130,6 +161,24 @@ const globalItems = [
 .scope-card li::before { content: '•'; color: var(--red); position: absolute; inset-inline-start: 0; font-weight: 900; }
 .item-video-link { display: inline-block; margin-inline-start: 8px; font-size: 12px; font-weight: 700; color: var(--red); }
 
+/* Initiatives gallery */
+.initiatives-section { background: white; padding: 80px 0; }
+.initiative-group { margin-top: 44px; }
+.initiative-group:first-of-type { margin-top: 24px; }
+.initiative-group-title {
+  font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 18px;
+  padding-inline-start: 14px; border-inline-start: 4px solid var(--red);
+}
+.photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.photo-item { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.photo-item:hover img { transform: scale(1.06); }
+.photo-label {
+  position: absolute; bottom: 0; inset-inline: 0; padding: 8px 10px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.75), transparent);
+  color: white; font-size: 11px; font-weight: 700; line-height: 1.4;
+}
+
 .cta-section { background: var(--dark); padding: 64px 0; }
 .cta-inner { text-align: center; color: white; }
 .cta-inner h2 { font-size: clamp(24px,3vw,34px); font-weight: 800; margin-bottom: 24px; }
@@ -146,5 +195,9 @@ const globalItems = [
   .intro-grid { grid-template-columns: 1fr; }
   .intro-image { order: -1; }
   .two-col-grid { grid-template-columns: 1fr; }
+  .photo-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 560px) {
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
