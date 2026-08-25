@@ -26,10 +26,23 @@
           </div>
         </div>
         <div class="intro-image fade-up">
-          <img src="/images/projects/education-micro.jpg" :alt="locale === 'ar' ? 'المدارس المصغرة' : 'Micro Schools'" />
+          <img src="/images/projects/micro-schools-gallery/nagaa-jabran.jpg" :alt="locale === 'ar' ? 'المدارس المصغرة' : 'Micro Schools'" />
         </div>
       </div>
     </div>
+
+    <!-- Gallery -->
+    <section class="gallery-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'من مدارسنا حول العالم' : 'From Our Schools Around the World' }}</h2>
+        <div class="photo-grid">
+          <div v-for="p in schoolPhotos" :key="p.image" class="photo-item">
+            <img :src="p.image" :alt="locale === 'ar' ? p.labelAr : p.labelEn" loading="lazy" />
+            <span class="photo-label">{{ locale === 'ar' ? p.labelAr : p.labelEn }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Stats -->
     <div class="stats-bar">
@@ -147,6 +160,18 @@ const countries = [
     ],
   },
 ]
+
+const schoolPhotos = [
+  { image: '/images/projects/micro-schools-gallery/nagaa-jabran.jpg', labelAr: 'مدرسة نجع جبران — مصر', labelEn: 'Nagaa Jabran School — Egypt' },
+  { image: '/images/projects/micro-schools-gallery/al-rehab.jpg', labelAr: 'مدرسة الرحاب — مصر', labelEn: 'Al Rehab School — Egypt' },
+  { image: '/images/projects/micro-schools-gallery/mohamed-ali-alsaghir.jpg', labelAr: 'مدرسة محمد علي الصغير — مصر', labelEn: 'Mohamed Ali Al-Saghir School — Egypt' },
+  { image: '/images/projects/micro-schools-gallery/oda-hamdan.jpg', labelAr: 'مدرسة عودة حمدان — مصر', labelEn: 'Oda Hamdan School — Egypt' },
+  { image: '/images/projects/micro-schools-gallery/kerala.jpg', labelAr: 'مدرسة كيرلا — الهند', labelEn: 'Kerala School — India' },
+  { image: '/images/projects/micro-schools-gallery/mali.jpg', labelAr: 'مدرسة دوغي — مالي', labelEn: 'Dogui School — Mali' },
+  { image: '/images/projects/micro-schools-gallery/general-1.jpg', labelAr: 'من مدارسنا المصغرة', labelEn: 'From Our Micro Schools' },
+  { image: '/images/projects/micro-schools-gallery/general-2.jpg', labelAr: 'من مدارسنا المصغرة', labelEn: 'From Our Micro Schools' },
+  { image: '/images/projects/micro-schools-gallery/general-3.jpg', labelAr: 'من مدارسنا المصغرة', labelEn: 'From Our Micro Schools' },
+]
 </script>
 
 <style scoped>
@@ -186,6 +211,18 @@ const countries = [
 .school-year { flex-shrink: 0; font-weight: 800; color: var(--red); font-size: 12px; }
 .school-name { color: var(--text-light); line-height: 1.5; }
 
+/* Gallery */
+.gallery-section { background: var(--off-white); padding: 80px 0; }
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 16px; }
+.photo-item { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.photo-item:hover img { transform: scale(1.06); }
+.photo-label {
+  position: absolute; bottom: 0; inset-inline: 0; padding: 10px 14px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.75), transparent);
+  color: white; font-size: 12px; font-weight: 700;
+}
+
 .cta-section { background: var(--dark); padding: 64px 0; }
 .cta-inner { text-align: center; color: white; }
 .cta-inner h2 { font-size: clamp(24px,3vw,34px); font-weight: 800; margin-bottom: 10px; }
@@ -204,6 +241,7 @@ const countries = [
   .intro-image { order: -1; }
   .countries-grid { grid-template-columns: 1fr 1fr; }
   .stats-inner { grid-template-columns: 1fr; gap: 20px; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 600px) {
   .countries-grid { grid-template-columns: 1fr; }
