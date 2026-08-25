@@ -32,10 +32,64 @@
           </div>
         </div>
         <div class="intro-image fade-up">
-          <img src="/images/projects/community.jpg" :alt="locale === 'ar' ? 'مركز صفية علي كانو للفنون' : 'Safeya Ali Kanoo Hub for Arts'" />
+          <img src="/images/projects/safeya-hub/exhibitions/exhibition-1.jpg" :alt="locale === 'ar' ? 'مركز صفية علي كانو للفنون' : 'Safeya Ali Kanoo Hub for Arts'" />
         </div>
       </div>
     </div>
+
+    <!-- In Memory of Safeya Ali Kanoo -->
+    <section class="memory-section">
+      <div class="container">
+        <div class="memory-grid">
+          <div class="memory-image fade-up">
+            <img src="/images/projects/safeya-hub/safeya-ali-kanoo.jpg" alt="Safeya Ali Kanoo" />
+          </div>
+          <div class="memory-text fade-up">
+            <span class="hero-eyebrow memory-eyebrow">{{ locale === 'ar' ? 'بذكراها' : 'In Her Memory' }}</span>
+            <h2 class="section-title">{{ locale === 'ar' ? 'الراحلة صفية علي كانو' : 'The Late Safeya Ali Kanoo' }}</h2>
+            <p>{{ locale === 'ar'
+              ? 'يحمل هذا المركز اسم السيدة صفية علي محمد كانو تخليداً لعطائها وكرمها، اللي جسّدته بتمويلها الكامل لهذا الصرح الفني. رؤيتها الفنية وإيمانها بأهمية دعم المبدعين هي اللي أسّست لهذا المكان، ويبقى المركز شاهداً حياً على أثرها وإرثها بالمجتمع البحريني.'
+              : "This hub carries the name of Mrs. Safeya Ali Mohammed Kanoo in honor of her generosity, which she embodied through her full funding of this artistic landmark. Her artistic vision and belief in supporting creatives are what established this place, and the hub remains a living testament to her impact and legacy within the Bahraini community." }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Exhibitions -->
+    <section class="gallery-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'من معارضنا' : 'From Our Exhibitions' }}</h2>
+        <p class="section-subtitle center">{{ locale === 'ar'
+          ? 'لحظات من فعاليات ومعارض أقيمت بالمركز'
+          : 'Moments from events and exhibitions held at the hub' }}</p>
+        <div class="photo-grid">
+          <div v-for="img in exhibitionPhotos" :key="img" class="photo-item">
+            <img :src="img" :alt="locale === 'ar' ? 'معرض بالمركز' : 'Exhibition at the hub'" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Facilities -->
+    <section class="facilities-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'مرافق المركز' : 'Hub Facilities' }}</h2>
+        <p class="section-subtitle center">{{ locale === 'ar'
+          ? 'بيئة متكاملة مجهزة لدعم الفنانين والمبدعين'
+          : 'A fully equipped environment to support artists and creatives' }}</p>
+        <div class="facilities-grid">
+          <div v-for="f in facilities" :key="f.nameEn" class="facility-card">
+            <img :src="f.image" :alt="locale === 'ar' ? f.nameAr : f.nameEn" loading="lazy" />
+            <span class="facility-label">{{ locale === 'ar' ? f.nameAr : f.nameEn }}</span>
+          </div>
+        </div>
+        <div class="facilities-cta">
+          <a href="https://wa.me/97332224841" target="_blank" rel="noopener" class="btn btn-primary">
+            💬 {{ locale === 'ar' ? 'للاستفسارات والحجوزات عبر واتساب' : 'Inquiries & Bookings via WhatsApp' }}
+          </a>
+        </div>
+      </div>
+    </section>
 
     <!-- Goals -->
     <section class="goals-section">
@@ -96,6 +150,24 @@ const localePath = useLocalePath()
 useHead({
   title: locale.value === 'ar' ? 'مركز صفية علي كانو للفنون | مؤسسة البحرين ترست' : 'Safeya Ali Kanoo Hub for Arts | Bahrain Trust Foundation',
 })
+
+const exhibitionPhotos = [
+  '/images/projects/safeya-hub/exhibitions/exhibition-1.jpg',
+  '/images/projects/safeya-hub/exhibitions/exhibition-2.jpg',
+  '/images/projects/safeya-hub/exhibitions/exhibition-3.jpg',
+  '/images/projects/safeya-hub/exhibitions/exhibition-4.jpg',
+  '/images/projects/safeya-hub/exhibitions/exhibition-5.jpg',
+]
+
+const facilities = [
+  { nameAr: 'الغاليري', nameEn: 'Gallery', image: '/images/projects/safeya-hub/facilities/gallery.jpg' },
+  { nameAr: 'المقهى', nameEn: 'Café', image: '/images/projects/safeya-hub/facilities/cafe.jpg' },
+  { nameAr: 'ورشة الخزف', nameEn: 'Ceramics Workshop', image: '/images/projects/safeya-hub/facilities/ceramics-workshop.jpg' },
+  { nameAr: 'استوديوهات الفنانين', nameEn: 'Artist Studios', image: '/images/projects/safeya-hub/facilities/artist-studios.jpg' },
+  { nameAr: 'مختبر الحاسوب', nameEn: 'Computer Lab', image: '/images/projects/safeya-hub/facilities/computer-lab.jpg' },
+  { nameAr: 'غرفة التدريب', nameEn: 'Training Room', image: '/images/projects/safeya-hub/facilities/training-room.jpg' },
+  { nameAr: 'المبنى', nameEn: 'The Building', image: '/images/projects/safeya-hub/facilities/building.jpg' },
+]
 
 const goals = [
   {
@@ -190,6 +262,33 @@ const servicesList = [
 .intro-ctas { display: flex; gap: 14px; margin-top: 24px; flex-wrap: wrap; }
 .intro-image img { border-radius: var(--radius); box-shadow: var(--shadow-lg); width: 100%; aspect-ratio: 4/3; object-fit: cover; }
 
+/* In Memory */
+.memory-section { background: white; padding: 0 0 80px; }
+.memory-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 48px; align-items: center; }
+.memory-image img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+.memory-eyebrow { background: rgba(227,28,38,0.1); color: var(--red); margin-bottom: 14px; }
+.memory-text .section-title { margin-bottom: 14px; }
+.memory-text p { color: var(--text-light); font-size: 16px; line-height: 1.9; }
+
+/* Exhibitions gallery */
+.gallery-section { background: var(--off-white); padding: 80px 0; }
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 16px; }
+.photo-item { border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.photo-item:hover img { transform: scale(1.06); }
+
+/* Facilities */
+.facilities-section { background: white; padding: 80px 0; }
+.facilities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 16px; }
+.facility-card { border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); position: relative; }
+.facility-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+.facility-label {
+  position: absolute; bottom: 0; inset-inline: 0; padding: 10px 14px;
+  background: linear-gradient(0deg, rgba(0,0,0,0.75), transparent);
+  color: white; font-size: 13px; font-weight: 700;
+}
+.facilities-cta { text-align: center; margin-top: 36px; }
+
 .goals-section { background: var(--off-white); padding: 80px 0; }
 .goals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
 .goal-card { padding: 28px; }
@@ -221,5 +320,11 @@ const servicesList = [
   .intro-grid { grid-template-columns: 1fr; }
   .intro-image { order: -1; }
   .goals-grid { grid-template-columns: 1fr; }
+  .memory-grid { grid-template-columns: 1fr; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .facilities-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .photo-grid { grid-template-columns: 1fr; }
 }
 </style>
