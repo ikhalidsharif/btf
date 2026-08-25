@@ -76,7 +76,6 @@ useHead({
 // homepage partners array manually for now.
 const partners = [
   { name: 'Tamkeen', image: '/images/partners/tamkeen.png' },
-  { name: 'ONE GCC', image: '/images/partners/onegcc.png' },
   { name: 'Khutwa', image: '/images/partners/khutwa.jpg' },
   { name: 'Baladeya', image: '/images/partners/baladeya.jpg' },
   { name: 'Telp', image: '/images/partners/telp.jpg' },
@@ -160,13 +159,16 @@ const reasons = [
 .intro-text p { color: var(--text-light); font-size: 17px; line-height: 1.9; }
 
 .partners-section { background: var(--off-white); padding: 64px 0; }
-.partners-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; margin-top: 32px; align-items: center; }
+.partners-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 32px; }
 .partner-logo {
-  background: white; border-radius: 14px; padding: 20px;
-  display: flex; align-items: center; justify-content: center; height: 88px;
+  background: white; border-radius: 14px; padding: 18px;
+  display: flex; align-items: center; justify-content: center; height: 130px;
   transition: box-shadow 0.25s, transform 0.25s;
 }
-.partner-logo img { max-width: 100%; max-height: 40px; filter: grayscale(100%); opacity: 0.7; transition: filter 0.3s, opacity 0.3s; }
+.partner-logo img {
+  width: 100%; height: 100%; object-fit: contain;
+  filter: grayscale(100%); opacity: 0.75; transition: filter 0.3s, opacity 0.3s;
+}
 .partner-logo:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-3px); }
 .partner-logo:hover img { filter: grayscale(0%); opacity: 1; }
 

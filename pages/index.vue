@@ -701,7 +701,6 @@ onUnmounted(() => {
 // photos rather than clean logos — add those in once confirmed.
 const partners = [
   { name: 'Tamkeen', image: '/images/partners/tamkeen.png' },
-  { name: 'ONE GCC', image: '/images/partners/onegcc.png' },
   { name: 'Khutwa', image: '/images/partners/khutwa.jpg' },
   { name: 'Baladeya', image: '/images/partners/baladeya.jpg' },
   { name: 'Telp', image: '/images/partners/telp.jpg' },
