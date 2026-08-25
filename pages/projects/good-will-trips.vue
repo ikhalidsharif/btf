@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="intro-image fade-up">
-          <img src="/images/projects/community-goodwill.jpg" :alt="locale === 'ar' ? 'رحلات الخير' : 'Good Will Trips'" />
+          <img src="/images/projects/good-will-trips/photo-1.jpg" :alt="locale === 'ar' ? 'رحلات الخير' : 'Good Will Trips'" />
         </div>
       </div>
     </div>
@@ -55,6 +55,33 @@
         </div>
       </div>
     </section>
+
+    <!-- Photo Gallery -->
+    <section class="gallery-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'لحظات من رحلاتنا' : 'Moments From Our Trips' }}</h2>
+        <div class="photo-grid">
+          <button
+            v-for="(img, i) in photos"
+            :key="img"
+            class="photo-item"
+            type="button"
+            @click="openLightbox(i)"
+          >
+            <img :src="img" :alt="locale === 'ar' ? 'رحلات الخير' : 'Good Will Trips'" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div v-if="activeIndex !== null" class="lightbox" @click.self="closeLightbox">
+      <button class="lightbox-close" type="button" @click="closeLightbox">✕</button>
+      <button class="lightbox-prev" type="button" @click="prevImage">‹</button>
+      <img class="lightbox-img" :src="photos[activeIndex]" alt="" />
+      <button class="lightbox-next" type="button" @click="nextImage">›</button>
+      <span class="lightbox-counter">{{ activeIndex + 1 }} / {{ photos.length }}</span>
+    </div>
 
     <!-- CTA -->
     <section class="cta-section">
@@ -93,6 +120,23 @@ const trips = [
   { date: '6–9 Oct 2025', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوتشي، كيرلا', placeEn: 'Kochi, Kerala' },
   { date: '21–28 Dec 2025', countryAr: 'تركيا', countryEn: 'Turkey', placeAr: 'اسطنبول', placeEn: 'Istanbul' },
 ]
+
+const photos = Array.from({ length: 23 }, (_, i) => `/images/projects/good-will-trips/photo-${i + 1}.jpg`)
+
+const activeIndex = ref(null)
+function openLightbox(i) { activeIndex.value = i }
+function closeLightbox() { activeIndex.value = null }
+function nextImage() { activeIndex.value = (activeIndex.value + 1) % photos.length }
+function prevImage() { activeIndex.value = (activeIndex.value - 1 + photos.length) % photos.length }
+
+function onKeydown(e) {
+  if (activeIndex.value === null) return
+  if (e.key === 'Escape') closeLightbox()
+  else if (e.key === 'ArrowRight') nextImage()
+  else if (e.key === 'ArrowLeft') prevImage()
+}
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 </script>
 
 <style scoped>
@@ -132,6 +176,34 @@ const trips = [
 .timeline-content h3 { font-size: 16px; color: var(--dark); margin-bottom: 2px; }
 .timeline-content p { font-size: 13px; color: var(--text-light); }
 
+/* Gallery */
+.gallery-section { background: white; padding: 80px 0; }
+.photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
+.photo-item {
+  border: none; padding: 0; cursor: pointer; border-radius: var(--radius);
+  overflow: hidden; aspect-ratio: 1/1; box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+.photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.photo-item:hover img { transform: scale(1.08); }
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.92);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.lightbox-img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+.lightbox-close, .lightbox-prev, .lightbox-next {
+  position: absolute; background: rgba(255,255,255,0.1); border: none; color: white;
+  border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.25); }
+.lightbox-close { top: 20px; inset-inline-end: 20px; width: 40px; height: 40px; font-size: 16px; }
+.lightbox-prev, .lightbox-next { top: 50%; transform: translateY(-50%); width: 52px; height: 52px; font-size: 30px; }
+.lightbox-prev { inset-inline-start: 16px; }
+.lightbox-next { inset-inline-end: 16px; }
+.lightbox-counter { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 13px; }
+
 .cta-section { background: var(--dark); padding: 64px 0; }
 .cta-inner { text-align: center; color: white; }
 .cta-inner h2 { font-size: clamp(24px,3vw,34px); font-weight: 800; margin-bottom: 24px; }
@@ -147,5 +219,10 @@ const trips = [
 @media (max-width: 900px) {
   .intro-grid { grid-template-columns: 1fr; }
   .intro-image { order: -1; }
+  .photo-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 560px) {
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .lightbox-prev, .lightbox-next { width: 40px; height: 40px; font-size: 22px; }
 }
 </style>
