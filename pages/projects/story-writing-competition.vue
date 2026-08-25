@@ -32,7 +32,25 @@
           </div>
         </div>
         <div class="intro-image fade-up">
-          <img src="/images/projects/education-story.jpg" :alt="locale === 'ar' ? 'مسابقة تأليف القصص' : 'Story Writing Competition'" />
+          <img src="/images/projects/story-competition/photo-1.jpg" :alt="locale === 'ar' ? 'مسابقة تأليف القصص' : 'Story Writing Competition'" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="container stats-inner">
+        <div class="stat">
+          <strong>2018</strong>
+          <span>{{ locale === 'ar' ? 'انطلقت المسابقة' : 'Competition launched' }}</span>
+        </div>
+        <div class="stat">
+          <strong>{{ locale === 'ar' ? 'كل سنتين' : 'Every 2 Years' }}</strong>
+          <span>{{ locale === 'ar' ? 'دورية المسابقة' : 'Competition frequency' }}</span>
+        </div>
+        <div class="stat">
+          <strong>7</strong>
+          <span>{{ locale === 'ar' ? 'موضوعات تناولتها المسابقة' : 'Themes explored so far' }}</span>
         </div>
       </div>
     </div>
@@ -48,6 +66,18 @@
           <div v-for="(t, i) in themes" :key="i" class="theme-item fade-up">
             <span class="theme-num">{{ i + 1 }}</span>
             <p>{{ locale === 'ar' ? t.ar : t.en }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'من ورش المسابقة وحفلات التدشين' : 'From Workshops & Launch Ceremonies' }}</h2>
+        <div class="photo-grid">
+          <div v-for="img in photos" :key="img" class="photo-item">
+            <img :src="img" :alt="locale === 'ar' ? 'مسابقة تأليف القصص' : 'Story Writing Competition'" loading="lazy" />
           </div>
         </div>
       </div>
@@ -84,6 +114,8 @@ const themes = [
   { ar: 'التشجيع على ريادة الأعمال', en: 'Encouraging entrepreneurship' },
   { ar: 'التوعية بأهداف التنمية المستدامة', en: 'Raising awareness about sustainable development' },
 ]
+
+const photos = Array.from({ length: 12 }, (_, i) => `/images/projects/story-competition/photo-${i + 1}.jpg`)
 </script>
 
 <style scoped>
@@ -115,6 +147,18 @@ const themes = [
 }
 .theme-item p { font-size: 14px; color: var(--dark); line-height: 1.6; }
 
+.stats-bar { background: var(--dark); }
+.stats-inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 36px 0; }
+.stat { text-align: center; color: white; }
+.stat strong { display: block; font-size: 30px; font-weight: 900; color: var(--red-light); }
+.stat span { font-size: 13px; opacity: 0.8; }
+
+.gallery-section { background: white; padding: 80px 0; }
+.photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
+.photo-item { border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.photo-item:hover img { transform: scale(1.06); }
+
 .cta-section { background: var(--dark); padding: 64px 0; }
 .cta-inner { text-align: center; color: white; }
 .cta-inner h2 { font-size: clamp(24px,3vw,34px); font-weight: 800; margin-bottom: 24px; }
@@ -131,5 +175,7 @@ const themes = [
   .intro-grid { grid-template-columns: 1fr; }
   .intro-image { order: -1; }
   .themes-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: 1fr; gap: 20px; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
