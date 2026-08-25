@@ -102,7 +102,10 @@
 
         <!-- Chairman — featured -->
         <div class="board-featured card fade-up">
-          <div class="board-avatar board-avatar-lg" :style="{ background: chairman.color }">{{ chairman.initial }}</div>
+          <div v-if="chairman.photo" class="board-avatar board-avatar-lg board-avatar-photo">
+            <img :src="chairman.photo" :alt="locale === 'ar' ? chairman.nameAr : chairman.nameEn" />
+          </div>
+          <div v-else class="board-avatar board-avatar-lg" :style="{ background: chairman.color }">{{ chairman.initial }}</div>
           <h3>{{ locale === 'ar' ? chairman.nameAr : chairman.nameEn }}</h3>
           <span class="board-title">{{ locale === 'ar' ? chairman.titleAr : chairman.titleEn }}</span>
           <p class="board-bio">{{ locale === 'ar' ? chairman.bioAr : chairman.bioEn }}</p>
@@ -111,7 +114,10 @@
         <!-- Rest of the board -->
         <div class="board-grid">
           <div v-for="m in boardMembers" :key="m.nameEn" class="board-card card fade-up">
-            <div class="board-avatar" :style="{ background: m.color }">{{ m.initial }}</div>
+            <div v-if="m.photo" class="board-avatar board-avatar-photo">
+              <img :src="m.photo" :alt="locale === 'ar' ? m.nameAr : m.nameEn" />
+            </div>
+            <div v-else class="board-avatar" :style="{ background: m.color }">{{ m.initial }}</div>
             <h3>{{ locale === 'ar' ? m.nameAr : m.nameEn }}</h3>
             <span class="board-title">{{ locale === 'ar' ? m.titleAr : m.titleEn }}</span>
             <p class="board-bio">{{ locale === 'ar' ? m.bioAr : m.bioEn }}</p>
@@ -195,7 +201,7 @@ useHead({
 // with their real bios as soon as you have them.
 const chairman = {
   initial: 'ف', color: '#E31C26',
-  nameAr: 'د. فاطمة البلوشي', nameEn: 'Dr. Fatima Al Balooshi',
+  nameAr: 'د. فاطمة البلوشي', nameEn: 'Dr. Fatima Al Balooshi', photo: '/images/team/board/dr-fatima.jpg',
   titleAr: 'رئيسة مجلس الأمناء (مؤسِّسة)', titleEn: 'Chairman of the Board of Trustees (Founder)',
   bioAr: 'قائدة مؤسِّسة لرؤية بحرين ترست، تقود مجلس الأمناء منذ التأسيس بشغف لخدمة المجتمع البحريني.',
   bioEn: "A founding leader of Bahrain Trust's vision, chairing the Board of Trustees since inception with a passion for serving the Bahraini community.",
@@ -204,35 +210,35 @@ const chairman = {
 const boardMembers = [
   {
     initial: 'ع', color: '#3c3950',
-    nameAr: 'د. عبدالرحمن العطاوي', nameEn: 'Dr. Abdulrahman Al Attawi',
+    nameAr: 'د. عبدالرحمن العطاوي', nameEn: 'Dr. Abdulrahman Al Attawi', photo: '/images/team/board/dr-abdulrahman.jpg',
     titleAr: 'عضو مؤسس', titleEn: 'Founder',
     bioAr: 'أحد الأعضاء المؤسسين للمؤسسة، ساهم في وضع أسس رؤيتها ورسالتها.',
     bioEn: "One of the Foundation's founding members, instrumental in shaping its vision and mission.",
   },
   {
     initial: 'ف', color: '#c8972a',
-    nameAr: 'د. فاتن المؤيد', nameEn: 'Dr. Faten Almoayyed',
+    nameAr: 'د. فاتن المؤيد', nameEn: 'Dr. Faten Almoayyed', photo: '/images/team/board/dr-faten.jpg',
     titleAr: 'نائبة الرئيس', titleEn: 'Vice President',
     bioAr: 'تدعم رئاسة المجلس بخبرتها القيادية لضمان استمرارية عمل المؤسسة وتطورها.',
     bioEn: "Supports the board's leadership with her expertise, helping guide the Foundation's continuity and growth.",
   },
   {
     initial: 'ل', color: '#00bcd4',
-    nameAr: 'الشيخة لبنى آل خليفة', nameEn: 'Sh. Lubna Al Khalifa',
+    nameAr: 'الشيخة لبنى آل خليفة', nameEn: 'Sh. Lubna Al Khalifa', photo: '/images/team/board/lubna-al-khalifa.jpg',
     titleAr: 'أمينة السر (مؤسِّسة)', titleEn: 'Secretary (Founder)',
     bioAr: 'عضوة مؤسسة تتولى أمانة سر المجلس وتوثيق مسيرة المؤسسة.',
     bioEn: "A founding member serving as board secretary, documenting the Foundation's journey.",
   },
   {
     initial: 'س', color: '#8B0000',
-    nameAr: 'السيدة سوزي كانو', nameEn: 'Mrs. Suzy Kanoo',
+    nameAr: 'السيدة سوزي كانو', nameEn: 'Mrs. Suzy Kanoo', photo: '/images/team/board/suzie-kanoo.jpg',
     titleAr: 'عضو مجلس الأمناء', titleEn: 'Board Member',
     bioAr: 'عضوة فاعلة بمجلس الأمناء، تسهم برؤيتها في توجيه مشاريع المؤسسة.',
     bioEn: "An active Board of Trustees member, contributing her vision to guide the Foundation's projects.",
   },
   {
     initial: 'ح', color: '#5f727f',
-    nameAr: 'السيد الحارث العطاوي', nameEn: 'Mr. Al Harith Al Attawi',
+    nameAr: 'السيد الحارث العطاوي', nameEn: 'Mr. Al Harith Al Attawi', photo: '/images/team/board/al-harith.jpg',
     titleAr: 'أمين الصندوق', titleEn: 'Financial Secretary',
     bioAr: 'يتولى الإشراف المالي على المؤسسة لضمان الشفافية والاستدامة في مشاريعها.',
     bioEn: "Oversees the Foundation's finances, ensuring transparency and sustainability across its projects.",
@@ -257,9 +263,9 @@ const teamDepartments = [
   {
     titleAr: 'قطاع التعليم المجتمعي', titleEn: 'Community Education Sector',
     people: [
-      { nameAr: 'بدرية هرمس', nameEn: 'Badreya Harmes', titleAr: 'رئيس قطاع التعليم المجتمعي', titleEn: 'Head of Community Education Sector', initial: 'ب', color: '#3c3950' },
+      { nameAr: 'بدرية هرمس', nameEn: 'Badreya Harmes', titleAr: 'رئيس قطاع التعليم المجتمعي', titleEn: 'Head of Community Education Sector', photo: '/images/team/community/badriya-harmes.jpg' },
       { nameAr: 'آية الدوسري', nameEn: 'Ayah Al Doseri', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', photo: '/images/team/community/ayah-al-doseri.jpg' },
-      { nameAr: 'مريم بن عرفة', nameEn: 'Maryam Binarafa', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', initial: 'م', color: '#c8972a' },
+      { nameAr: 'مريم بن عرفة', nameEn: 'Maryam Binarafa', titleAr: 'مشرف قطاع التعليم المجتمعي', titleEn: 'Supervisor of Community Education Sector', photo: '/images/team/community/maryam-bin-arafa.jpg' },
     ],
   },
   {
@@ -268,13 +274,13 @@ const teamDepartments = [
       { nameAr: 'سكينة العيسى', nameEn: 'Sakina Al Isa', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital/sakina-al-isa.jpg' },
       { nameAr: 'وداد حسين', nameEn: 'Wedad Hussein', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، جناح 31', titleEn: 'Facilitator, Deena Kanoo Micro School, Ward 31', photo: '/images/team/hospital/wedad-hussein.jpg' },
       { nameAr: 'عفاف نايف', nameEn: 'Afaf Nayef', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', photo: '/images/team/hospital/afaf-nayef.jpg' },
-      { nameAr: 'خلود ناصر', nameEn: 'Khulood Nasser', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', initial: 'خ', color: '#00bcd4' },
+      { nameAr: 'خلود ناصر', nameEn: 'Khulood Nasser', titleAr: 'ميسر، مدرسة مستشفى الملك حمد الجامعي المصغرة', titleEn: 'Facilitator, King Hamad University Hospital Micro School', photo: '/images/team/hospital/khulood-nasser.jpg' },
       { nameAr: 'حنان مسعد', nameEn: 'Hanan Masaad', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، عيادة الأطفال', titleEn: 'Facilitator, Military Hospital Micro School — Pediatric Clinic', photo: '/images/team/hospital/hanan-masaad.jpg' },
       { nameAr: 'خديجة الموالي', nameEn: 'Khadija Al Mawali', titleAr: 'ميسر، مدرسة المستشفى العسكري المصغرة، جناح الأطفال 31', titleEn: "Facilitator, Military Hospital Micro School — Children's Ward 31", photo: '/images/team/hospital/khadija-al-mawali.jpg' },
       { nameAr: 'مريم الصيبعي', nameEn: 'Mariam Al Saibai', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital/mariam-al-saibai.jpg' },
       { nameAr: 'سارة الجبر', nameEn: 'Sara Al Jabor', titleAr: 'ميسر، مدرسة الطب النفسي المصغرة', titleEn: 'Facilitator, Psychiatric Hospital Micro School', photo: '/images/team/hospital/sara-al-jabor.jpg' },
       { nameAr: 'هند عبداللطيف', nameEn: 'Hind Abdullatef', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', photo: '/images/team/hospital/hind-a-latif.jpg' },
-      { nameAr: 'مروة العباسي', nameEn: 'Marwa Al Abbasi', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', initial: 'م', color: '#8B0000' },
+      { nameAr: 'مروة العباسي', nameEn: 'Marwa Al Abbasi', titleAr: 'ميسر، مدرسة دينا كانو المصغرة، مركز البحرين للأورام', titleEn: 'Facilitator, Deena Kanoo Micro School, Bahrain Oncology Center', photo: '/images/team/hospital/marwa-al-abbasi.jpg' },
     ],
   },
   {
@@ -398,8 +404,11 @@ const teamDepartments = [
   width: 64px; height: 64px; margin: 0 auto 16px;
   border-radius: 50%; color: white; font-weight: 800; font-size: 22px;
   display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
 }
 .board-avatar-lg { width: 88px; height: 88px; font-size: 30px; }
+.board-avatar-photo { background: var(--gray-light); }
+.board-avatar-photo img { width: 100%; height: 100%; object-fit: cover; }
 
 .board-title {
   display: inline-block; font-size: 12px; font-weight: 700; color: var(--red);
