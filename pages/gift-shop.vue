@@ -25,10 +25,13 @@
             <NuxtLink :to="localePath('/projects/safeya-kanoo-hub')" class="btn btn-outline">
               {{ locale === 'ar' ? 'مركز صفية علي كانو للفنون' : 'Safeya Ali Kanoo Hub for Arts' }}
             </NuxtLink>
+            <a href="https://www.instagram.com/btf.giftshop" target="_blank" rel="noopener" class="btn btn-outline">
+              📷 {{ locale === 'ar' ? 'إنستغرام' : 'Instagram' }}
+            </a>
           </div>
         </div>
         <div class="intro-image fade-up">
-          <img src="/images/projects/creative-giftshop.jpg" :alt="locale === 'ar' ? 'متجر الهدايا' : 'Gift Shop'" />
+          <img src="/images/gift-shop/interior/shop-1.jpg" :alt="locale === 'ar' ? 'متجر الهدايا' : 'Gift Shop'" />
         </div>
       </div>
     </div>
@@ -44,6 +47,24 @@
             <p>{{ locale === 'ar' ? f.textAr : f.textEn }}</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- 3alimny Products -->
+    <section class="alimny-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'منتجات معرض "علّمني" لفن الطفل' : '"3alimny" Children\'s Art Exhibition Products' }}</h2>
+        <p class="section-subtitle center">{{ locale === 'ar'
+          ? 'أعمال فنية للأطفال تعكس إبداعاتهم ومواهبهم، تحوّلت إلى منتجات تدعم استمرار مواهبهم'
+          : "Artworks reflecting children's creativity and talent, transformed into products that support their continued growth" }}</p>
+        <div class="photo-grid">
+          <div v-for="img in alimnyPhotos" :key="img" class="photo-item">
+            <img :src="img" :alt="locale === 'ar' ? 'منتجات علّمني' : '3alimny Products'" loading="lazy" />
+          </div>
+        </div>
+        <p class="alimny-note">{{ locale === 'ar'
+          ? 'يمكنكم اقتناء منتجاتكم المفضلة من متجرنا بمركز صفية علي كانو للفنون'
+          : 'You can shop your favorite products at our Gift Shop, located at Safeya Ali Kanoo Hub for Arts' }}</p>
       </div>
     </section>
 
@@ -110,6 +131,8 @@ const features = [
     textEn: 'We believe in the value of local products, prioritizing items made by Bahraini hands.',
   },
 ]
+
+const alimnyPhotos = Array.from({ length: 6 }, (_, i) => `/images/gift-shop/3alimny-products/product-${i + 1}.jpg`)
 </script>
 
 <style scoped>
@@ -132,6 +155,13 @@ const features = [
 .intro-image img { border-radius: var(--radius); box-shadow: var(--shadow-lg); width: 100%; aspect-ratio: 4/3; object-fit: cover; }
 
 .feature-list-section { background: var(--off-white); padding: 80px 0; }
+
+.alimny-section { background: white; padding: 80px 0; }
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 16px; }
+.photo-item { border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.photo-item:hover img { transform: scale(1.06); }
+.alimny-note { text-align: center; color: var(--text-light); font-size: 14px; margin-top: 24px; }
 .feature-list-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
 .feature-list-card { padding: 28px; text-align: center; }
 .feature-icon-img { width: 64px; height: 64px; object-fit: contain; display: block; margin: 0 auto 14px; }
@@ -155,8 +185,10 @@ const features = [
   .intro-grid { grid-template-columns: 1fr; }
   .intro-image { order: -1; }
   .feature-list-grid { grid-template-columns: 1fr 1fr; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 560px) {
   .feature-list-grid { grid-template-columns: 1fr; }
+  .photo-grid { grid-template-columns: 1fr; }
 }
 </style>

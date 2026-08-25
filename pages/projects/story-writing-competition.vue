@@ -37,24 +37,6 @@
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats-bar">
-      <div class="container stats-inner">
-        <div class="stat">
-          <strong>2018</strong>
-          <span>{{ locale === 'ar' ? 'انطلقت المسابقة' : 'Competition launched' }}</span>
-        </div>
-        <div class="stat">
-          <strong>{{ locale === 'ar' ? 'كل سنتين' : 'Every 2 Years' }}</strong>
-          <span>{{ locale === 'ar' ? 'دورية المسابقة' : 'Competition frequency' }}</span>
-        </div>
-        <div class="stat">
-          <strong>7</strong>
-          <span>{{ locale === 'ar' ? 'موضوعات تناولتها المسابقة' : 'Themes explored so far' }}</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Themes -->
     <section class="themes-section">
       <div class="container">
@@ -70,6 +52,24 @@
         </div>
       </div>
     </section>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="container stats-inner">
+        <div class="stat">
+          <strong>4</strong>
+          <span>{{ locale === 'ar' ? 'نسخ من المسابقة تم تنفيذها' : 'Editions held so far' }}</span>
+        </div>
+        <div class="stat">
+          <strong>21</strong>
+          <span>{{ locale === 'ar' ? 'قصة فائزة' : 'Winning stories' }}</span>
+        </div>
+        <div class="stat">
+          <strong>+200</strong>
+          <span>{{ locale === 'ar' ? 'مشارك في المسابقة' : 'Participants in the competition' }}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Gallery -->
     <section class="gallery-section">

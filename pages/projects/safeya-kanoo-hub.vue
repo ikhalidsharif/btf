@@ -29,6 +29,9 @@
             <NuxtLink :to="localePath('/gift-shop')" class="btn btn-outline">
               {{ locale === 'ar' ? 'زر متجر الهدايا' : 'Visit the Gift Shop' }}
             </NuxtLink>
+            <a href="https://www.instagram.com/safeya.kanoo.hub" target="_blank" rel="noopener" class="btn btn-outline">
+              📷 {{ locale === 'ar' ? 'إنستغرام' : 'Instagram' }}
+            </a>
           </div>
         </div>
         <div class="intro-image fade-up">
@@ -46,10 +49,19 @@
           </div>
           <div class="memory-text fade-up">
             <span class="hero-eyebrow memory-eyebrow">{{ locale === 'ar' ? 'بذكراها' : 'In Her Memory' }}</span>
-            <h2 class="section-title">{{ locale === 'ar' ? 'الراحلة صفية علي كانو' : 'The Late Safeya Ali Kanoo' }}</h2>
+            <h2 class="section-title">{{ locale === 'ar' ? 'الراحلة صفية علي محمد كانو' : 'The Late Safeya Ali Mohamed Kanoo' }}</h2>
+            <p class="memory-quote">{{ locale === 'ar'
+              ? '"لوحاتي أولادي، وأفضل أن تتحدث أعمالي عوضاً عني."'
+              : '"My paintings are my children, and I prefer that my works tell you who I am."' }}</p>
             <p>{{ locale === 'ar'
-              ? 'يحمل هذا المركز اسم السيدة صفية علي محمد كانو تخليداً لعطائها وكرمها، اللي جسّدته بتمويلها الكامل لهذا الصرح الفني. رؤيتها الفنية وإيمانها بأهمية دعم المبدعين هي اللي أسّست لهذا المكان، ويبقى المركز شاهداً حياً على أثرها وإرثها بالمجتمع البحريني.'
-              : "This hub carries the name of Mrs. Safeya Ali Mohammed Kanoo in honor of her generosity, which she embodied through her full funding of this artistic landmark. Her artistic vision and belief in supporting creatives are what established this place, and the hub remains a living testament to her impact and legacy within the Bahraini community." }}</p>
+              ? 'من رائدات البحرين في الفنون والعمل التطوعي والخيري، ومن أوائل الرسامات البحرينيات — بدأت مسيرتها الفنية وهي في سن السابعة عشرة، وتميزت بأسلوبها الجميل في الرسم الكلاسيكي والحديث.'
+              : "One of Bahrain's pioneering women artists and philanthropists, and among the first Bahraini female painters — she began her artistic career at the age of seventeen, distinguished by her beautiful style of classical and modern painting." }}</p>
+            <p>{{ locale === 'ar'
+              ? 'للسيدة صفية مسيرة حافلة في التطوع والعمل الخيري، حيث ساهمت في دعم وتمويل العديد من المبادرات والمشاريع الخيرية في مملكة البحرين، ومنها وحدة صفية علي كانو في مستشفى المحرّق، جناح خليل بن إبراهيم كانو، جناح سلمان بن خليل كانو لرعاية المسنّين، وحدة عبدالله خليل كانو لعلاج أورام الأطفال في مجمع السلمانية الطبي، جامع صفية علي محمد كانو في توبلي، ومركز صفية علي كانو للفنون في بوغزال.'
+              : 'Mrs. Safeya has a rich history of volunteering and charitable work, contributing to the support and financing of many charitable initiatives across the Kingdom of Bahrain — including the Safeya Ali Kanoo Unit at Muharraq Hospital, the Khalil Bin Ebrahim Kanoo Ward, the Salman Bin Khalil Kanoo Ward for Elderly Care, the Abdulla Khalil Kanoo Pediatric Oncology Unit at Salmaniya Medical Complex, the Safeya Ali Mohamed Kanoo Mosque in Tubli, and the Safeya Ali Kanoo Hub for Arts in Bu Ghazal.' }}</p>
+            <p>{{ locale === 'ar'
+              ? 'منحت وسام الكفاءة من الدرجة الأولى في عامي 2001 و2012، كما نالت العديد من الأوسمة والشهادات تقديراً لجهودها في دعم وتمويل المبادرات الخيرية بقطاعات الشباب والمرأة والطفولة.'
+              : "She was awarded the First Class Efficiency Medal in 2001 and 2012, along with numerous honors and certificates in recognition of her efforts supporting and financing charitable initiatives in the youth, women's, and children's sectors." }}</p>
           </div>
         </div>
       </div>
@@ -268,6 +280,7 @@ const servicesList = [
 .memory-image img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
 .memory-eyebrow { background: rgba(227,28,38,0.1); color: var(--red); margin-bottom: 14px; }
 .memory-text .section-title { margin-bottom: 14px; }
+.memory-quote { font-style: italic; color: var(--red) !important; font-weight: 600; margin-bottom: 16px !important; }
 .memory-text p { color: var(--text-light); font-size: 16px; line-height: 1.9; }
 
 /* Exhibitions gallery */

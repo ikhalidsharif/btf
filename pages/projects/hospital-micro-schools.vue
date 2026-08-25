@@ -32,6 +32,9 @@
             <a href="https://youtu.be/bnWw492BCr8" target="_blank" rel="noopener" class="btn btn-outline">
               ▶ {{ locale === 'ar' ? 'حكاية مدارس المستشفى' : 'Hospital Schools Story' }}
             </a>
+            <a href="https://www.instagram.com/bahraintrust_hospitals_schools" target="_blank" rel="noopener" class="btn btn-outline">
+              📷 {{ locale === 'ar' ? 'إنستغرام' : 'Instagram' }}
+            </a>
           </div>
         </div>
         <div class="intro-image fade-up">

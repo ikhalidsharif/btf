@@ -29,6 +29,9 @@
             <a href="https://youtu.be/BqzoZNFTG_E" target="_blank" rel="noopener" class="btn btn-outline">
               ▶ {{ locale === 'ar' ? 'مشروع فضاء للجميع' : 'Space for All Video' }}
             </a>
+            <a href="https://www.instagram.com/space.bahraintrust" target="_blank" rel="noopener" class="btn btn-outline">
+              📷 {{ locale === 'ar' ? 'إنستغرام' : 'Instagram' }}
+            </a>
           </div>
         </div>
         <div class="intro-image fade-up">
@@ -141,11 +144,18 @@ const branches = [
     contact: '17827682',
   },
   {
-    nameAr: 'فضاء عائشة', nameEn: 'Space Aysha',
+    nameAr: 'فضاء للجميع — الرفاع (فضاء عائشة سابقاً)', nameEn: 'Space for All — Riffa (formerly Aysha Space)',
     sinceAr: 'منذ 2021 — بدعم من عائلة السيدة عائشة بنت ناصر البلوشي رحمها الله',
     sinceEn: 'Since 2021 — Supported by the family of Aysha bint Nasser Al Balooshi',
     locationAr: 'الطريق التعليمي — الرفاع الشرقي', locationEn: 'Learning Alley — East Riffa',
     contact: '17691518',
+  },
+  {
+    nameAr: 'فضاء صفية للفن', nameEn: 'Safeya Space for Arts',
+    sinceAr: 'منذ 2026 — بدعم من السيدة صفية علي كانو رحمها الله',
+    sinceEn: 'Since 2026 — Supported by Mrs. Safeya Ali Kanoo',
+    locationAr: 'مركز صفية علي كانو للفنون — الخارطة', locationEn: 'Safeya Ali Kanoo Hub for Arts — Al Kharrarah',
+    contact: '32224841',
   },
 ]
 </script>
@@ -186,7 +196,7 @@ const branches = [
 .service-item p { font-size: 14px; color: var(--dark); line-height: 1.6; }
 
 .branches-section { background: var(--off-white); padding: 80px 0; }
-.branches-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
+.branches-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 16px; }
 .branch-card { padding: 28px; }
 .branch-card h3 { font-size: 17px; color: var(--dark); margin-bottom: 8px; }
 .branch-since { display: block; font-size: 12px; font-weight: 700; color: var(--red); margin-bottom: 14px; line-height: 1.5; }
@@ -211,6 +221,9 @@ const branches = [
   .mission-vision { flex-direction: column; gap: 28px; }
   .mv-divider { display: none; }
   .services-grid { grid-template-columns: 1fr; }
+  .branches-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
   .branches-grid { grid-template-columns: 1fr; }
 }
 </style>

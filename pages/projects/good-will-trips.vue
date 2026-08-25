@@ -41,7 +41,7 @@
     <section class="timeline-section">
       <div class="container">
         <h2 class="section-title center">{{ locale === 'ar' ? 'رحلاتنا حول العالم' : 'Our Trips Around the World' }}</h2>
-        <p class="section-subtitle center">{{ locale === 'ar' ? 'منذ 2017 وإلى اليوم' : 'Since 2017 and counting' }}</p>
+        <p class="section-subtitle center">{{ locale === 'ar' ? 'منذ 2016 وإلى اليوم' : 'Since 2016 and counting' }}</p>
 
         <div class="timeline">
           <div v-for="(t, i) in trips" :key="i" class="timeline-item fade-up">
@@ -106,19 +106,23 @@ useHead({
 })
 
 const trips = [
-  { date: '8–12 Nov 2017', countryAr: 'مصر — أسوان', countryEn: 'Egypt — Aswan', placeAr: 'نجع جبران', placeEn: 'Nagaa Jabran' },
-  { date: '16 Feb 2019', countryAr: 'مصر — أسوان', countryEn: 'Egypt — Aswan', placeAr: 'قرية الرحاب', placeEn: 'Rehab Village' },
-  { date: '7–11 Apr 2019', countryAr: 'مصر — أسوان', countryEn: 'Egypt — Aswan', placeAr: 'قرية العبابدة', placeEn: 'Al-Ababda Village' },
+  { date: '23–26 Jan 2016', countryAr: 'مصر', countryEn: 'Egypt', placeAr: 'أسوان — القاهرة', placeEn: 'Aswan — Cairo' },
+  { date: '3 Jan 2017', countryAr: 'الأردن', countryEn: 'Jordan', placeAr: 'عمّان', placeEn: 'Amman' },
+  { date: '29 Jul – 1 Aug 2017', countryAr: 'الأردن', countryEn: 'Jordan', placeAr: 'عمّان', placeEn: 'Amman' },
+  { date: '3 May 2017', countryAr: 'مصر', countryEn: 'Egypt', placeAr: 'الفيوم — القاهرة', placeEn: 'Fayoum — Cairo' },
+  { date: '8–12 Nov 2017', countryAr: 'مصر', countryEn: 'Egypt', placeAr: 'نجع جبران، أسوان', placeEn: 'Nagaa Jabran, Aswan' },
   { date: '11–18 Apr 2018', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوجي، كيرلا', placeEn: 'Kogi, Kerala' },
-  { date: '15–23 Jan 2020', countryAr: 'مصر — الأقصر', countryEn: 'Egypt — Luxor', placeAr: 'قرية عودة حمدان', placeEn: 'Oudha Hamdan Village' },
-  { date: '31 Jan – 7 Feb 2020', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوتشي، كيرلا', placeEn: 'Kochi, Kerala' },
-  { date: '8–13 Nov 2022', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوتشي، كيرلا', placeEn: 'Kochi, Kerala' },
+  { date: '16 Feb 2019', countryAr: 'مصر', countryEn: 'Egypt', placeAr: 'قرية الرحاب، أسوان', placeEn: 'Rehab Village, Aswan' },
+  { date: '7–11 Apr 2019', countryAr: 'مصر', countryEn: 'Egypt', placeAr: 'قرية العبابدة، أسوان', placeEn: 'Al-Ababda Village, Aswan' },
+  { date: '15–23 Jan 2020', countryAr: 'مصر', countryEn: 'Egypt', placeAr: 'قرية عودة حمدان، الأقصر', placeEn: 'Oudha Hamdan Village, Luxor' },
+  { date: '31 Jan – 7 Feb 2020', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوجي، كيرلا', placeEn: 'Kogi, Kerala' },
+  { date: '8–13 Nov 2022', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوجي، كيرلا', placeEn: 'Kogi, Kerala' },
   { date: '3–10 Feb 2024', countryAr: 'المغرب', countryEn: 'Morocco', placeAr: 'خنيفرة', placeEn: 'Khenifra' },
-  { date: '24–31 Oct 2024', countryAr: 'تنزانيا — زنجبار', countryEn: 'Tanzania — Zanzibar', placeAr: 'المدينة القديمة', placeEn: 'Old Town' },
+  { date: '24–31 Oct 2024', countryAr: 'تنزانيا', countryEn: 'Tanzania', placeAr: 'زنجبار', placeEn: 'Zanzibar' },
   { date: '21–26 Dec 2024', countryAr: 'مصر', countryEn: 'Egypt', placeAr: 'أسوان', placeEn: 'Aswan' },
   { date: '16–24 Jan 2025', countryAr: 'المغرب', countryEn: 'Morocco', placeAr: 'خنيفرة', placeEn: 'Khenifra' },
-  { date: '6–9 Oct 2025', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوتشي، كيرلا', placeEn: 'Kochi, Kerala' },
-  { date: '21–28 Dec 2025', countryAr: 'تركيا', countryEn: 'Turkey', placeAr: 'اسطنبول', placeEn: 'Istanbul' },
+  { date: '6–9 Oct 2025', countryAr: 'الهند', countryEn: 'India', placeAr: 'كوجي، كيرلا', placeEn: 'Kogi, Kerala' },
+  { date: '21–28 Oct 2025', countryAr: 'تركيا', countryEn: 'Turkey', placeAr: 'اسطنبول', placeEn: 'Istanbul' },
 ]
 
 const photos = Array.from({ length: 23 }, (_, i) => `/images/projects/good-will-trips/photo-${i + 1}.jpg`)
