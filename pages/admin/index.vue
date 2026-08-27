@@ -60,9 +60,23 @@
                 <label>الوصف الكامل بالإنجليزي</label>
                 <textarea v-model="projectForm.long_desc_en" class="form-input" rows="3" placeholder="Optional — falls back to the short description"></textarea>
               </div>
-              <div class="form-group">
-                <label>رابط الصورة</label>
-                <input v-model="projectForm.image_url" type="text" class="form-input" placeholder="/images/donate/donate-1.jpg" />
+              <div class="form-group full">
+                <label>صورة المشروع بالعربي (تظهر بالصفحة العربية)</label>
+                <div class="upload-row">
+                  <input type="file" accept="image/*" class="form-input" @change="onImageSelect($event, 'ar')" />
+                  <span v-if="uploadingAr" class="upload-status">⏳ جاري الرفع...</span>
+                  <span v-else-if="projectForm.image_url_ar" class="upload-status upload-ok">✅ تم الرفع</span>
+                </div>
+                <img v-if="projectForm.image_url_ar" :src="projectForm.image_url_ar" class="upload-preview" />
+              </div>
+              <div class="form-group full">
+                <label>Project Image in English (shown on the English page)</label>
+                <div class="upload-row">
+                  <input type="file" accept="image/*" class="form-input" @change="onImageSelect($event, 'en')" />
+                  <span v-if="uploadingEn" class="upload-status">⏳ Uploading...</span>
+                  <span v-else-if="projectForm.image_url_en" class="upload-status upload-ok">✅ Uploaded</span>
+                </div>
+                <img v-if="projectForm.image_url_en" :src="projectForm.image_url_en" class="upload-preview" />
               </div>
               <div class="form-group">
                 <label>المبلغ المقترح (دينار بحريني)</label>
@@ -112,7 +126,7 @@
             <div v-else class="rows-table">
               <div v-for="proj in projects" :key="proj.id" class="row-item" :class="{ inactive: !proj.active }">
                 <div class="row-img">
-                  <img v-if="proj.image_url" :src="proj.image_url" :alt="proj.name_ar" />
+                  <img v-if="proj.image_url_ar || proj.image_url_en" :src="proj.image_url_ar || proj.image_url_en" :alt="proj.name_ar" />
                   <div v-else class="no-img">📷</div>
                 </div>
                 <div class="row-info">
@@ -205,7 +219,7 @@
 <script setup>
 definePageMeta({ layout: false })
 
-const { query, insert, update, remove } = useSupabase()
+const { query, insert, update, remove, uploadFile } = useSupabase()
 
 const ADMIN_PASSWORD = 'BTF@Admin2026'
 
@@ -237,11 +251,32 @@ const defaultProjectForm = {
   name_ar: '', name_en: '',
   desc_ar: '', desc_en: '',
   long_desc_ar: '', long_desc_en: '',
-  image_url: '', amount: 10,
+  image_url_ar: '', image_url_en: '', amount: 10,
   category: 'general', is_urgent: false,
   sort_order: 0, active: true,
 }
 const projectForm = reactive({ ...defaultProjectForm })
+
+const uploadingAr = ref(false)
+const uploadingEn = ref(false)
+
+async function onImageSelect(e, lang) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  if (lang === 'ar') uploadingAr.value = true
+  else uploadingEn.value = true
+
+  const url = await uploadFile(file, 'donations')
+  if (url) {
+    if (lang === 'ar') projectForm.image_url_ar = url
+    else projectForm.image_url_en = url
+  } else {
+    alert('فشل رفع الصورة — تأكد إن bucket "donation-images" موجود وعام (public) بـ Supabase Storage')
+  }
+
+  if (lang === 'ar') uploadingAr.value = false
+  else uploadingEn.value = false
+}
 
 const categoryLabels = {
   general: 'التبرع العام',
@@ -299,7 +334,7 @@ function editProject(proj) {
     name_ar: proj.name_ar, name_en: proj.name_en,
     desc_ar: proj.desc_ar || '', desc_en: proj.desc_en || '',
     long_desc_ar: proj.long_desc_ar || '', long_desc_en: proj.long_desc_en || '',
-    image_url: proj.image_url || '', amount: proj.amount,
+    image_url_ar: proj.image_url_ar || '', image_url_en: proj.image_url_en || '', amount: proj.amount,
     category: proj.category || 'general', is_urgent: !!proj.is_urgent,
     sort_order: proj.sort_order, active: proj.active,
   })
@@ -434,6 +469,12 @@ async function deleteReport(id) {
 .form-group label { display: block; font-size: 13px; font-weight: 600; color: #3c3950; margin-bottom: 6px; }
 .form-input { width: 100%; padding: 9px 12px; border: 1.5px solid #dfe5e8; border-radius: 4px; font-size: 14px; font-family: inherit; box-sizing: border-box; }
 .form-input:focus { outline: none; border-color: #E31C26; }
+
+.upload-row { display: flex; align-items: center; gap: 12px; }
+.upload-row .form-input { flex: 1; padding: 8px; }
+.upload-status { font-size: 12px; color: #99a9b5; white-space: nowrap; }
+.upload-status.upload-ok { color: #2e7d32; font-weight: 600; }
+.upload-preview { max-width: 160px; max-height: 200px; object-fit: contain; border-radius: 6px; margin-top: 10px; border: 1px solid #e0e0e0; }
 
 .form-actions { display: flex; gap: 12px; }
 .btn-save { background: #E31C26; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }

@@ -109,7 +109,7 @@ const { data: rawProjects } = await useAsyncData('donation-projects', () =>
 
 const projects = computed(() => (rawProjects.value || []).map((p) => ({
   id: p.id,
-  image: p.image_url,
+  image: (locale.value === 'ar' ? p.image_url_ar : p.image_url_en) || p.image_url_ar || p.image_url_en || p.image_url,
   nameAr: p.name_ar,
   nameEn: p.name_en,
   descAr: p.desc_ar,
@@ -204,8 +204,8 @@ const filteredProjects = computed(() => {
 .empty-state { grid-column: 1 / -1; text-align: center; color: var(--text-light); padding: 40px 0; }
 
 .project-card { display: flex; flex-direction: column; text-decoration: none; overflow: hidden; }
-.project-img { position: relative; aspect-ratio: 4/3; overflow: hidden; }
-.project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.project-img { position: relative; aspect-ratio: 4/5; overflow: hidden; }
+.project-img img { width: 100%; height: 100%; object-fit: contain; background: var(--off-white); transition: transform 0.4s; }
 .project-card:hover .project-img img { transform: scale(1.06); }
 
 .badge {

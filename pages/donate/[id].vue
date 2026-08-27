@@ -124,7 +124,7 @@ const project = computed(() => {
   if (!p) return null
   return {
     id: p.id,
-    image: p.image_url,
+    image: (locale.value === 'ar' ? p.image_url_ar : p.image_url_en) || p.image_url_ar || p.image_url_en || p.image_url,
     nameAr: p.name_ar,
     nameEn: p.name_en,
     descAr: p.desc_ar,
@@ -208,8 +208,8 @@ async function submitDonation() {
 .breadcrumb a:hover { color: var(--red); }
 
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
-.detail-image { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg); }
-.detail-image img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.detail-image { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg); background: var(--off-white); }
+.detail-image img { width: 100%; aspect-ratio: 4/5; object-fit: contain; display: block; }
 .badge { position: absolute; top: 14px; inset-inline-start: 14px; font-size: 12px; font-weight: 800; padding: 5px 14px; border-radius: 14px; color: white; }
 .badge-urgent { background: #E31C26; }
 
@@ -248,7 +248,7 @@ async function submitDonation() {
 
 .achieves-section { background: var(--off-white); padding: 64px 0; margin-top: 40px; }
 .achieves-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center; }
-.achieves-image img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+.achieves-image img { width: 100%; aspect-ratio: 4/5; object-fit: contain; background: var(--off-white); border-radius: var(--radius); box-shadow: var(--shadow-lg); }
 .achieves-text h2 { font-size: 24px; font-weight: 800; color: var(--dark); margin-bottom: 14px; }
 .achieves-text p { font-size: 15px; color: var(--text-light); line-height: 1.9; }
 

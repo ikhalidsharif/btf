@@ -52,5 +52,30 @@ export const useSupabase = () => {
     })
   }
 
-  return { query, insert, update, remove }
+  // Uploads a file to Supabase Storage and returns its public URL.
+  // Requires a public bucket named "donation-images" (see admin setup notes).
+  const uploadFile = async (file: File, folder = 'donations'): Promise<string | null> => {
+    const BUCKET = 'donation-images'
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '-')
+    const path = `${folder}/${Date.now()}-${safeName}`
+
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${path}`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': file.type || 'application/octet-stream',
+      },
+      body: file,
+    })
+
+    if (!res.ok) {
+      console.error('Upload failed', await res.text())
+      return null
+    }
+
+    return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`
+  }
+
+  return { query, insert, update, remove, uploadFile }
 }
