@@ -39,7 +39,7 @@
     <!-- What you'll find -->
     <section class="feature-list-section">
       <div class="container">
-        <h2 class="section-title center">{{ locale === 'ar' ? 'وش تلقى بالمتجر' : "What You'll Find in the Shop" }}</h2>
+        <h2 class="section-title center">{{ locale === 'ar' ? 'شنو بتلقى في المتجر؟' : "What You'll Find in the Shop" }}</h2>
         <div class="feature-list-grid">
           <div v-for="f in features" :key="f.titleEn" class="feature-list-card card fade-up">
             <img :src="f.icon" :alt="locale === 'ar' ? f.titleAr : f.titleEn" class="feature-icon-img" loading="lazy" />
