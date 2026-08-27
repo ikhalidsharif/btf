@@ -297,18 +297,20 @@ async function handleSubmit() {
       projects: projectsText,
     }
 
-    const res = await fetch(SCRIPT_URL, {
+    // Apps Script Web Apps don't return CORS headers to external domains,
+    // so the browser blocks us from reading the response even though the
+    // request reaches the script and executes successfully server-side
+    // (confirmed via DevTools: the POST returns 200 OK, it's just an
+    // opaque response). no-cors still delivers the POST; a thrown error
+    // here means the request never even reached Google (e.g. offline).
+    await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
     })
-    const data = await res.json()
 
-    if (data.result === 'success') {
-      submitted.value = true
-    } else {
-      throw new Error(data.error || 'unknown')
-    }
+    submitted.value = true
   } catch (e) {
     errorMsg.value = locale.value === 'ar'
       ? 'حدث خطأ أثناء إرسال الطلب، حاول مرة أخرى'
