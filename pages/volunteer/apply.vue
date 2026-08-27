@@ -254,7 +254,7 @@ const errorMsg = ref('')
 // Submits directly into the Foundation's Google Sheet via a deployed Apps
 // Script Web App — unlike posting straight to Google Forms, this returns
 // a real success/failure response instead of a blind guess.
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjaQnimsJpnUOX-WFynVbW5OL14q13VNZDiN2WHiXCeb1YFE7QURLBOnBjpXw8mm4k/exec'
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyjTMNfoRjtFYzmiiodYp_ulZYJSuWMcjSpQaowuGD059XPhwbo3STA9IX6wgkxYQ/exec'
 
 const genderLabel = { male: 'ذكر', female: 'أنثى' }
 const qualificationLabel = { high_school: 'ثانوي | High School', bachelors: 'بكالريوس | Bachelor’s Degree', phd: 'دكتوراه | PhD', other: 'أخرى | Other' }
