@@ -95,14 +95,8 @@ useHead({
 // old WordPress site before it's decommissioned).
 const features = [
   {
-    icon: '/images/gift-shop/productive-families.png',
-    titleAr: 'الأسر المنتجة', titleEn: 'Productive Families',
-    textAr: 'نفخر بمنتجات الأسر المنتجة البحرينية، ونتيح لهم مساهمة بالمتجر تترك بصمتهم بالمجتمع.',
-    textEn: "We're proud of Bahraini productive families' products, giving them a contribution that leaves their mark on the community.",
-  },
-  {
     icon: '/images/gift-shop/hospital-schools.png',
-    titleAr: 'مدارس المستشفى', titleEn: 'Hospital Schools',
+    titleAr: 'برنامج علمني', titleEn: '3alimny Program',
     textAr: 'نفخر بدعم الأطفال الموهوبين من مرضى السرطان والأمراض المزمنة، ونحوّل أعمالهم الفنية إلى منتجات تُعرض للبيع بالمتجر.',
     textEn: 'We support talented children with cancer and chronic illnesses, transforming their artwork into products available for sale.',
   },
@@ -123,12 +117,6 @@ const features = [
     titleAr: 'الحقيبة المدرسية', titleEn: 'School Backpack',
     textAr: 'كل أرباح الحقيبة المدرسية تذهب لمشاريع المؤسسة الخيرية — بشرائها أنت تكفل طالباً.',
     textEn: 'All backpack profits go to the Foundation\'s charitable projects — by purchasing one, you sponsor a student.',
-  },
-  {
-    icon: '/images/gift-shop/community-partnership.png',
-    titleAr: 'الشراكة المجتمعية', titleEn: 'Community Partnership',
-    textAr: 'نؤمن بأهمية المنتج المحلي، لذلك نوفر منتجات مصنوعة بأيدٍ بحرينية كأولوية بالمتجر.',
-    textEn: 'We believe in the value of local products, prioritizing items made by Bahraini hands.',
   },
 ]
 
@@ -162,7 +150,7 @@ const alimnyPhotos = Array.from({ length: 6 }, (_, i) => `/images/gift-shop/3ali
 .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
 .photo-item:hover img { transform: scale(1.06); }
 .alimny-note { text-align: center; color: var(--text-light); font-size: 14px; margin-top: 24px; }
-.feature-list-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 16px; }
+.feature-list-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 16px; }
 .feature-list-card { padding: 28px; text-align: center; }
 .feature-icon-img { width: 64px; height: 64px; object-fit: contain; display: block; margin: 0 auto 14px; }
 .feature-list-card h3 { font-size: 16px; color: var(--dark); margin-bottom: 10px; }
