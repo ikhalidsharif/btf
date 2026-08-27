@@ -250,31 +250,11 @@ const loading = ref(false)
 const submitted = ref(false)
 const errorMsg = ref('')
 
-// ── Google Form bridge ──
-// Submits straight into the Foundation's existing Google Form/Sheet so
-// responses land in the same place as before — no new database needed.
-//
-// Verified against the form's own FB_PUBLIC_LOAD_DATA_ structure.
-const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfHD7ZQM3kjNITizyhCROSAHESyhI-6SKi2_TzmMQXd982TCA/formResponse'
-
-const ENTRY = {
-  fullName: 'entry.1122539974',
-  gender: 'entry.2056172152',
-  birthDate: 'entry.1875196333', // split into _month/_day/_year — see note below
-  nationality: 'entry.847242140',
-  cpr: 'entry.823834245',
-  email: 'entry.981866934',
-  phone: 'entry.2076656407',
-  address: 'entry.603399992',
-  qualification: 'entry.1926016320',
-  fieldOfStudy: 'entry.1763016946',
-  healthConditions: 'entry.566700043',
-  volunteeredBefore: 'entry.835352389',
-  previousExperience: 'entry.1565215589',
-  skills: 'entry.206465370',
-  motivation: 'entry.1689329840',
-  projects: 'entry.2144654963',
-}
+// ── Google Apps Script bridge ──
+// Submits directly into the Foundation's Google Sheet via a deployed Apps
+// Script Web App — unlike posting straight to Google Forms, this returns
+// a real success/failure response instead of a blind guess.
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjaQnimsJpnUOX-WFynVbW5OL14q13VNZDiN2WHiXCeb1YFE7QURLBOnBjpXw8mm4k/exec'
 
 const genderLabel = { male: 'ذكر', female: 'أنثى' }
 const qualificationLabel = { high_school: 'ثانوي | High School', bachelors: 'بكالريوس | Bachelor’s Degree', phd: 'دكتوراه | PhD', other: 'أخرى | Other' }
@@ -284,53 +264,51 @@ async function handleSubmit() {
   errorMsg.value = ''
   loading.value = true
   try {
-    const fd = new FormData()
-    fd.append(ENTRY.fullName, form.fullName)
-    fd.append(ENTRY.gender, genderLabel[form.gender] || form.gender)
+    const skillsText = form.skills
+      .map((s) => {
+        const opt = skillOptions.find((o) => o.value === s)
+        return opt ? `${opt.ar} | ${opt.en}` : s
+      })
+      .join(', ')
 
-    // Google date fields are usually split into three inputs:
-    // entry.XXXX_month, entry.XXXX_day, entry.XXXX_year
-    if (form.birthDate) {
-      const [y, m, d] = form.birthDate.split('-')
-      fd.append(`${ENTRY.birthDate}_month`, m)
-      fd.append(`${ENTRY.birthDate}_day`, d)
-      fd.append(`${ENTRY.birthDate}_year`, y)
-    }
-
-    fd.append(ENTRY.nationality, form.nationality)
-    fd.append(ENTRY.cpr, form.cpr)
-    fd.append(ENTRY.email, form.email)
-    fd.append(ENTRY.phone, form.phone)
-    fd.append(ENTRY.address, form.address)
-    fd.append(ENTRY.qualification, qualificationLabel[form.qualification] || form.qualification)
-    fd.append(ENTRY.fieldOfStudy, form.fieldOfStudy)
-    fd.append(ENTRY.healthConditions, yesNoLabel[form.healthConditions] || form.healthConditions)
-    fd.append(ENTRY.volunteeredBefore, yesNoLabel[form.volunteeredBefore] || form.volunteeredBefore)
-    if (form.volunteeredBefore === 'yes') fd.append(ENTRY.previousExperience, form.previousExperience)
-
-    form.skills.forEach((s) => {
-      const opt = skillOptions.find((o) => o.value === s)
-      fd.append(ENTRY.skills, opt ? `${opt.ar} | ${opt.en}` : s)
-    })
-
-    fd.append(ENTRY.motivation, form.motivation)
-
-    form.projects.forEach((p) => {
+    const projectsList = form.projects.map((p) => {
       const opt = projectOptions.find((o) => o.value === p)
-      fd.append(ENTRY.projects, opt ? `${opt.ar} | ${opt.en}` : p)
+      return opt ? `${opt.ar} | ${opt.en}` : p
     })
-    if (form.projectsHasOther && form.projectsOther) {
-      fd.append(ENTRY.projects, '__other_option__')
-      fd.append(`${ENTRY.projects}.other_option_response`, form.projectsOther)
+    if (form.projectsHasOther && form.projectsOther) projectsList.push(form.projectsOther)
+    const projectsText = projectsList.join(', ')
+
+    const payload = {
+      fullName: form.fullName,
+      gender: genderLabel[form.gender] || form.gender,
+      birthDate: form.birthDate,
+      nationality: form.nationality,
+      cpr: form.cpr,
+      email: form.email,
+      phone: form.phone,
+      address: form.address,
+      qualification: qualificationLabel[form.qualification] || form.qualification,
+      fieldOfStudy: form.fieldOfStudy,
+      healthConditions: yesNoLabel[form.healthConditions] || form.healthConditions,
+      volunteeredBefore: yesNoLabel[form.volunteeredBefore] || form.volunteeredBefore,
+      previousExperience: form.volunteeredBefore === 'yes' ? form.previousExperience : '',
+      skills: skillsText,
+      motivation: form.motivation,
+      projects: projectsText,
     }
 
-    // Google Forms doesn't send CORS headers back, so the response is
-    // opaque — we can't read success/failure from it directly. no-cors
-    // still delivers the request; this is the standard pattern for
-    // posting into Google Forms from a custom UI.
-    await fetch(GOOGLE_FORM_ACTION, { method: 'POST', mode: 'no-cors', body: fd })
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids a CORS preflight
+      body: JSON.stringify(payload),
+    })
+    const data = await res.json()
 
-    submitted.value = true
+    if (data.result === 'success') {
+      submitted.value = true
+    } else {
+      throw new Error(data.error || 'unknown')
+    }
   } catch (e) {
     errorMsg.value = locale.value === 'ar'
       ? 'حدث خطأ أثناء إرسال الطلب، حاول مرة أخرى'
