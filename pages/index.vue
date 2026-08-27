@@ -113,8 +113,8 @@
         <div class="section-header center">
           <h2 class="section-title">{{ locale === "ar" ? "برامجنا" : "Our Programs" }}</h2>
           <p class="section-subtitle">{{ locale === "ar"
-            ? "نعمل عبر ثلاثة محاور رئيسية لإحداث أثر مستدام في المجتمع"
-            : "We work across three core pillars to create lasting impact in the community" }}</p>
+            ? "التعليم المجتمعي - خدمة المجتمع - الابداع والابتكار"
+            : "Community Education - Community Service - Creativity & Innovation" }}</p>
         </div>
 
         <div class="programs-grid">
