@@ -41,6 +41,8 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
+    adminPassword: process.env.ADMIN_PASSWORD || '',
+    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
     public: {
       tapPublicKey: process.env.TAP_PUBLIC_KEY || '',
       supabaseUrl: 'https://gdhjyokwozlgocsmlfoj.supabase.co',

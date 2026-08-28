@@ -8,7 +8,7 @@
         <h2>لوحة التحكم</h2>
         <p>إدارة المشاريع والتقارير</p>
         <input v-model="password" type="password" placeholder="كلمة المرور" class="form-input" @keyup.enter="login" />
-        <button class="btn-login" @click="login">دخول</button>
+        <button class="btn-login" :disabled="loggingIn" @click="login">{{ loggingIn ? '...جاري التحقق' : 'دخول' }}</button>
         <p v-if="loginError" class="error-msg">كلمة مرور خاطئة</p>
       </div>
     </div>
@@ -219,24 +219,36 @@
 <script setup>
 definePageMeta({ layout: false })
 
-const { query, insert, update, remove, uploadFile } = useSupabase()
+const { query } = useSupabase()
 
-const ADMIN_PASSWORD = 'BTF@Admin2026'
-
+// The password is only ever checked server-side now (see
+// server/api/admin/login.post.ts) — nothing secret ships to the browser.
 const authenticated = ref(false)
 const password = ref('')
 const loginError = ref(false)
+const loggingIn = ref(false)
 const activeTab = ref('projects')
 
-function login() {
-  if (password.value === ADMIN_PASSWORD) {
+async function login() {
+  loggingIn.value = true
+  loginError.value = false
+  try {
+    await $fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'x-admin-password': password.value },
+    })
     authenticated.value = true
-    loginError.value = false
     loadProjects()
     loadReports()
-  } else {
+  } catch (e) {
     loginError.value = true
+  } finally {
+    loggingIn.value = false
   }
+}
+
+function adminHeaders() {
+  return { 'x-admin-password': password.value }
 }
 
 // ── Donation Projects ──
@@ -266,12 +278,19 @@ async function onImageSelect(e, lang) {
   if (lang === 'ar') uploadingAr.value = true
   else uploadingEn.value = true
 
-  const url = await uploadFile(file, 'donations')
-  if (url) {
-    if (lang === 'ar') projectForm.image_url_ar = url
-    else projectForm.image_url_en = url
-  } else {
-    alert('فشل رفع الصورة — تأكد إن bucket "donation-images" موجود وعام (public) بـ Supabase Storage')
+  try {
+    const fd = new FormData()
+    fd.append('file', file)
+    fd.append('folder', 'donations')
+    const res = await $fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: adminHeaders(),
+      body: fd,
+    })
+    if (lang === 'ar') projectForm.image_url_ar = res.url
+    else projectForm.image_url_en = res.url
+  } catch (e) {
+    alert('فشل رفع الصورة — تأكد إن bucket "donation-images" موجود بـ Supabase Storage، وإن SUPABASE_SERVICE_ROLE_KEY مضبوط بمتغيرات البيئة')
   }
 
   if (lang === 'ar') uploadingAr.value = false
@@ -306,21 +325,26 @@ async function saveProject() {
   savingProject.value = true
   projectSaveMsg.value = ''
 
-  let res
-  if (editingProject.value) {
-    res = await update('donation_projects', editingProject.value, { ...projectForm })
-  } else {
-    res = await insert('donation_projects', { ...projectForm })
-  }
-
-  if (Array.isArray(res) || (res && !res.message && !res.code)) {
-    projectSaveMsg.value = editingProject.value ? '✅ تم تعديل المشروع بنجاح' : '✅ تم إضافة المشروع بنجاح'
-    if (editingProject.value) cancelEditProject()
-    else Object.assign(projectForm, defaultProjectForm)
-  } else {
-    projectSaveMsg.value = res?.message
-      ? `❌ فشل الحفظ: ${res.message} — تأكد إنك ضفت أعمدة category/is_urgent/long_desc_ar/long_desc_en بجدول donation_projects`
-      : '❌ فشل الحفظ'
+  try {
+    if (editingProject.value) {
+      await $fetch(`/api/admin/donation-projects/${editingProject.value}`, {
+        method: 'PATCH',
+        headers: adminHeaders(),
+        body: { ...projectForm },
+      })
+      projectSaveMsg.value = '✅ تم تعديل المشروع بنجاح'
+      cancelEditProject()
+    } else {
+      await $fetch('/api/admin/donation-projects', {
+        method: 'POST',
+        headers: adminHeaders(),
+        body: { ...projectForm },
+      })
+      projectSaveMsg.value = '✅ تم إضافة المشروع بنجاح'
+      Object.assign(projectForm, defaultProjectForm)
+    }
+  } catch (e) {
+    projectSaveMsg.value = `❌ فشل الحفظ: ${e?.data?.statusMessage || e?.statusMessage || 'خطأ غير معروف'} — تأكد إنك ضفت أعمدة category/is_urgent/long_desc_ar/long_desc_en بجدول donation_projects`
   }
 
   await loadProjects()
@@ -347,13 +371,20 @@ function cancelEditProject() {
 }
 
 async function toggleProjectActive(proj) {
-  await update('donation_projects', proj.id, { active: !proj.active })
+  await $fetch(`/api/admin/donation-projects/${proj.id}`, {
+    method: 'PATCH',
+    headers: adminHeaders(),
+    body: { active: !proj.active },
+  })
   await loadProjects()
 }
 
 async function deleteProject(id) {
   if (!confirm('هل أنت متأكد من حذف هذا المشروع؟')) return
-  await remove('donation_projects', id)
+  await $fetch(`/api/admin/donation-projects/${id}`, {
+    method: 'DELETE',
+    headers: adminHeaders(),
+  })
   await loadProjects()
 }
 
@@ -391,21 +422,26 @@ async function saveReport() {
   savingReport.value = true
   reportSaveMsg.value = ''
 
-  let res
-  if (editingReport.value) {
-    res = await update('annual_reports', editingReport.value, { ...reportForm })
-  } else {
-    res = await insert('annual_reports', { ...reportForm })
-  }
-
-  if (Array.isArray(res) || (res && !res.message && !res.code)) {
-    reportSaveMsg.value = editingReport.value ? '✅ تم تعديل التقرير بنجاح' : '✅ تم إضافة التقرير بنجاح'
-    if (editingReport.value) cancelEditReport()
-    else Object.assign(reportForm, defaultReportForm)
-  } else {
-    reportSaveMsg.value = res?.message
-      ? `❌ فشل الحفظ: ${res.message}`
-      : '❌ فشل الحفظ — تأكد إن جدول annual_reports موجود بـ Supabase'
+  try {
+    if (editingReport.value) {
+      await $fetch(`/api/admin/annual-reports/${editingReport.value}`, {
+        method: 'PATCH',
+        headers: adminHeaders(),
+        body: { ...reportForm },
+      })
+      reportSaveMsg.value = '✅ تم تعديل التقرير بنجاح'
+      cancelEditReport()
+    } else {
+      await $fetch('/api/admin/annual-reports', {
+        method: 'POST',
+        headers: adminHeaders(),
+        body: { ...reportForm },
+      })
+      reportSaveMsg.value = '✅ تم إضافة التقرير بنجاح'
+      Object.assign(reportForm, defaultReportForm)
+    }
+  } catch (e) {
+    reportSaveMsg.value = `❌ فشل الحفظ: ${e?.data?.statusMessage || e?.statusMessage || 'تأكد إن جدول annual_reports موجود بـ Supabase'}`
   }
 
   await loadReports()
@@ -429,7 +465,10 @@ function cancelEditReport() {
 
 async function deleteReport(id) {
   if (!confirm('هل أنت متأكد من حذف هذا التقرير؟')) return
-  await remove('annual_reports', id)
+  await $fetch(`/api/admin/annual-reports/${id}`, {
+    method: 'DELETE',
+    headers: adminHeaders(),
+  })
   await loadReports()
 }
 </script>
