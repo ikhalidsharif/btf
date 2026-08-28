@@ -6,7 +6,7 @@
       <div class="container top-bar-inner">
         <div class="top-bar-contact">
           <span>📍 {{ locale === 'ar' ? 'مركز صفية علي كانو للفنون، بوغزال، البحرين' : 'Safiya Ali Kanoo Arts Centre, Bughazal, Bahrain' }}</span>
-          <span>📞 (+973) 1722 3781</span>
+          <span>📞 <span dir="ltr">(+973) 1722 3781</span></span>
         </div>
         <div class="top-bar-actions">
           <a href="https://www.instagram.com/bahraintrust/" target="_blank" class="social-icon">IG</a>
@@ -160,7 +160,7 @@
         <div class="footer-contact">
           <h3 class="footer-heading">{{ locale === 'ar' ? 'تواصل معنا' : 'Contact Us' }}</h3>
           <p>📍 {{ locale === 'ar' ? 'مركز صفية علي كانو للفنون، بوغزال، البحرين' : 'Safiya Ali Kanoo Hub for Arts, Bughazal, Bahrain' }}</p>
-          <p>📞 (+973) 1722 3781</p>
+          <p>📞 <span dir="ltr">(+973) 1722 3781</span></p>
           <p>📧 info@bahraintrust.org</p>
           <p>🌐 www.bahraintrust.org</p>
         </div>

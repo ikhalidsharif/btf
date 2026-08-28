@@ -166,7 +166,7 @@
           <div class="location-icon">📞</div>
           <div>
             <h3>{{ locale === 'ar' ? 'تواصل معنا' : 'Get in Touch' }}</h3>
-            <p>(+973) 1722 3781 · info@bahraintrust.org</p>
+            <p><span dir="ltr">(+973) 1722 3781</span> · info@bahraintrust.org</p>
           </div>
         </div>
       </div>
