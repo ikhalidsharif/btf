@@ -59,6 +59,7 @@
                 <NuxtLink :to="localePath('/projects/micro-schools')" @click="menuOpen = false">{{ locale === 'ar' ? 'المدارس المصغرة' : 'Micro Schools' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/ilm-scholarship')" @click="menuOpen = false">{{ locale === 'ar' ? 'منحة علم' : 'Ilm Scholarship' }}</NuxtLink>
                 <NuxtLink :to="localePath('/projects/manara-platform')" @click="menuOpen = false">{{ locale === 'ar' ? 'منصة منارة للتعليم' : 'Manara Education Platform' }}</NuxtLink>
+                <NuxtLink :to="localePath('/projects/iqraa-platform')" @click="menuOpen = false">{{ locale === 'ar' ? 'منصة إقراء' : 'Iqraa Platform' }}</NuxtLink>
               </div>
               <div class="mega-col">
                 <div class="mega-heading">{{ locale === 'ar' ? 'خدمة المجتمع' : 'Community Service' }}</div>

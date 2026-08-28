@@ -132,6 +132,12 @@ const education = [
     desc: 'A digital platform expanding access to quality education.',
     descAr: 'منصة رقمية توسّع فرص الوصول إلى تعليم جيد.',
   },
+  {
+    slug: '/projects/iqraa-platform', image: '/images/projects/education.jpg',
+    title: 'Iqraa Platform', titleAr: 'منصة إقراء',
+    desc: 'An AI-powered digital platform for Qur\'an education.',
+    descAr: 'منصة رقمية ذكية لتعليم القرآن الكريم بالذكاء الاصطناعي.',
+  },
 ]
 
 const community = [

@@ -74,6 +74,19 @@
       </div>
     </section>
 
+    <!-- Videos -->
+    <section class="videos-section">
+      <div class="container">
+        <h2 class="section-title center">{{ locale === 'ar' ? 'فيديوهات رحلات الخير' : 'Good Will Trips Videos' }}</h2>
+        <div class="videos-grid">
+          <a v-for="v in tripVideos" :key="v.url" :href="v.url" target="_blank" rel="noopener" class="video-card card">
+            <span class="video-play">▶</span>
+            <span class="video-label">{{ locale === 'ar' ? v.labelAr : v.labelEn }}</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- Lightbox -->
     <div v-if="activeIndex !== null" class="lightbox" @click.self="closeLightbox">
       <button class="lightbox-close" type="button" @click="closeLightbox">✕</button>
@@ -126,6 +139,13 @@ const trips = [
 ]
 
 const photos = Array.from({ length: 23 }, (_, i) => `/images/projects/good-will-trips/photo-${i + 1}.jpg`)
+
+const tripVideos = [
+  { url: 'https://youtu.be/D92yQnVrjtk', labelAr: 'رحلة الخير إلى المغرب 2024', labelEn: 'Good Will Trip to Morocco 2024' },
+  { url: 'https://youtu.be/jEkg68Hr9Uw', labelAr: 'رحلة الخير إلى زنجبار 2024', labelEn: 'Good Will Trip to Zanzibar 2024' },
+  { url: 'https://youtu.be/s2mQDc4M0-8', labelAr: 'رحلة الخير إلى مصر 2024', labelEn: 'Good Will Trip to Egypt 2024' },
+  { url: 'https://youtu.be/hW2ZLDX0D84', labelAr: 'رحلة الخير إلى المغرب 2025', labelEn: 'Good Will Trip to Morocco 2025' },
+]
 
 const activeIndex = ref(null)
 function openLightbox(i) { activeIndex.value = i }
@@ -182,6 +202,19 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 
 /* Gallery */
 .gallery-section { background: white; padding: 80px 0; }
+
+.videos-section { background: var(--off-white); padding: 80px 0; }
+.videos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 16px; }
+.video-card {
+  display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 20px;
+  text-align: center; text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;
+}
+.video-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.1); }
+.video-play {
+  width: 52px; height: 52px; border-radius: 50%; background: var(--red); color: white;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.video-label { font-size: 13px; font-weight: 700; color: var(--dark); line-height: 1.5; }
 .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
 .photo-item {
   border: none; padding: 0; cursor: pointer; border-radius: var(--radius);
@@ -224,6 +257,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
   .intro-grid { grid-template-columns: 1fr; }
   .intro-image { order: -1; }
   .photo-grid { grid-template-columns: repeat(3, 1fr); }
+  .videos-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 560px) {
   .photo-grid { grid-template-columns: repeat(2, 1fr); }
