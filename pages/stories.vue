@@ -102,61 +102,39 @@ useHead({
 })
 
 const config = useRuntimeConfig()
-const SUPABASE = `${config.public.supabaseUrl}/storage/v1/object/public/stories`
-const WP = 'https://bahraintrust.org/wp-content/uploads/real3d-flipbook'
+const { query } = useSupabase()
+const SUPABASE_PDFS = `${config.public.supabaseUrl}/storage/v1/object/public/stories`
 
-const books = [
-  {
-    title: locale.value === 'ar' ? 'برواز الأعواد' : 'Brawaz Al-Awad',
-    cover: `${WP}/flipbook_2/thumb.jpg`,
-    url: `${SUPABASE}/Brawaz-Al-Awad.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'رأيت في حلمي' : 'I Saw in My Dream',
-    cover: `${WP}/flipbook_4/thumb.jpg`,
-    url: `${SUPABASE}/Rayt-Fi-Holmi.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'أنا طباخ ماهر' : 'I Am a Great Chef',
-    cover: `${WP}/flipbook_5/thumb.jpg`,
-    url: `${SUPABASE}/Tabbakh-Maher.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'طائرتي الصفراء' : 'My Yellow Airplane',
-    cover: `${WP}/flipbook_6/thumb.jpg`,
-    url: `${SUPABASE}/Tayarti-Al-Safra.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'أح مد' : 'Ahmad',
-    cover: `${WP}/flipbook_7/thumb.jpg`,
-    url: `${SUPABASE}/Ahmad.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'مقدام يعيد الأيام' : 'Moqdam Relives the Days',
-    cover: `${WP}/flipbook_8/thumb.jpg`,
-    url: `${SUPABASE}/Moqdam.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'العالم الذي أيقظني' : 'The World That Woke Me',
-    cover: `${WP}/flipbook_10/thumb.jpg`,
-    url: `${SUPABASE}/Al-Alam-Alathi-Ayqathni.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'جدي القلاف' : 'My Grandfather the Boat Builder',
-    cover: `${WP}/flipbook_11/thumb.jpg`,
-    url: `${SUPABASE}/Jiddi-Al-Qallaf.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'معالم بلادنا' : 'Landmarks of Our Country',
-    cover: `${WP}/flipbook_12/thumb.jpg`,
-    url: `${SUPABASE}/Malem-Bladna.pdf`,
-  },
-  {
-    title: locale.value === 'ar' ? 'ما هو إعادة التدوير؟' : 'What is Recycling?',
-    cover: `${WP}/flipbook_14/thumb.jpg`,
-    url: `${SUPABASE}/Eadat-Tadweer.pdf`,
-  },
+// Books are now managed from /admin → قصص الأطفال. Falls back to the
+// known set (with locally-hosted covers, not the old WordPress hotlinks)
+// if the table is empty/not yet seeded.
+const { data: rawStories } = await useAsyncData('stories', () =>
+  query('stories', '?active=eq.true&order=sort_order.asc')
+)
+
+const fallbackBooks = [
+  { title: locale.value === 'ar' ? 'برواز الأعواد' : 'Brawaz Al-Awad', cover: '/images/stories/covers/brawaz-al-awad.jpg', url: `${SUPABASE_PDFS}/Brawaz-Al-Awad.pdf` },
+  { title: locale.value === 'ar' ? 'رأيت في حلمي' : 'I Saw in My Dream', cover: '/images/stories/covers/rayt-fi-holmi.jpg', url: `${SUPABASE_PDFS}/Rayt-Fi-Holmi.pdf` },
+  { title: locale.value === 'ar' ? 'أنا طباخ ماهر' : 'I Am a Great Chef', cover: '/images/stories/covers/tabbakh-maher.jpg', url: `${SUPABASE_PDFS}/Tabbakh-Maher.pdf` },
+  { title: locale.value === 'ar' ? 'طائرتي الصفراء' : 'My Yellow Airplane', cover: '/images/stories/covers/tayarti-al-safra.jpg', url: `${SUPABASE_PDFS}/Tayarti-Al-Safra.pdf` },
+  { title: locale.value === 'ar' ? 'أح مد' : 'Ahmad', cover: '/images/stories/covers/ahmad.jpg', url: `${SUPABASE_PDFS}/Ahmad.pdf` },
+  { title: locale.value === 'ar' ? 'مقدام يعيد الأيام' : 'Moqdam Relives the Days', cover: '/images/stories/covers/moqdam.jpg', url: `${SUPABASE_PDFS}/Moqdam.pdf` },
+  { title: locale.value === 'ar' ? 'العالم الذي أيقظني' : 'The World That Woke Me', cover: '/images/stories/covers/al-alam-alathi-ayqathni.jpg', url: `${SUPABASE_PDFS}/Al-Alam-Alathi-Ayqathni.pdf` },
+  { title: locale.value === 'ar' ? 'جدي القلاف' : 'My Grandfather the Boat Builder', cover: '/images/stories/covers/jiddi-al-qallaf.jpg', url: `${SUPABASE_PDFS}/Jiddi-Al-Qallaf.pdf` },
+  { title: locale.value === 'ar' ? 'معالم بلادنا' : 'Landmarks of Our Country', cover: '/images/stories/covers/malem-bladna.jpg', url: `${SUPABASE_PDFS}/Malem-Bladna.pdf` },
+  { title: locale.value === 'ar' ? 'ما هو إعادة التدوير؟' : 'What is Recycling?', cover: '/images/stories/covers/eadat-tadweer.jpg', url: `${SUPABASE_PDFS}/Eadat-Tadweer.pdf` },
 ]
+
+const books = computed(() => {
+  if (rawStories.value && rawStories.value.length) {
+    return rawStories.value.map((s) => ({
+      title: locale.value === 'ar' ? s.title_ar : s.title_en,
+      cover: s.cover_url,
+      url: s.pdf_url,
+    }))
+  }
+  return fallbackBooks
+})
 
 // State
 const activeBook = ref(null)

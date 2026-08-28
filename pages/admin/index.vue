@@ -27,6 +27,7 @@
       <div class="dash-tabs">
         <button :class="{ active: activeTab === 'projects' }" @click="activeTab = 'projects'">مشاريع التبرع</button>
         <button :class="{ active: activeTab === 'reports' }" @click="activeTab = 'reports'">التقارير السنوية</button>
+        <button :class="{ active: activeTab === 'stories' }" @click="activeTab = 'stories'">قصص الأطفال</button>
       </div>
 
       <div class="dash-body">
@@ -211,6 +212,85 @@
           </div>
         </template>
 
+        <!-- ══════════ STORIES TAB ══════════ -->
+        <template v-if="activeTab === 'stories'">
+          <div class="section-card">
+            <h2>{{ editingStory ? 'تعديل قصة' : 'إضافة قصة جديدة' }}</h2>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>عنوان القصة بالعربي *</label>
+                <input v-model="storyForm.title_ar" type="text" class="form-input" placeholder="اسم القصة بالعربي" />
+              </div>
+              <div class="form-group">
+                <label>Story Title in English *</label>
+                <input v-model="storyForm.title_en" type="text" class="form-input" placeholder="Story title in English" />
+              </div>
+              <div class="form-group full">
+                <label>صورة الغلاف</label>
+                <div class="upload-row">
+                  <input type="file" accept="image/*" class="form-input" @change="onStoryFileSelect($event, 'cover')" />
+                  <span v-if="uploadingCover" class="upload-status">⏳ جاري الرفع...</span>
+                  <span v-else-if="storyForm.cover_url" class="upload-status upload-ok">✅ تم الرفع</span>
+                </div>
+                <img v-if="storyForm.cover_url" :src="storyForm.cover_url" class="upload-preview" />
+              </div>
+              <div class="form-group full">
+                <label>ملف القصة (PDF)</label>
+                <div class="upload-row">
+                  <input type="file" accept="application/pdf" class="form-input" @change="onStoryFileSelect($event, 'pdf')" />
+                  <span v-if="uploadingPdf" class="upload-status">⏳ جاري الرفع...</span>
+                  <span v-else-if="storyForm.pdf_url" class="upload-status upload-ok">✅ تم الرفع</span>
+                </div>
+                <a v-if="storyForm.pdf_url" :href="storyForm.pdf_url" target="_blank" class="pdf-preview-link">📄 معاينة الملف المرفوع</a>
+              </div>
+              <div class="form-group">
+                <label>الترتيب</label>
+                <input v-model="storyForm.sort_order" type="number" class="form-input" min="0" />
+              </div>
+              <div class="form-group">
+                <label>الحالة</label>
+                <select v-model="storyForm.active" class="form-input">
+                  <option :value="true">نشطة ✅</option>
+                  <option :value="false">مخفية ❌</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn-save" :disabled="savingStory" @click="saveStory">
+                {{ savingStory ? 'جاري الحفظ...' : (editingStory ? 'حفظ التعديلات' : 'إضافة القصة') }}
+              </button>
+              <button v-if="editingStory" class="btn-cancel" @click="cancelEditStory">إلغاء</button>
+            </div>
+            <p v-if="storySaveMsg" class="success-msg">{{ storySaveMsg }}</p>
+          </div>
+
+          <div class="section-card">
+            <h2>القصص الحالية ({{ stories.length }})</h2>
+            <p v-if="storyLoadError" class="error-msg">{{ storyLoadError }}</p>
+            <div v-if="loadingStories" class="loading-text">جاري التحميل...</div>
+            <div v-else class="rows-table">
+              <div v-for="story in stories" :key="story.id" class="row-item" :class="{ inactive: !story.active }">
+                <div class="row-img">
+                  <img v-if="story.cover_url" :src="story.cover_url" :alt="story.title_ar" />
+                  <div v-else class="no-img">📖</div>
+                </div>
+                <div class="row-info">
+                  <strong>{{ story.title_ar }}</strong>
+                  <span>{{ story.title_en }}</span>
+                  <span v-if="story.pdf_url" class="row-link">✅ ملف PDF موجود</span>
+                  <span v-else class="row-link-missing">⚠️ ما فيه ملف PDF</span>
+                  <span :class="story.active ? 'badge-active' : 'badge-inactive'">{{ story.active ? 'نشطة' : 'مخفية' }}</span>
+                </div>
+                <div class="row-actions">
+                  <button class="btn-edit" @click="editStory(story)">✏️ تعديل</button>
+                  <button class="btn-delete" @click="deleteStory(story.id)">🗑️ حذف</button>
+                </div>
+              </div>
+              <p v-if="!stories.length" class="loading-text">ما فيه قصص مضافة بعد</p>
+            </div>
+          </div>
+        </template>
+
       </div>
     </div>
   </div>
@@ -240,6 +320,7 @@ async function login() {
     authenticated.value = true
     loadProjects()
     loadReports()
+    loadStories()
   } catch (e) {
     loginError.value = true
   } finally {
@@ -471,6 +552,120 @@ async function deleteReport(id) {
   })
   await loadReports()
 }
+
+// ── Stories ──
+const stories = ref([])
+const loadingStories = ref(false)
+const savingStory = ref(false)
+const editingStory = ref(null)
+const storySaveMsg = ref('')
+const storyLoadError = ref('')
+const uploadingCover = ref(false)
+const uploadingPdf = ref(false)
+
+const defaultStoryForm = {
+  title_ar: '', title_en: '',
+  cover_url: '', pdf_url: '',
+  sort_order: 0, active: true,
+}
+const storyForm = reactive({ ...defaultStoryForm })
+
+async function onStoryFileSelect(e, kind) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  if (kind === 'cover') uploadingCover.value = true
+  else uploadingPdf.value = true
+
+  try {
+    const fd = new FormData()
+    fd.append('file', file)
+    fd.append('folder', kind === 'cover' ? 'covers' : 'pdfs')
+    fd.append('bucket', 'stories')
+    const res = await $fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: adminHeaders(),
+      body: fd,
+    })
+    if (kind === 'cover') storyForm.cover_url = res.url
+    else storyForm.pdf_url = res.url
+  } catch (e) {
+    alert('فشل رفع الملف — تأكد إن bucket "stories" موجود بـ Supabase Storage')
+  }
+
+  if (kind === 'cover') uploadingCover.value = false
+  else uploadingPdf.value = false
+}
+
+async function loadStories() {
+  loadingStories.value = true
+  storyLoadError.value = ''
+  const data = await query('stories', '?order=sort_order.asc')
+  if (Array.isArray(data)) {
+    stories.value = data
+  } else {
+    stories.value = []
+    storyLoadError.value = data?.message
+      ? `⚠️ خطأ من قاعدة البيانات: ${data.message}`
+      : '⚠️ جدول stories غير موجود بعد — شغّل كود SQL لإنشائه بـ Supabase أولاً'
+  }
+  loadingStories.value = false
+}
+
+async function saveStory() {
+  if (!storyForm.title_ar || !storyForm.title_en) return
+  savingStory.value = true
+  storySaveMsg.value = ''
+
+  try {
+    if (editingStory.value) {
+      await $fetch(`/api/admin/stories/${editingStory.value}`, {
+        method: 'PATCH',
+        headers: adminHeaders(),
+        body: { ...storyForm },
+      })
+      storySaveMsg.value = '✅ تم تعديل القصة بنجاح'
+      cancelEditStory()
+    } else {
+      await $fetch('/api/admin/stories', {
+        method: 'POST',
+        headers: adminHeaders(),
+        body: { ...storyForm },
+      })
+      storySaveMsg.value = '✅ تم إضافة القصة بنجاح'
+      Object.assign(storyForm, defaultStoryForm)
+    }
+  } catch (e) {
+    storySaveMsg.value = `❌ فشل الحفظ: ${e?.data?.statusMessage || e?.statusMessage || 'تأكد إن جدول stories موجود بـ Supabase'}`
+  }
+
+  await loadStories()
+  savingStory.value = false
+  setTimeout(() => storySaveMsg.value = '', 8000)
+}
+
+function editStory(story) {
+  editingStory.value = story.id
+  Object.assign(storyForm, {
+    title_ar: story.title_ar, title_en: story.title_en,
+    cover_url: story.cover_url || '', pdf_url: story.pdf_url || '',
+    sort_order: story.sort_order || 0, active: story.active,
+  })
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function cancelEditStory() {
+  editingStory.value = null
+  Object.assign(storyForm, defaultStoryForm)
+}
+
+async function deleteStory(id) {
+  if (!confirm('هل أنت متأكد من حذف هذه القصة؟')) return
+  await $fetch(`/api/admin/stories/${id}`, {
+    method: 'DELETE',
+    headers: adminHeaders(),
+  })
+  await loadStories()
+}
 </script>
 
 <style scoped>
@@ -514,6 +709,7 @@ async function deleteReport(id) {
 .upload-status { font-size: 12px; color: #99a9b5; white-space: nowrap; }
 .upload-status.upload-ok { color: #2e7d32; font-weight: 600; }
 .upload-preview { max-width: 160px; max-height: 200px; object-fit: contain; border-radius: 6px; margin-top: 10px; border: 1px solid #e0e0e0; }
+.pdf-preview-link { display: inline-block; margin-top: 10px; font-size: 13px; color: #1565c0; font-weight: 600; }
 
 .form-actions { display: flex; gap: 12px; }
 .btn-save { background: #E31C26; color: white; border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
