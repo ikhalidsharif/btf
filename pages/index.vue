@@ -74,7 +74,7 @@
             <h2>{{ locale === 'ar' ? 'رؤيتنا' : 'OUR VISION' }}</h2>
             <p>{{ locale === 'ar'
               ? 'أن يتمكن أفراد المجتمع من تغيير حياتهم نحو الأفضل من خلال خدمات التنمية المستدامة'
-              : 'People in the community are able to change their lives for the better through sustainable development services (such as Education, Community Service, and Creative Economy)' }}</p>
+              : 'People in the community are able to change their lives for the better through sustainable development services (such as Community Education, Community Service, and Creativity & Innovation)' }}</p>
           </div>
         </div>
 
@@ -88,14 +88,14 @@
           <div class="pillar">
             <div class="pillar-icon">💡</div>
             <p>{{ locale === 'ar'
-              ? 'تمكين الأفراد من الاستفادة من الاقتصاد الإبداعي من خلال الحلول المبتكرة'
-              : 'EMPOWER INDIVIDUALS TO BENEFIT FROM THE CREATIVE ECONOMY THROUGH INNOVATIVE SOLUTIONS AND VOCATIONAL TRAINING' }}</p>
+              ? 'تمكين الأفراد من صقل مواهبهم الفنية والإبداعية من خلال حلول مبتكرة وتدريب مهني'
+              : 'EMPOWERING INDIVIDUALS TO REFINE THEIR ARTISTIC AND CREATIVE TALENTS THROUGH INNOVATIVE SOLUTIONS AND VOCATIONAL TRAINING' }}</p>
           </div>
           <div class="pillar">
             <div class="pillar-icon">🎓</div>
             <p>{{ locale === 'ar'
-              ? 'تعزيز التعليم الشامل والمستدام محلياً وإقليمياً من خلال برامج مبتكرة'
-              : 'ENHANCE INCLUSIVE AND SUSTAINABLE EDUCATION LOCALLY AND REGIONALLY THROUGH INNOVATIVE PROGRAMS' }}</p>
+              ? 'تعزيز التعليم الشامل والمستدام محلياً وعالمياً من خلال المدارس المصغرة وبرامج تعليمية مبتكرة'
+              : 'ENHANCING INCLUSIVE AND SUSTAINABLE EDUCATION LOCALLY AND GLOBALLY THROUGH MICRO SCHOOLS AND INNOVATIVE PROGRAMS' }}</p>
           </div>
         </div>
 
@@ -126,7 +126,7 @@
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
-                    <h3>{{ locale === "ar" ? "التعليم" : "Education" }}</h3>
+                    <h3>{{ locale === "ar" ? "التعليم المجتمعي" : "Community Education" }}</h3>
                     <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
                     <NuxtLink :to="localePath(slide.slug)" class="slide-btn" :aria-label="(locale === 'ar' ? slide.titleAr : slide.title) + (locale === 'ar' ? ' - اضغط هنا' : ' - Click Here')">
                       {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
@@ -176,7 +176,7 @@
                 <img :src="slide.image" :alt="slide.title" loading="lazy" decoding="async" />
                 <div class="slide-overlay">
                   <div class="slide-content">
-                    <h3>{{ locale === "ar" ? "الاقتصاد الإبداعي" : "Creative Economy" }}</h3>
+                    <h3>{{ locale === "ar" ? "الإبداع والابتكار" : "Creativity & Innovation" }}</h3>
                     <p>{{ locale === "ar" ? slide.titleAr : slide.title }}</p>
                     <NuxtLink :to="localePath(slide.slug)" class="slide-btn" :aria-label="(locale === 'ar' ? slide.titleAr : slide.title) + (locale === 'ar' ? ' - اضغط هنا' : ' - Click Here')">
                       {{ locale === "ar" ? "اضغط هنا" : "Click Here" }}
