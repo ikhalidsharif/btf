@@ -25,7 +25,12 @@ export default defineEventHandler(async (event) => {
 
   if (!res.ok) {
     const text = await res.text()
-    throw createError({ statusCode: res.status, statusMessage: text || 'Upload failed' })
+    let message = text || `Upload failed (HTTP ${res.status})`
+    try {
+      const parsed = JSON.parse(text)
+      message = parsed.message || parsed.error || message
+    } catch { /* not JSON, use raw text as-is */ }
+    throw createError({ statusCode: res.status, statusMessage: message })
   }
 
   return { url: `${auth.supabaseUrl}/storage/v1/object/public/${bucket}/${path}` }

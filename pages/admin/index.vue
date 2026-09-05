@@ -371,7 +371,8 @@ async function onImageSelect(e, lang) {
     if (lang === 'ar') projectForm.image_url_ar = res.url
     else projectForm.image_url_en = res.url
   } catch (e) {
-    alert('فشل رفع الصورة — تأكد إن bucket "donation-images" موجود بـ Supabase Storage، وإن SUPABASE_SERVICE_ROLE_KEY مضبوط بمتغيرات البيئة')
+    const detail = e?.data?.statusMessage || e?.statusMessage || e?.data?.message || e?.message || 'خطأ غير معروف'
+    alert(`فشل رفع الصورة:\n${detail}`)
   }
 
   if (lang === 'ar') uploadingAr.value = false
@@ -589,7 +590,8 @@ async function onStoryFileSelect(e, kind) {
     if (kind === 'cover') storyForm.cover_url = res.url
     else storyForm.pdf_url = res.url
   } catch (e) {
-    alert('فشل رفع الملف — تأكد إن bucket "stories" موجود بـ Supabase Storage')
+    const detail = e?.data?.statusMessage || e?.statusMessage || e?.data?.message || e?.message || 'خطأ غير معروف'
+    alert(`فشل رفع الملف:\n${detail}`)
   }
 
   if (kind === 'cover') uploadingCover.value = false
